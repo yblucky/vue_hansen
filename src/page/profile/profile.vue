@@ -61,13 +61,13 @@
                         </span>
                         <span class="info-data-bottom">转账汇款</span>
                     </router-link>
-                    <router-link to="/login" tag="li" class="info-data-link">
+                    <router-link to="/dynamicProfit" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../images/income.png" class="vip" />
                       </span>
                         <span class="info-data-bottom">动态收益</span>
                     </router-link>
-                    <router-link to="/login" tag="li" class="info-data-link">
+                    <router-link to="/staticProfit" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../images/dividend.png" class="vip" />
                       </span>
