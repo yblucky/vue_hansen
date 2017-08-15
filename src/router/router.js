@@ -1,8 +1,6 @@
 import App from '../App'
 
 const login = r => require.ensure([], () => r(require('../page/login/login')), 'login')
-const upgrade = r => require.ensure([], () => r(require('../page/upgrade/upgrade')), 'upgrade')
-const upgradeRecord = r => require.ensure([], () => r(require('../page/upgrade/children/upgradeRecord')), 'upgradeRecord')
 const profile = r => require.ensure([], () => r(require('../page/profile/profile')), 'profile')
 const forget = r => require.ensure([], () => r(require('../page/forget/forget')), 'forget')
 const info = r => require.ensure([], () => r(require('../page/profile/children/info')), 'info')
@@ -21,7 +19,14 @@ const service = r => require.ensure([], () => r(require('../page/service/service
 const questionDetail = r => require.ensure([], () => r(require('../page/service/children/questionDetail')), 'questionDetail')
 const setphone = r => require.ensure([], () => r(require('../page/profile/children/setphone')), 'setphone')
 const setmail = r => require.ensure([], () => r(require('../page/profile/children/setmail')), 'setmail')
+<<<<<<< HEAD
 const transfer = r => require.ensure([], () => r(require('../page/transfer/transfer')), 'transfer')
+=======
+const upgrade = r => require.ensure([], () => r(require('../page/upgrade/upgrade')), 'upgrade')
+const upgradeRecord = r => require.ensure([], () => r(require('../page/upgrade/upgradeRecord')), 'upgradeRecord')
+const staticProfit = r => require.ensure([], () => r(require('../page/profit/staticProfit')), 'staticProfit')
+const dynamicProfit = r => require.ensure([], () => r(require('../page/profit/dynamicProfit')), 'dynamicProfit')
+>>>>>>> 2d854e76e01ef77aacdaccbb2d0a9cb512cad565
 
 export default [{
     path: '/',
@@ -36,15 +41,6 @@ export default [{
         {
             path: '/login',
             component: login
-        },
-        //会员升级页
-        {
-            path: '/upgrade',
-            component: upgrade,
-            children: [{
-               path: '/upgradeRecord', //账户升级记录页
-               component: upgradeRecord,
-           }, ]
         },
         //个人信息页
         {
@@ -129,6 +125,7 @@ export default [{
                 component: pointsDetail,
             }, ]
         },
+<<<<<<< HEAD
         //转账汇款
         {
             path: 'transfer',
@@ -137,6 +134,27 @@ export default [{
             //     path: 'record', //转账记录
             //     component: pointsDetail,
             // }, ]
+=======
+        //会员升级页
+        {
+          path: '/upgrade',
+          component: upgrade
+        },
+        //会员升级记录页
+        {
+          path: '/upgradeRecord',
+          component: upgradeRecord
+        },
+        //静态收益页
+        {
+          path: '/staticProfit',
+          component: staticProfit
+        },
+        //动态收益页
+        {
+          path: '/dynamicProfit',
+          component: dynamicProfit
+>>>>>>> 2d854e76e01ef77aacdaccbb2d0a9cb512cad565
         },
     ]
 }]

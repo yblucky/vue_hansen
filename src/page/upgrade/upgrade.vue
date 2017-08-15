@@ -1,8 +1,8 @@
 <template>
-    <div class="loginContainer">
+    <div class="upGradeContainer">
         <head-top :head-title="'普卡用户升级'" goBack="true">
-            <div slot="changeLogin" class="change_login">
-              <router-link to="/upgrade/upgradeRecord" >升级记录</router-link>
+            <div slot="changeLogin" class="jumpRecord">
+              <router-link to="/upgradeRecord" >升级记录</router-link>
             </div>
         </head-top>
         <section class="category_title">
@@ -14,26 +14,38 @@
           <section class="info-data">
               <ul class="clear">
                   <li @click="selCard(0);" v-bind:class="{active:selCardType==0}" class="info-data-link">
-                      <span class="info-data-top-right"><img src="../../images/34.png" /></span>
-                      <span class="info-data-top"><img src="../../images/33.png" class="vip" /></span>
+                      <span class="info-data-top-right">
+                        <img v-if="selCardType === 0" src="../../images/check.png"/>
+                        <img v-else src="../../images/uncheck.png"/>
+                      </span>
+                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-middle">铜卡</span>
                       <div class="info-data-bottom">1万</div>
                   </li>
                   <li to="" @click="selCard(1);" v-bind:class="{active:selCardType==1}" class="info-data-link">
-                      <span class="info-data-top-right"><img src="../../images/34.png" /></span>
-                      <span class="info-data-top"><img src="../../images/33.png" class="vip" /></span>
+                      <span class="info-data-top-right">
+                        <img v-if="selCardType == 1" src="../../images/check.png"/>
+                        <img v-else src="../../images/uncheck.png"/>
+                      </span>
+                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-bottom">银卡</span>
                       <div class="info-data-bottom">1万</div>
                   </li>
                   <li to="" @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
-                      <span class="info-data-top-right"><img src="../../images/34.png" /></span>
-                      <span class="info-data-top"><img src="../../images/33.png" class="vip" /></span>
+                      <span class="info-data-top-right">
+                        <img v-if="selCardType == 2" src="../../images/check.png"/>
+                        <img v-else src="../../images/uncheck.png"/>
+                      </span>
+                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-bottom">金卡</span>
                       <div class="info-data-bottom">1万</div>
                   </li>
                   <li to="" @click="selCard(3);" v-bind:class="{active:selCardType==3}" class="info-data-link">
-                      <span class="info-data-top-right"><img src="../../images/34.png" /></span>
-                      <span class="info-data-top"><img src="../../images/33.png" class="vip" /></span>
+                      <span class="info-data-top-right">
+                        <img v-if="selCardType == 3" src="../../images/check.png"/>
+                        <img v-else src="../../images/uncheck.png"/>
+                      </span>
+                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-bottom">钻石卡</span>
                       <div class="info-data-bottom">1万</div>
                   </li>
@@ -41,10 +53,24 @@
           </section>
         </div>
         <section class="input_container">
-          <span>最大收益：<input type="text" placeholder="最大收益" v-model.lazy="needActiveNum"></span>
-        
+          <div>
+            <span>最大收益：</span>
+            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="needActiveNum">
+          </div>
+          <div>
+            <span>补充激活码：</span>
+            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="needActiveNum">
+          </div>
+          <div>
+            <span>补充购物币：</span>
+            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="needActiveNum">
+          </div>
+          <div>
+            <span>补充交易币：</span>
+            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="needActiveNum">
+          </div>
         </section>
-        <div class="login_container" @click="active=2">激活注册</div>
+        <div class="active_container" @click="upGradeAction">激活注册</div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <foot-guide></foot-guide>
     </div>
@@ -95,6 +121,12 @@
              selCard (index) {
                   this.selCardType = index;
               },
+            //升级
+            async upGradeAction(){
+                this.showAlert = true;
+                this.alertText = '手机号码不正确';
+                return
+            },
             closeTip(){
                 this.showAlert = false;
             }
@@ -105,7 +137,6 @@
 
 <style lang="scss" scoped>
     @import '../../style/mixin';
-
     .category_title{
         display: flex;
         justify-content: space-around;
@@ -124,6 +155,12 @@
             color: $blue;
         }
     }
+    .jumpRecord{
+        position: absolute;
+        @include ct;
+        right: 0.75rem;
+        @include sc(.7rem, #fff);
+    }
     .selCardType{
       background-color:#fff;
       .title{
@@ -131,9 +168,6 @@
         font-weight:500;
         padding:15px 20px;
       }
-    }
-    .active{
-
     }
     .info-data{
          width:100%;
@@ -183,32 +217,13 @@
              }
          }
     }
-    .vip{
-        text-align:center;
-        display:inline-block;
-    }
-    .loginContainer{
+    .upGradeContainer{
         padding-top: 1.95rem;
         p, span, input{
             font-family: Helvetica Neue,Tahoma,Arial;
         }
     }
-    .change_login{
-        position: absolute;
-        @include ct;
-        right: 0.75rem;
-        @include sc(.7rem, #fff);
-    }
-
-    .login_tips{
-        @include sc(.5rem, red);
-        padding: .4rem .6rem;
-        line-height: .5rem;
-        a{
-            color: #3b95e9;
-        }
-    }
-    .login_container{
+    .active_container{
         margin: 0 .5rem 1rem;
         @include sc(.7rem, #fff);
         background-color: #3b95e9;
@@ -220,21 +235,22 @@
     .change_to_text{
         background-color: #4cd964;
     }
-    .to_forget{
-        float: right;
-        @include sc(.6rem, #3b95e9);
-        margin-right: .3rem;
-    }
     .input_container{
         font-size: 0.75rem;
         font-weight:500;
         width:100%;
-        text-align:center;
+        text-align:right;
         display:block;
         background-color:#eee;
+        div{
+          padding: .15rem .15rem;
+        }
         input{
             @include sc(0.85rem, #666);
             border:1px solid #dedede;
+            width:10rem;
+            height:1.45rem;
+            disabled:true;
         }
     }
 </style>
