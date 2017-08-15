@@ -19,14 +19,11 @@ const service = r => require.ensure([], () => r(require('../page/service/service
 const questionDetail = r => require.ensure([], () => r(require('../page/service/children/questionDetail')), 'questionDetail')
 const setphone = r => require.ensure([], () => r(require('../page/profile/children/setphone')), 'setphone')
 const setmail = r => require.ensure([], () => r(require('../page/profile/children/setmail')), 'setmail')
-<<<<<<< HEAD
 const transfer = r => require.ensure([], () => r(require('../page/transfer/transfer')), 'transfer')
-=======
 const upgrade = r => require.ensure([], () => r(require('../page/upgrade/upgrade')), 'upgrade')
 const upgradeRecord = r => require.ensure([], () => r(require('../page/upgrade/upgradeRecord')), 'upgradeRecord')
 const staticProfit = r => require.ensure([], () => r(require('../page/profit/staticProfit')), 'staticProfit')
 const dynamicProfit = r => require.ensure([], () => r(require('../page/profit/dynamicProfit')), 'dynamicProfit')
->>>>>>> 2d854e76e01ef77aacdaccbb2d0a9cb512cad565
 
 export default [{
     path: '/',
@@ -125,7 +122,6 @@ export default [{
                 component: pointsDetail,
             }, ]
         },
-<<<<<<< HEAD
         //转账汇款
         {
             path: 'transfer',
@@ -134,7 +130,7 @@ export default [{
             //     path: 'record', //转账记录
             //     component: pointsDetail,
             // }, ]
-=======
+        },
         //会员升级页
         {
           path: '/upgrade',
@@ -154,7 +150,6 @@ export default [{
         {
           path: '/dynamicProfit',
           component: dynamicProfit
->>>>>>> 2d854e76e01ef77aacdaccbb2d0a9cb512cad565
         },
     ]
 }]

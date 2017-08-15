@@ -11,8 +11,8 @@
               <ul class="clear">
                   <li @click="selCard(0);" v-bind:class="{active:selCardType==0}" class="info-data-link">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType === 0" src="../../images/34.png"/>
-                        <img v-else src="../../images/35.png"/>
+                        <img v-if="selCardType === 0" src="../../images/check.png"/>
+                        <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/10.png" class="vip" /></span>
                       <span class="info-data-middle">购物币</span>
@@ -20,8 +20,8 @@
                   </li>
                   <li to="" @click="selCard(1);" v-bind:class="{active:selCardType==1}" class="info-data-link">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType === 1" src="../../images/34.png"/>
-                        <img v-else src="../../images/35.png"/>
+                        <img v-if="selCardType === 1" src="../../images/check.png"/>
+                        <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/11.png" class="vip" /></span>
                       <span class="info-data-bottom">交易币</span>
@@ -29,8 +29,8 @@
                   </li>
                   <li to="" @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType === 2" src="../../images/34.png"/>
-                        <img v-else src="../../images/35.png"/>
+                        <img v-if="selCardType === 2" src="../../images/check.png"/>
+                        <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/12.png" class="vip" /></span>
                       <span class="info-data-bottom">翰森股权</span>
