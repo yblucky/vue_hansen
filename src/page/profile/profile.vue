@@ -55,7 +55,7 @@
 
             <section class="profile-1reTe">
                 <ul class="clear">
-                    <router-link to="/login" tag="li" class="info-data-link">
+                    <router-link to="/transfer" tag="li" class="info-data-link">
                         <span class="info-data-top">
                             <img src="../../images/transfer.png" class="vip" />
                         </span>

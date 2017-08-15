@@ -21,6 +21,7 @@ const service = r => require.ensure([], () => r(require('../page/service/service
 const questionDetail = r => require.ensure([], () => r(require('../page/service/children/questionDetail')), 'questionDetail')
 const setphone = r => require.ensure([], () => r(require('../page/profile/children/setphone')), 'setphone')
 const setmail = r => require.ensure([], () => r(require('../page/profile/children/setmail')), 'setmail')
+const transfer = r => require.ensure([], () => r(require('../page/transfer/transfer')), 'transfer')
 
 export default [{
     path: '/',
@@ -127,6 +128,15 @@ export default [{
                 path: 'detail', //积分说明
                 component: pointsDetail,
             }, ]
+        },
+        //转账汇款
+        {
+            path: 'transfer',
+            component: transfer,
+            // children: [{
+            //     path: 'record', //转账记录
+            //     component: pointsDetail,
+            // }, ]
         },
     ]
 }]
