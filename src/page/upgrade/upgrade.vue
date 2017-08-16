@@ -224,13 +224,21 @@
         }
     }
     .active_container{
-        margin: 0 .5rem 1rem;
+        margin: 0.5rem 0.5rem;
         @include sc(.7rem, #fff);
         background-color: #3b95e9;
-        padding: .5rem 0;
+        padding: .5rem 0.5rem;
         border: 1px;
         border-radius: 0.15rem;
         text-align: center;
+ 
+        background: #3b95e9; /* Old browsers */
+      	background: -moz-linear-gradient(top,  #3b95e9 0%, #39a0be 100%); /* FF3.6+ */
+      	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3b95e9), color-stop(100%,#39a0be)); /* Chrome,Safari4+ */
+      	background: -webkit-linear-gradient(top,  #3b95e9 0%,#39a0be 100%); /* Chrome10+,Safari5.1+ */
+      	background: -o-linear-gradient(top,  #3b95e9 0%,#39a0be 100%); /* Opera 11.10+ */
+      	background: -ms-linear-gradient(top,  #3b95e9 0%,#39a0be 100%); /* IE10+ */
+      	background: linear-gradient(top,  #3b95e9 0%,#39a0be 100%);
     }
     .change_to_text{
         background-color: #4cd964;

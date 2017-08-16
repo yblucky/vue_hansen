@@ -2,7 +2,7 @@
    <div class="upGradeRecordContainer">
        <head-top head-title="升级记录" go-back='true'></head-top>
        <ul>
-          <li class="page">
+          <li class="page" v-for="item in upgradeRecordList">
               <div class="page-record">
                 <span class="">2017-08-15</span>
                 <div  class="page-record-bottom">
@@ -26,7 +26,7 @@
    export default {
      data(){
            return{
-
+              upgradeRecordList:[1,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6],//升级记录
            }
        },
        components: {
@@ -39,6 +39,7 @@
 <style lang="scss" scoped>
    @import 'src/style/mixin';
    .upGradeRecordContainer{
+       background-color:white;
        padding-top: 1.95rem;
        p, span, input{
            font-family: Helvetica Neue,Tahoma,Arial;

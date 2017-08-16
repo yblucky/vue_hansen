@@ -7,7 +7,7 @@
             <span :class="{choosed: active === 3}" @click="active = 3">级差奖</span>
         </section>
         <section class="show-data" v-if="active === 1">
-          <div>
+          <div v-for="item in pushRecordList">
             <span class="showDate">2017-08-12</span>
             <ul>
                <li class="page">
@@ -22,7 +22,7 @@
           </div>
         </section>
         <section class="show-data" v-else-if="active === 2">
-          <div>
+          <div v-for="item in manageRecordList">
             <span class="showDate">2017-08-12</span>
             <ul>
                <li class="page">
@@ -37,7 +37,7 @@
           </div>
         </section>
         <section class="push-data" v-else="active === 2">
-          <div>
+          <div v-for="item in diffRecordList">
             <ul>
                <li class="page">
                    <div class="page-left">
@@ -72,13 +72,10 @@
             return {
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
-                upWay: 0, //升级方式
-                active: 1, //升级方式
-                selCardType: 0, //升级等级
-                cardMaxproft: 0, //最大收益
-                needActiveNum:0,//需要补充激活码数量
-                needBuyNum:0,//需要补充购物币数量
-                needChangeNum:0,//需要补充交易数量
+                active: 1, //切换tab查看不同的记录
+                manageRecordList:[1,2,3],//管理奖记录
+                pushRecordList:[1,2,3],//管理奖记录
+                diffRecordList:[1,2,3],//管理奖记录
 
             }
         },
@@ -135,6 +132,7 @@
         }
     }
     .show-data{
+       background-color: #eee;
        .showDate{
          font-family: Helvetica Neue,Tahoma,Arial;
          font-size: 0.65rem;
@@ -198,12 +196,14 @@
              }
              div{
                color: green;
+               padding: 0.25rem 0rem;
              }
          }
          .page-record-bottom{
            float: none;
            width: 100%;
            font-size: 0.55rem;
+           padding: 0.25rem 0rem;
            color:darkgrey;
          }
       }

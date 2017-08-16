@@ -2,26 +2,10 @@
    <div class="staticContainer">
        <head-top head-title="静态收益" go-back='true'></head-top>
        <ul>
-          <li class="page">
+          <li class="page" v-for="item in staticRecordList">
               <span class="">2017-08-15</span>
               <div class="">+100</div>
           </li>
-             <li class="page">
-                 <span class="">2017-08-15</span>
-                 <div class="">+100</div>
-             </li>
-                <li class="page">
-                    <span class="">2017-08-15</span>
-                    <div class="">+100</div>
-                </li>
-                   <li class="page">
-                       <span class="">2017-08-15</span>
-                       <div class="">+100</div>
-                   </li>
-                      <li class="page">
-                          <span class="">2017-08-15</span>
-                          <div class="">+100</div>
-                      </li>
        </ul>
        <foot-guide></foot-guide>
    </div>
@@ -35,7 +19,7 @@
    export default {
      data(){
            return{
-
+              staticRecordList:[1,2,3,4,5,6,7,8,9],
            }
        },
        components: {
