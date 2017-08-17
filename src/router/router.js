@@ -24,6 +24,7 @@ const upgrade = r => require.ensure([], () => r(require('../page/upgrade/upgrade
 const upgradeRecord = r => require.ensure([], () => r(require('../page/upgrade/upgradeRecord')), 'upgradeRecord')
 const staticProfit = r => require.ensure([], () => r(require('../page/profit/staticProfit')), 'staticProfit')
 const dynamicProfit = r => require.ensure([], () => r(require('../page/profit/dynamicProfit')), 'dynamicProfit')
+const transferRecord = r => require.ensure([], () => r(require('../page/transfer/children/transferRecord')), 'transferRecord')
 
 export default [{
     path: '/',
@@ -126,10 +127,10 @@ export default [{
         {
             path: 'transfer',
             component: transfer,
-            // children: [{
-            //     path: 'record', //转账记录
-            //     component: pointsDetail,
-            // }, ]
+            children: [{
+                path: 'transferRecord', //转账记录
+                component: transferRecord,
+            }, ]
         },
         //会员升级页
         {

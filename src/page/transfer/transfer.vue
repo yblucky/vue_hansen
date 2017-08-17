@@ -2,7 +2,7 @@
     <div class="loginContainer">
         <head-top :head-title="'转账汇款'" goBack="true">
             <div slot="changeLogin" class="change_login">
-              <router-link to="/upgrade/upgradeRecord" >转账记录</router-link>
+              <router-link to="/transfer/transferRecord" >转账记录</router-link>
             </div>
         </head-top>
         <div class="selCardType">
@@ -50,6 +50,9 @@
         <div class="login_container" @click="active=2">激活注册</div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <foot-guide></foot-guide>
+        <transition name="router-slid" mode="out-in">
+            <router-view></router-view>
+        </transition>
     </div>
 </template>
 
@@ -108,7 +111,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import '../../style/mixin';
+    @import "../../../src/style/mixin.scss";
 
     .category_title{
         display: flex;
@@ -137,9 +140,6 @@
         margin-bottom:20px;
       }
     }
-    .active{
-
-    }
     .info-data{
          width:100%;
          margin-top: 5%;
@@ -161,13 +161,13 @@
                      @include sc(.55rem,#333);
                      text-align:right;
                      img{
-                        width:0.85rem;
+                        width:0.65rem;
                      }
                  }
                  .info-data-top{
                      @include sc(.55rem,#333);
                      img{
-                        width:2.5rem;
+                        width:2rem;
                      }
                  }
                  .info-data-middle{
@@ -248,5 +248,13 @@
             text-align: center;
             margin-top:20px;
         }
+    }
+
+    .router-slid-enter-active, .router-slid-leave-active {
+        transition: all .4s;
+    }
+    .router-slid-enter, .router-slid-leave-active {
+        transform: translate3d(2rem, 0, 0);
+        opacity: 0;
     }
 </style>
