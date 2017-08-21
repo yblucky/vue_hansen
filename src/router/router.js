@@ -27,6 +27,7 @@ const registerCode = r => require.ensure([], () => r(require('../page/registerCo
 const myTeam = r => require.ensure([], () => r(require('../page/myTeam/myTeam')), 'myTeam')
 const message = r => require.ensure([], () => r(require('../page/message/message')), 'message')
 const setMessage = r => require.ensure([], () => r(require('../page/message/setMessage')), 'setMessage')
+const myReward = r => require.ensure([], () => r(require('../page/reward/myReward')), 'myReward')
 
 export default [{
     path: '/',
@@ -171,6 +172,11 @@ export default [{
         {
           path: '/setMessage',
           component: setMessage
+        },
+        //任务奖励红包
+        {
+          path: '/myReward',
+          component: myReward
         },
     ]
 }]
