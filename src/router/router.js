@@ -26,6 +26,7 @@ const activateCode = r => require.ensure([], () => r(require('../page/activateCo
 const registerCode = r => require.ensure([], () => r(require('../page/registerCode/registerCode')), 'registerCode')
 const myTeam = r => require.ensure([], () => r(require('../page/myTeam/myTeam')), 'myTeam')
 const message = r => require.ensure([], () => r(require('../page/message/message')), 'message')
+const setMessage = r => require.ensure([], () => r(require('../page/message/setMessage')), 'setMessage')
 
 export default [{
     path: '/',
@@ -165,6 +166,11 @@ export default [{
         {
           path: '/message',
           component: message
+        },
+        //新增反馈信息
+        {
+          path: '/setMessage',
+          component: setMessage
         },
     ]
 }]

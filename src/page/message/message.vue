@@ -1,32 +1,24 @@
 <template>
    <div class="upGradeRecordContainer">
-       <head-top head-title="消息中心" go-back='true'></head-top>
+       <head-top head-title="消息中心" go-back='true'>
+           <div slot="changeLogin" class="jumpRecord">
+             <router-link to="/setMessage" >反馈</router-link>
+           </div>
+       </head-top>
        <ul>
           <li class="page">
               <div class="page-record">
                   <div class="imgdiv">
                     <img src="../../hsimages/6.png"  class="privateImage"/>
                   </div>
-                  <div class="pdiv">
-                      <p>
-                          <span class="icon-mobile-number">
-                              系统升级中心
-                          </span>
-                      </p>
-                  </div>
-                  <div class="rightdiv">
-                      <p>
-                          <span class="icon-mobile-number">
-                              2017-08-08
-                          </span>
-                      </p>
-                  </div>
-                  <div class="messagediv">
-                      <p>
-                          <span class="icon-mobile-number">
-                              fsdfsdf
-                          </span>
-                      </p>
+                  <div class="rightContent">
+                      <div class="top">
+                          <span class="spanLeft">系统升级提示</span>
+                          <span class="spanRight">2016年11月12日</span>
+                      </div>
+                      <div class="bottom">
+                          hello vue_world 21245445erreeedddd333342222dfdfcvcxvxcvdsfsdfeeeeeeededsfsdfsdfsdfsdfsfddddddddddd
+                      </div>
                   </div>
               </div>
           </li>
@@ -67,6 +59,12 @@
            font-family: Helvetica Neue,Tahoma,Arial;
        }
    }
+   .jumpRecord{
+       position: absolute;
+       @include ct;
+       right: 0.75rem;
+       @include sc(.7rem, #fff);
+   }
    .page{
       border-bottom: 0.1rem solid #eee;
       font-family: Helvetica Neue,Tahoma,Arial;
@@ -78,27 +76,34 @@
         color: darkgrey;
       }
       .page-record{
+        width: 100%;
         padding: 0.5rem 0.5rem;
       }
       .imgdiv{
         float: left;
+        width: 20%;
       }
-      .pdiv{
-        float: left;
-        margin-left:4%;
+      .rightContent{
+          font-size: 0.55rem;
+          float: left;
+          width:80%;
+          display: block;
+          div,span{
+            color: black;
+          }
+          .top{
+            width: 100%;
+            .spanRight{
+              padding: 0 0 0 4rem;
+            }
+          }
+          .bottom{
+            width: 100%;
+            height: 1.5rem;
+            word-wrap:break-word;
+            overflow:hidden;
+          }
       }
-      .rightdiv{
-        float: right;
-        margin-right:2%;
-        .icon-mobile-number1{
-          margin-left:60%;
-        }
-      }
-      .messagediv{
-        clear: both;
-        float: left;
-      }
-
       img{
         width: 2rem;
       }
