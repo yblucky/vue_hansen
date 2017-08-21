@@ -8,11 +8,7 @@ const setusername = r => require.ensure([], () => r(require('../page/profile/chi
 const balance = r => require.ensure([], () => r(require('../page/balance/balance')), 'balance')
 const balanceDetail = r => require.ensure([], () => r(require('../page/balance/children/detail')), 'balanceDetail')
 const benefit = r => require.ensure([], () => r(require('../page/benefit/benefit')), 'benefit')
-const coupon = r => require.ensure([], () => r(require('../page/benefit/children/coupon')), 'coupon')
-const hbDescription = r => require.ensure([], () => r(require('../page/benefit/children/hbDescription')), 'hbDescription')
-const hbHistory = r => require.ensure([], () => r(require('../page/benefit/children/hbHistory')), 'hbHistory')
-const exchange = r => require.ensure([], () => r(require('../page/benefit/children/exchange')), 'exchange')
-const commend = r => require.ensure([], () => r(require('../page/benefit/children/commend')), 'commend')
+const benefitDetail = r => require.ensure([], () => r(require('../page/benefit/children/benefitDetail')), 'benefitDetail')
 const points = r => require.ensure([], () => r(require('../page/points/points')), 'points')
 const pointsDetail = r => require.ensure([], () => r(require('../page/points/children/detail')), 'pointsDetail')
 const service = r => require.ensure([], () => r(require('../page/service/service')), 'service')
@@ -25,6 +21,11 @@ const upgradeRecord = r => require.ensure([], () => r(require('../page/upgrade/u
 const staticProfit = r => require.ensure([], () => r(require('../page/profit/staticProfit')), 'staticProfit')
 const dynamicProfit = r => require.ensure([], () => r(require('../page/profit/dynamicProfit')), 'dynamicProfit')
 const transferRecord = r => require.ensure([], () => r(require('../page/transfer/children/transferRecord')), 'transferRecord')
+const inviteUser = r => require.ensure([], () => r(require('../page/inviteUser/inviteUser')), 'inviteUser')
+const activateCode = r => require.ensure([], () => r(require('../page/activateCode/activateCode')), 'activateCode')
+const registerCode = r => require.ensure([], () => r(require('../page/registerCode/registerCode')), 'registerCode')
+const myTeam = r => require.ensure([], () => r(require('../page/myTeam/myTeam')), 'myTeam')
+const message = r => require.ensure([], () => r(require('../page/message/message')), 'message')
 
 export default [{
     path: '/',
@@ -84,7 +85,7 @@ export default [{
                 component: questionDetail,
             }, ]
         },
-        //余额
+        //购物币
         {
             path: 'balance',
             component: balance,
@@ -98,20 +99,8 @@ export default [{
             path: 'benefit',
             component: benefit,
             children: [{
-                path: 'coupon', //代金券说明
-                component: coupon,
-            }, {
-                path: 'hbDescription', //红包说明
-                component: hbDescription,
-            }, {
-                path: 'hbHistory', //历史红包
-                component: hbHistory,
-            }, {
-                path: 'exchange', //兑换红包
-                component: exchange,
-            }, {
-                path: 'commend', //推荐有奖
-                component: commend,
+                path: 'benefitDetail', //代金券说明
+                component: benefitDetail,
             },]
         },
         //我的积分页
@@ -128,7 +117,7 @@ export default [{
             path: 'transfer',
             component: transfer,
             children: [{
-                path: 'transferRecord', //转账记录
+                path: 'transfer', //转账记录
                 component: transferRecord,
             }, ]
         },
@@ -151,6 +140,31 @@ export default [{
         {
           path: '/dynamicProfit',
           component: dynamicProfit
+        },
+        //邀请会员
+        {
+          path: '/inviteUser',
+          component: inviteUser
+        },
+        //我的激活码
+        {
+          path: '/activateCode',
+          component: activateCode
+        },
+        //我的注册码
+        {
+          path: '/registerCode',
+          component: registerCode
+        },
+        //我的团队
+        {
+          path: '/myTeam',
+          component: myTeam
+        },
+        //消息中心
+        {
+          path: '/message',
+          component: message
         },
     ]
 }]

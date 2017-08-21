@@ -1,8 +1,8 @@
 <template>
     <div class="loginContainer">
-        <head-top :head-title="'转账汇款'" goBack="true">
+        <head-top head-title="转账汇款" goBack="true">
             <div slot="changeLogin" class="change_login">
-              <router-link to="/transfer/transferRecord" >转账记录</router-link>
+              <router-link to="/transfer/transfer" >转账记录</router-link>
             </div>
         </head-top>
         <div class="selCardType">

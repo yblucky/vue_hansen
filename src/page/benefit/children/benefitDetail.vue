@@ -1,9 +1,12 @@
 <template>
    <div class="upGradeRecordContainer">
-       <head-top head-title="购物币明细" go-back='true'></head-top>
+       <head-top head-title="交易币明细" go-back='true'></head-top>
        <ul>
           <li class="page">
               <div class="page-record">
+                  <div class="coindiv">
+                      充币
+                  </div>
                   <div class="pdiv">
                       <p>
                           <span>
@@ -34,6 +37,9 @@
 
           <li class="page">
               <div class="page-record">
+                  <div class="coindiv">
+                      提币
+                  </div>
                   <div class="pdiv">
                       <p>
                           <span>
@@ -42,7 +48,7 @@
                       </p>
                       <p>
                           <span>
-                              待审核
+                              已完成
                           </span>
                       </p>
                   </div>
@@ -117,13 +123,18 @@
       .page-record{
         padding: 0.5rem 0.5rem;
       }
+      .coindiv{
+        float: left;
+        margin-left:1%;
+        margin-top: 3%;
+      }
       .pdiv{
         float: left;
         margin-left:2%;
       }
       .rightdiv{
         float: right;
-        margin-right:2%;
+        margin-right:3%;
       }
 
       img{

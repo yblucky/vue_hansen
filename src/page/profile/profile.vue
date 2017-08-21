@@ -1,11 +1,20 @@
 <template>
     <div class="profile_page">
-        <head-top :head-title="profiletitle"></head-top>
+        <head-top :head-title="profiletitle">
+            <div slot="changeLogin" class="change_login">
+              <router-link to="/message" >
+                  <img src="../../hsimages/27.png" />
+              </router-link>
+            </div>
+            <div slot="changeLogin" class="message_count">
+              <span>10</span>
+            </div>
+        </head-top>
         <section>
             <section class="profile-number">
                 <ul class="profile-link">
                     <!--<img :src="imgBaseUrl + userInfo.avatar" class="privateImage" v-if="userInfo&&userInfo.user_id">-->
-                  <img :src="imgBaseUrl" class="privateImage"  >
+                  <img :src="imgBaseUrl" class="privateImage" />
                   <!--  <span class="privateImage" v-else>
                         <svg class="privateImage-svg">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
@@ -76,19 +85,19 @@
                 </ul>
 
                 <ul class="clear">
-                    <router-link to="/login" tag="li" class="info-data-link">
+                    <router-link to="/activateCode" tag="li" class="info-data-link">
                         <span class="info-data-top">
                             <img src="../../images/activecode.png" class="vip" />
                         </span>
                         <span class="info-data-bottom">我的激活码</span>
                     </router-link>
-                    <router-link to="/login" tag="li" class="info-data-link">
+                    <router-link to="/registerCode" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../images/registercode.png" class="vip" />
                       </span>
                         <span class="info-data-bottom">我的注册码</span>
                     </router-link>
-                    <router-link to="/login" tag="li" class="info-data-link">
+                    <router-link to="/inviteUser" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../images/inviteUser.png" class="vip" />
                       </span>
@@ -109,7 +118,7 @@
                       </span>
                         <span class="info-data-bottom">修改密码</span>
                     </router-link>
-                    <router-link to="/login" tag="li" class="info-data-link">
+                    <router-link to="/myTeam" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../images/myteam.png" class="vip" />
                       </span>
@@ -360,4 +369,23 @@ export default {
             }
         }
     }
+
+    .change_login{
+        position: absolute;
+        @include ct;
+        top:1.5rem;
+        right: 0.75rem;
+        @include sc(.7rem, #fff);
+    }
+    .message_count{
+      position: absolute;
+      @include ct;
+      top:1rem;
+      right: 0.95rem;
+      @include sc(.7rem, #fff);
+      span{
+        color: white;
+      }
+    }
+
 </style>

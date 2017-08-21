@@ -1,70 +1,30 @@
 <template>
    <div class="upGradeRecordContainer">
-       <head-top head-title="升级记录" go-back='true'></head-top>
+       <head-top head-title="消息中心" go-back='true'></head-top>
        <ul>
           <li class="page">
               <div class="page-record">
                   <div class="imgdiv">
-                    <img v-if="coinType === 0" src="../../../hsimages/39.png"  class="privateImage"/>
-                    <img v-if="coinType === 1" src="../../../hsimages/40.png"  class="privateImage"/>
-                    <img v-if="coinType === 2" src="../../../hsimages/41.png"  class="privateImage"/>
+                    <img src="../../hsimages/6.png"  class="privateImage"/>
                   </div>
                   <div class="pdiv">
                       <p>
                           <span class="icon-mobile-number">
-                              HS12000
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number">
-                              购物币
+                              系统升级中心
                           </span>
                       </p>
                   </div>
-
                   <div class="rightdiv">
                       <p>
                           <span class="icon-mobile-number">
                               2017-08-08
                           </span>
                       </p>
-                      <p>
-                          <span class="icon-mobile-number1">
-                              -500
-                          </span>
-                      </p>
                   </div>
-              </div>
-          </li>
-          <li class="page">
-              <div class="page-record">
-                <div class="imgdiv">
-                  <img v-if="coinType === 0" src="../../../hsimages/39.png"  class="privateImage"/>
-                  <img v-if="coinType === 1" src="../../../hsimages/40.png"  class="privateImage"/>
-                  <img v-if="coinType === 2" src="../../../hsimages/41.png"  class="privateImage"/>
-                </div>
-                  <div class="pdiv">
+                  <div class="messagediv">
                       <p>
                           <span class="icon-mobile-number">
-                              HS12000
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number">
-                              购物币
-                          </span>
-                      </p>
-                  </div>
-
-                  <div class="rightdiv">
-                      <p>
-                          <span class="icon-mobile-number">
-                              2017-08-08
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number1">
-                              -500
+                              fsdfsdf
                           </span>
                       </p>
                   </div>
@@ -83,7 +43,6 @@
    export default {
      data(){
            return{
-                coinType:0,
            }
        },
        components: {
@@ -134,6 +93,10 @@
         .icon-mobile-number1{
           margin-left:60%;
         }
+      }
+      .messagediv{
+        clear: both;
+        float: left;
       }
 
       img{
