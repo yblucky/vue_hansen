@@ -56,12 +56,14 @@
     @import '../../style/mixin';
 
     #head_top{
-        background-color: $blue;
+        background-color:$blue;
         position: fixed;
         z-index: 100;
         left: 0;
         top: 0;
         @include wh(100%, 1.95rem);
+        height:2.2rem;
+        border-bottom:1px solid #f1f1f1;
     }
     .head_goback{
         left: 0.4rem;
@@ -89,7 +91,8 @@
         .title_text{
             @include sc(0.8rem, #fff);
             text-align: center;
-            font-weight: bold;
+            color: #595959;
+            font-weight:700;
         }
     }
 </style>

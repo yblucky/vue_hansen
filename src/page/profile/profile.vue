@@ -1,43 +1,52 @@
 <template>
     <div class="profile_page">
-        <head-top :head-title="profiletitle">
+        <head-top :head-title="profiletitle" style="background-color:white;">
             <div slot="changeLogin" class="change_login">
               <router-link to="/message" >
-                  <img src="../../hsimages/27.png" />
+                  <img v-if="messageCount === 0" src="../../hsimages/26.png" />
+                  <img v-else src="../../hsimages/27.png" />
               </router-link>
             </div>
             <div slot="changeLogin" class="message_count">
-              <span>10</span>
+              <span v-if="messageCount">{{messageCount}}</span>
             </div>
         </head-top>
         <section>
             <section class="profile-number">
                 <ul class="profile-link">
                     <!--<img :src="imgBaseUrl + userInfo.avatar" class="privateImage" v-if="userInfo&&userInfo.user_id">-->
-                  <img :src="imgBaseUrl" class="privateImage" />
+                  <img src="../../hsimages/1.png" class="privateImage" />
                   <!--  <span class="privateImage" v-else>
                         <svg class="privateImage-svg">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
                         </svg>
                     </span>-->
                     <div class="user-info">
-                        <p>昵称：{{username}}</p>
                         <p>
-                            <span class="icon-mobile-number">账户：{{mobile}}</span>
-                            <span class="icon-mobile-number1">
-                                普卡账户 <router-link to="/upgrade" class="info-data-link">升级</router-link>
-                            </span>
+                            <b>{{username}}</b>
                         </p>
                         <p>
-                          <img src="../../images/vip.png" class="vip" algin="middle" />
-                          <span class="icon-mobile-number" style="background-color:burlywood">普通会员</span>
+                            <span class="icon-mobile-number"><b>{{mobile}}</b></span>
                         </p>
                         <p>
-                          <div>
-                              <progress></progress>
-                          </div>
+                          <img src="../../hsimages/22.png" class="vip22" algin="middle" />
+                          <span class="icon-mobile-number2">普通会员</span>
                         </p>
                     </div>
+
+                    <div class="rightdiv">
+                      <b>普卡账户</b>
+                      <span class="icon-mobile-number1">
+                           <router-link to="/upgrade" class="info-data-link">
+                                <img src="../../hsimages/23.png" class="vip22" algin="middle" />
+                           </router-link>
+                      </span>
+                    </div>
+
+                    <!-- <div class="bottomdiv">
+                        <progress></progress>
+                    </div> -->
+
                     <!-- <span class="arrow">
                         <svg class="arrow-svg" fill="#fff">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
@@ -48,15 +57,18 @@
             <section class="info-data">
                 <ul class="clear">
                     <router-link to="/balance" tag="li" class="info-data-link">
-                        <span class="info-data-top"><b>{{parseInt(balance).toFixed(2)}}</b>元</span>
+                        <img src="../../hsimages/36.png" class="vip22" />
+                        <span class="info-data-middle"><b>{{parseInt(balance).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">购物币</span>
                     </router-link>
                     <router-link to="/benefit" tag="li" class="info-data-link">
-                        <span class="info-data-top"><b>{{count}}</b>个</span>
+                        <img src="../../hsimages/37.png" class="vip22" />
+                        <span class="info-data-middle"><b>{{parseInt(count).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">交易币</span>
                     </router-link>
                     <router-link to="/points" tag="li" class="info-data-link">
-                        <span class="info-data-top"><b>{{pointNumber}}</b>分</span>
+                        <img src="../../hsimages/38.png" class="vip22" />
+                        <span class="info-data-middle"><b>{{parseInt(pointNumber).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">翰森股权</span>
                     </router-link>
                 </ul>
@@ -66,19 +78,19 @@
                 <ul class="clear">
                     <router-link to="/transfer" tag="li" class="info-data-link">
                         <span class="info-data-top">
-                            <img src="../../images/transfer.png" class="vip" />
+                            <img src="../../hsimages/13.png" class="vip" />
                         </span>
                         <span class="info-data-bottom">转账汇款</span>
                     </router-link>
-                    <router-link to="/dynamicProfit" tag="li" class="info-data-link">
+                    <router-link to="/myReward" tag="li" class="info-data-link">
                       <span class="info-data-top">
-                          <img src="../../images/income.png" class="vip" />
+                          <img src="../../hsimages/14.png" class="vip" />
                       </span>
-                        <span class="info-data-bottom">动态收益</span>
+                        <span class="info-data-bottom">任务奖励</span>
                     </router-link>
                     <router-link to="/staticProfit" tag="li" class="info-data-link">
                       <span class="info-data-top">
-                          <img src="../../images/dividend.png" class="vip" />
+                          <img src="../../hsimages/15.png" class="vip" />
                       </span>
                         <span class="info-data-bottom">静态分红</span>
                     </router-link>
@@ -87,19 +99,19 @@
                 <ul class="clear">
                     <router-link to="/activateCode" tag="li" class="info-data-link">
                         <span class="info-data-top">
-                            <img src="../../images/activecode.png" class="vip" />
+                            <img src="../../hsimages/16.png" class="vip" />
                         </span>
                         <span class="info-data-bottom">我的激活码</span>
                     </router-link>
                     <router-link to="/registerCode" tag="li" class="info-data-link">
                       <span class="info-data-top">
-                          <img src="../../images/registercode.png" class="vip" />
+                          <img src="../../hsimages/17.png" class="vip" />
                       </span>
                         <span class="info-data-bottom">我的注册码</span>
                     </router-link>
                     <router-link to="/inviteUser" tag="li" class="info-data-link">
                       <span class="info-data-top">
-                          <img src="../../images/inviteUser.png" class="vip" />
+                          <img src="../../hsimages/18.png" class="vip" />
                       </span>
                         <span class="info-data-bottom">邀请会员</span>
                     </router-link>
@@ -108,26 +120,27 @@
                 <ul class="clear">
                     <router-link to="/profile/info" tag="li" class="info-data-link">
                         <span class="info-data-top">
-                            <img src="../../images/updateUser.png" class="vip" />
+                            <img src="../../hsimages/19.png" class="vip" />
                         </span>
-                        <span class="info-data-bottom">修改资料</span>
+                        <span class="info-data-bottom">资料修改</span>
                     </router-link>
                     <router-link to="/forget" tag="li" class="info-data-link">
                       <span class="info-data-top">
-                          <img src="../../images/updatepwd.png" class="vip" />
+                          <img src="../../hsimages/20.png" class="vip" />
                       </span>
                         <span class="info-data-bottom">修改密码</span>
                     </router-link>
                     <router-link to="/myTeam" tag="li" class="info-data-link">
                       <span class="info-data-top">
-                          <img src="../../images/myteam.png" class="vip" />
+                          <img src="../../hsimages/21.png" class="vip" />
                       </span>
                         <span class="info-data-bottom">我的团队</span>
                     </router-link>
                 </ul>
             </section>
         </section>
-        <foot-guide></foot-guide>
+        <div class="login_container" @click="active=2">退出登录</div>
+        <!-- <foot-guide></foot-guide> -->
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -136,7 +149,7 @@
 
 <script>
 import headTop from 'src/components/header/head'
-import footGuide from 'src/components/footer/footGuide'
+// import footGuide from 'src/components/footer/footGuide'
 import progress from 'src/components/progressBar/progress'
 import {mapState, mapMutations} from 'vuex'
 import {imgBaseUrl} from 'src/config/env'
@@ -146,14 +159,15 @@ export default {
     data(){
         return{
             profiletitle: '翰森国际理财计划',
-            username: '登录/注册',           //用户名
+            username: '',           //用户名
             resetname: '',
-            mobile: '13680334542',             //电话号码
-            balance: 0,            //我的余额
-            count : 0,             //优惠券个数
-            pointNumber : 0,       //积分数
+            mobile: 'HS10000',             //电话号码
+            balance: 342,            //我的余额
+            count : 432,             //优惠券个数
+            pointNumber : 4343,       //积分数
             avatar: '',             //头像地址
             imgBaseUrl,
+            messageCount:10,           //消息个数
         }
     },
     mounted(){
@@ -162,7 +176,7 @@ export default {
     mixins: [getImgPath],
     components:{
         headTop,
-        footGuide,
+        // footGuide,
     },
 
     computed:{
@@ -189,8 +203,8 @@ export default {
         initData(){
             if (this.userInfo && this.userInfo.user_id) {
                 this.avatar = this.userInfo.avatar;
-                this.username = this.userInfo.username;
-                this.mobile = this.userInfo.mobile || '13680334542';
+                this.username = '理财大神';
+                this.mobile = this.userInfo.mobile || 'HS10000';
                 this.balance = this.userInfo.balance;
                 this.count = this.userInfo.gift_amount;
                 this.pointNumber = this.userInfo.point;
@@ -213,7 +227,7 @@ export default {
   @import "../../../src/style/mixin.scss";
 
     .profile_page{
-        background-color: #F0F0F0;
+        background-color: white;
         p, span{
             font-family: Helvetica Neue,Tahoma,Arial;
         }
@@ -227,11 +241,11 @@ export default {
             -webkit-box-align: center;
             -ms-flex-align: center;
             align-items: center;
-            background:$blue;
+            background:white;
             padding: .666667rem .6rem;
             .privateImage{
                 display:inline-block;
-                @include wh(2.5rem,2.5rem);
+                @include wh(3.5rem,3.5rem);
                 border-radius:50%;
                 vertical-align:middle;
                 .privateImage-svg{
@@ -241,7 +255,7 @@ export default {
                 }
             }
             .user-info{
-                margin-left:.48rem;
+                margin-left:.88rem;
                 -webkit-box-flex: 1;
                 -ms-flex-positive: 1;
                 flex-grow: 1;
@@ -259,18 +273,35 @@ export default {
                     }
                     .icon-mobile-number{
                         display:inline-block;
+                        @include sc(.87333rem,$fc);
+
+                    }
+                    .icon-mobile-number2{
+                        display:inline-block;
                         @include sc(.57333rem,$fc);
+                        position: absolute;
+                        top: 18.3%;
+                        left: 37.5%;
+                        color: #919191;
 
                     }
                     .icon-mobile-number1{
-                        display:inline-block;
-                        margin-left:.99rem;
+                        margin-left:20%;
                         @include sc(.57333rem,$fc);
 
                     }
                     .vip{
                         vertical-align:middle;
                         display:inline-block;
+                    }
+                    .vip22{
+                      vertical-align:middle;
+                      display:inline-block;
+                      width:3.5rem;
+                    }
+                    b{
+                      color: #6E6E6E;
+                      font-weight:600;
                     }
                 }
 
@@ -282,12 +313,27 @@ export default {
                    @include wh(100%,100%);
                 }
             }
+            .rightdiv{
+              position: absolute;
+              top: 10%;
+              left:75%;
+              .vip22{
+                vertical-align:middle;
+                display:inline-block;
+                width:3rem;
+              }
+              b{
+                font-size: 17px;
+                color: #8A8A8A;
+              }
+            }
         }
    }
    .info-data{
         width:100%;
         background:$fc;
         box-sizing: border-box;
+        border-top:1px solid #f1f1f1;
         ul{
             .info-data-link{
                 float:left;
@@ -298,6 +344,12 @@ export default {
                     display:block;
                     width:100%;
                     text-align:center;
+                }
+                .vip22{
+                  margin-top:15%;
+                  margin-left: 23%;
+                  vertical-align:bottom;
+                  width:2.5rem;
                 }
                 .info-data-top{
                     @include sc(.55rem,#333);
@@ -310,12 +362,24 @@ export default {
                         font-family: Helvetica Neue,Tahoma;
                     }
                 }
+                .info-data-middle{
+                    @include sc(.55rem,#333);
+                    padding: .553333rem 0 .453333rem;
+                    b{
+                        display:inline-block;
+                        @include sc(0.8rem,#f90);
+                        font-weight:700;
+                        line-height:0.5rem;
+                        font-family: Helvetica Neue,Tahoma;
+                    }
+                }
                 .info-data-bottom{
                     @include sc(.57333rem,#666);
-                    font-weight:400;
+                    font-weight:700;
                     padding-bottom:.453333rem;
 
                 }
+
             }
             .info-data-link:nth-of-type(2){
                 .info-data-top{
@@ -337,10 +401,12 @@ export default {
    }
 
    .profile-1reTe{
-        margin-top:.9rem;
-        background:#F0F0F0;
+        border-top: 1px solid #f1f1f1;
+        /*margin-top:.9rem;*/
+        /*background:#F0F0F0;*/
+        background:white;
         ul{
-            margin-top: .9rem;
+
             .info-data-link{
                 float:left;
                 margin-left: 6%;
@@ -362,6 +428,9 @@ export default {
                     padding-bottom:.453333rem;
 
                 }
+                img{
+                  width:1.8rem;
+                }
             }
 
             .info-data-link:nth-of-type(1){
@@ -373,19 +442,32 @@ export default {
     .change_login{
         position: absolute;
         @include ct;
-        top:1.5rem;
-        right: 0.75rem;
-        @include sc(.7rem, #fff);
+        top:1.1rem;
+        right: 0.65rem;
+        @include sc(.8rem, #fff);
     }
     .message_count{
       position: absolute;
       @include ct;
-      top:1rem;
-      right: 0.95rem;
+      top:0.5rem;
+      right: 0.85rem;
       @include sc(.7rem, #fff);
       span{
         color: white;
       }
+    }
+
+    .login_container{
+        margin-top: 5%;
+        margin-left: 10%;
+        margin-bottom: 2%;
+        width:80%;
+        @include sc(.7rem, #fff);
+        background-color: #3b95e9;
+        padding: .5rem 0;
+        border: 1px;
+        border-radius: 1rem;
+        text-align: center;
     }
 
 </style>
