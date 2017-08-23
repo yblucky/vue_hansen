@@ -27,6 +27,7 @@
                 </div>
             </section>
         </form>
+        {{token}}
         <div class="login_container" @click="checkLogin">登录</div>
         <router-link to="/forget" class="to_forget">重置密码？</router-link>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
@@ -36,25 +37,27 @@
 <script>
     import headTop from '../../components/header/head'
     import alertTip from '../../components/common/alertTip'
-    import {localapi, proapi, imgBaseUrl} from 'src/config/env'
+    import {localapi, proapi, imgBaseUrl,token,setToken} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
     import {getcaptchas,loginIn} from '../../service/getData'
 
     export default {
         data(){
             return {
-                loginName: null, //用户名
-                password: null, //密码
+                loginName: "test01", //用户名
+                password: "123456", //密码
                 captchaCodeImg: null, //验证码地址
                 key: null, //传回验证验证码key
                 showPassword:false,
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
+                token,
             }
         },
         created(){
             this.getCaptchaCode();
         },
+        mixins: [setToken],
         components: {
             headTop,
             alertTip,
@@ -89,11 +92,10 @@
                 this.data = await loginIn(this.loginName, this.password, this.key);
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
                 if (this.data.code == 200) {
-                    this.RECORD_USERINFO(this.data.result);
-                    // this.showAlert = true;
-                    // this.alertText = 'token:'+this.data.result.token;
-                    token=this.data.result.token;
-                    this.$router.push("/profile"); 
+                    this.RECORD_USERINFO(this.data.result); 
+                    this.setToken(this.data.result.token);
+                    localStorage.setItem("token",this.data.result.token);
+                    this.$router.push("/profile");
                 }else{
                   this.showAlert = true;
                   this.alertText = this.data.msg;

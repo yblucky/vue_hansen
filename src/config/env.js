@@ -7,8 +7,8 @@
  *
  */
 
+let token=null;
 let baseUrl = '';
-let token = '';
 let routerMode = 'history';
 // let imgBaseUrl = 'http://images.cangdu.org/';
 let imgBaseUrl="http://oum0lyvjq.bkt.clouddn.com/logo.png";
@@ -24,4 +24,16 @@ export {
 	routerMode,
 	imgBaseUrl,
 	token
+}
+
+
+
+export const setToken = {
+	methods: {
+		//传递过来的图片地址需要处理后才能正常使用
+		setToken(newToken) {
+		 this.token=newToken;
+			return  this.token
+		},
+	}
 }

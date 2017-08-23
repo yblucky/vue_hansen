@@ -22,8 +22,9 @@
                         </svg>
                     </span>-->
                     <div class="user-info">
+
                         <p>
-                            <b>{{username}}</b>
+                            <b>{{username}} test {{token}}</b>
                         </p>
                         <p>
                             <span class="icon-mobile-number"><b>{{mobile}}</b></span>
@@ -152,7 +153,7 @@ import headTop from 'src/components/header/head'
 // import footGuide from 'src/components/footer/footGuide'
 import progress from 'src/components/progressBar/progress'
 import {mapState, mapMutations} from 'vuex'
-import {imgBaseUrl} from 'src/config/env'
+import {imgBaseUrl,token,setToken} from 'src/config/env'
 import {getImgPath} from 'src/components/common/mixin'
 
 export default {
@@ -168,12 +169,13 @@ export default {
             avatar: '',             //头像地址
             imgBaseUrl,
             messageCount:10,           //消息个数
+            token,
         }
     },
     mounted(){
         this.initData();
     },
-    mixins: [getImgPath],
+    mixins: [getImgPath,setToken],
     components:{
         headTop,
         // footGuide,
@@ -201,6 +203,10 @@ export default {
             'SAVE_AVANDER'
         ]),
         initData(){
+            this.token=localStorage.getItem("token");
+            if (!this.token) {
+              this.$router.push("/login");
+            }
             if (this.userInfo && this.userInfo.user_id) {
                 this.avatar = this.userInfo.avatar;
                 this.username = '理财大神';
