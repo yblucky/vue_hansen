@@ -36,8 +36,11 @@ module.exports = {
             '/promotion',
             '/eus',
             '/payapi',
+            '/api',
         ],
-        proxypath: 'http://cangdu.org:8001',
+        // proxypath: 'http://cangdu.org:8001',
+        proxypath: 'http://192.168.2.222:8090/api',
+
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README
         // (https://github.com/webpack/css-loader#sourcemaps)

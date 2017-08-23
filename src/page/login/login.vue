@@ -68,10 +68,7 @@
             //获取验证吗，线上环境使用固定的图片，生产环境使用真实的验证码
             async getCaptchaCode(){
                 let res = await getcaptchas();
-                this.showAlert = true;
-                this.alertText = '进来了'+this.res;
-                // console.log("获取"+res.result.picCode);
-                // this.captchaCodeImg = res.result.picCode;
+                 this.captchaCodeImg = res.result.picCode;
             },
             //发送登录信息
             async checkLogin(){
