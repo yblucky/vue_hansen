@@ -38,7 +38,7 @@
     import alertTip from '../../components/common/alertTip'
     import {localapi, proapi, imgBaseUrl} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
-    import {getcaptchas} from '../../service/getData'
+    import {getcaptchas,loginIn} from '../../service/getData'
 
     export default {
         data(){
@@ -86,18 +86,19 @@
                     return
                 }
                 //用户名登录
-                this.showAlert = true;
-                this.alertText = '进来了';
-                this.userInfo = await login(this.loginName, this.password, this.key);
+                this.data = await loginIn(this.loginName, this.password, this.key);
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
-                // if (!this.userInfo.token) {
-                //     this.showAlert = true;
-                //     this.alertText = this.userInfo.message;
-                //     if (!this.loginWay) this.getCaptchaCode();
-                // }else{
-                //     this.RECORD_USERINFO(this.userInfo);
-                //     this.$router.push("/profile");
-                // }
+                if (this.data.code == 200) {
+                    this.RECORD_USERINFO(this.data.result);
+                    // this.showAlert = true;
+                    // this.alertText = 'token:'+this.data.result.token;
+                    token=this.data.result.token;
+                    this.$router.push("/profile"); 
+                }else{
+                  this.showAlert = true;
+                  this.alertText = this.data.msg;
+                  this.getCaptchaCode();
+                }
             },
             closeTip(){
                 this.showAlert = false;

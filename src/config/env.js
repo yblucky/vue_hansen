@@ -8,6 +8,7 @@
  */
 
 let baseUrl = '';
+let token = '';
 let routerMode = 'history';
 // let imgBaseUrl = 'http://images.cangdu.org/';
 let imgBaseUrl="http://oum0lyvjq.bkt.clouddn.com/logo.png";
@@ -22,4 +23,5 @@ export {
 	baseUrl,
 	routerMode,
 	imgBaseUrl,
+	token
 }

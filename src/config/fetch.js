@@ -1,5 +1,6 @@
 import {
-	baseUrl
+	baseUrl,
+	token
 } from './env'
 
 export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
@@ -25,7 +26,8 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 			method: type,
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				"token":token
 			},
 			mode: "cors",
 			cache: "force-cache"

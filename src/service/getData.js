@@ -49,7 +49,7 @@ export const sendMobile = (sendData, captcha_code, type, password) => fetch('/v1
  * 获取用户信息
  */
 
-export const getUser = () => fetch('/login/userinfo', {user_id: getStore('user_id')});
+export const getUser = () => fetch('/login/userinfo', {token: getStore('USER_TOKEN')});
 
 
 /**
@@ -65,7 +65,7 @@ var sendLogin = (code, mobile, validate_token) => fetch('/v1/login/app_mobile', 
 /**
  * 账号密码登录
  */
-export const login = (loginName, password, key) => fetch('/login/loginIn', {loginName, password, key}, 'POST');
+export const loginIn = (loginName, password, key) => fetch('/login/loginIn', {loginName, password, key}, 'POST');
 
 
 /**
