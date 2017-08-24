@@ -14,7 +14,7 @@ let routerMode = 'history';
 let imgBaseUrl="http://oum0lyvjq.bkt.clouddn.com/logo.png";
 
 if (process.env.NODE_ENV == 'development') {
-		baseUrl="http://localhost:8090/api";
+		baseUrl="http://192.168.2.222:8090/api";
 }else if(process.env.NODE_ENV == 'production'){
 	// baseUrl = 'http://cangdu.org:8001';
 }
@@ -27,13 +27,22 @@ export {
 }
 
 
+export const isLogin = {
+	methods: {
+			isLogin(url) {
+				 this.token=localStorage.getItem("token");
+				 if (!this.token) {
+				 	  this.$router.push("/login");
+				 }
+		 }
+ }
+}
 
 export const setToken = {
 	methods: {
-		//传递过来的图片地址需要处理后才能正常使用
 		setToken(newToken) {
 		 this.token=newToken;
 			return  this.token
-		},
+		}
 	}
 }

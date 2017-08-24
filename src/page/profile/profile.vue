@@ -153,7 +153,7 @@ import headTop from 'src/components/header/head'
 // import footGuide from 'src/components/footer/footGuide'
 import progress from 'src/components/progressBar/progress'
 import {mapState, mapMutations} from 'vuex'
-import {imgBaseUrl,token,setToken} from 'src/config/env'
+import {imgBaseUrl,token,setToken,isLogin} from 'src/config/env'
 import {getImgPath} from 'src/components/common/mixin'
 
 export default {
@@ -173,9 +173,10 @@ export default {
         }
     },
     mounted(){
+        this.isLogin("/login");
         this.initData();
     },
-    mixins: [getImgPath,setToken],
+    mixins: [getImgPath,setToken,isLogin],
     components:{
         headTop,
         // footGuide,
@@ -203,10 +204,6 @@ export default {
             'SAVE_AVANDER'
         ]),
         initData(){
-            this.token=localStorage.getItem("token");
-            if (!this.token) {
-              this.$router.push("/login");
-            }
             if (this.userInfo && this.userInfo.user_id) {
                 this.avatar = this.userInfo.avatar;
                 this.username = '理财大神';
