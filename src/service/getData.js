@@ -49,7 +49,7 @@ export const sendMobile = (sendData, captcha_code, type, password) => fetch('/v1
  * 获取用户信息
  */
 
-export const getUser = () => fetch('/login/userinfo', {token: getStore('USER_TOKEN')});
+export const getUser = () => fetch('/login/userinfo', {},'GET');
 
 
 /**

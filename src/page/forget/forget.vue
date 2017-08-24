@@ -111,7 +111,10 @@
                         }
                     }, 1000)
                     //判断用户是否存在
-                    let res = await checkExsis(this.phoneNumber, this.accountType);
+                    // let res = await checkExsis(this.phoneNumber, this.accountType);
+                    let res = {
+                      message:'11111'
+                    };
                     //判断返回的信息是否正确，用户是否注册
                     if (res.message) {
                         this.showAlert = true;

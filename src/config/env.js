@@ -55,16 +55,12 @@ export const getLoginUserInfo = {
 			if (!this.info) {
 				return null;
 			}
+
 			this.obj = JSON.parse(this.info);
-			if(!this.obj){
+			if(!this.obj.hasOwnProperty(key) ){
 				return null;
 			}
-				console.log(this.obj[key]);
-			if (this.obj[key]) {
-				console.log(this.obj[key]);
-				return this.obj[key];
-			}
-			return  null;
+			return this.obj[key]; 
 		}
 	}
 }
