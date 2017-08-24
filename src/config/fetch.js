@@ -1,6 +1,7 @@
 import {
 	baseUrl,
-	token
+	token,
+  getLoginUserInfo
 } from './env'
 
 export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
@@ -27,7 +28,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
-				"token":token
+				"token":this.getLoginUserInfo("token");
 			},
 			mode: "cors",
 			cache: "force-cache"
