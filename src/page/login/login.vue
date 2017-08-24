@@ -92,8 +92,8 @@
                 this.data = await loginIn(this.loginName, this.password, this.key);
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
                 if (this.data.code == 200) {
-                    this.RECORD_USERINFO(this.data.result); 
-                    this.setToken(this.data.result.token);
+                    this.RECORD_USERINFO(this.data.result);
+                    this.setToken(this.data.result.token,this.data.result);
                     localStorage.setItem("token",this.data.result.token);
                     this.$router.push("/profile");
                 }else{

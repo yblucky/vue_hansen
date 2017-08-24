@@ -24,7 +24,7 @@
                     <div class="user-info">
 
                         <p>
-                            <b>{{username}}</b>
+                            <b>{{username}} </b>
                         </p>
                         <p>
                             <span class="icon-mobile-number"><b>{{mobile}}</b></span>
@@ -153,7 +153,7 @@ import headTop from 'src/components/header/head'
 // import footGuide from 'src/components/footer/footGuide'
 import progress from 'src/components/progressBar/progress'
 import {mapState, mapMutations} from 'vuex'
-import {imgBaseUrl,token,setToken,isLogin} from 'src/config/env'
+import {imgBaseUrl,token,setToken,isLogin,getLoginUserInfo} from 'src/config/env'
 import {getImgPath} from 'src/components/common/mixin'
 
 export default {
@@ -176,7 +176,7 @@ export default {
       this.isLogin("/login");
         this.initData();
     },
-    mixins: [getImgPath,setToken,isLogin],
+    mixins: [getImgPath,setToken,isLogin,getLoginUserInfo],
     components:{
         headTop,
         // footGuide,
@@ -204,6 +204,9 @@ export default {
             'SAVE_AVANDER'
         ]),
         initData(){
+           console.log(this.getLoginUserInfo("token"));
+           console.log(this.getLoginUserInfo("id"));
+           console.log(this.getLoginUserInfo("nickName"));
             if (this.userInfo && this.userInfo.user_id) {
                 this.avatar = this.userInfo.avatar;
                 this.username = '理财大神';

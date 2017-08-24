@@ -40,9 +40,31 @@ export const isLogin = {
 
 export const setToken = {
 	methods: {
-		setToken(newToken) {
+		setToken(newToken,obj) {
 		 this.token=newToken;
-			return  this.token
+ 	 		localStorage.setItem("loginUserInfo", JSON.stringify(obj));
+			return  this.token;
+		}
+	}
+}
+
+export const getLoginUserInfo = {
+	methods: {
+		getLoginUserInfo(key) {
+			this.info=localStorage.getItem("loginUserInfo");
+			if (!this.info) {
+				return null;
+			}
+			this.obj = JSON.parse(this.info);
+			if(!this.obj){
+				return null;
+			}
+				console.log(this.obj[key]);
+			if (this.obj[key]) {
+				console.log(this.obj[key]);
+				return this.obj[key];
+			}
+			return  null;
 		}
 	}
 }
