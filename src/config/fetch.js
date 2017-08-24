@@ -1,19 +1,31 @@
 import {
-	baseUrl,
-	token,
-  getLoginUserInfo
+	baseUrl
 } from './env'
 
 export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
+	let token;
+	token=localStorage.getItem("token");
 	type = type.toUpperCase();
 	url = baseUrl + url;
 
+	let requestConfig = {
+		// credentials: 'include',
+		credentials: '*',
+		method: type,
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			"token":token,
+		},
+		mode: "cors",
+		cache: "force-cache"
+	}
 	if (type == 'GET') {
 		let dataStr = ''; //数据拼接字符串
 		Object.keys(data).forEach(key => {
 			dataStr += key + '=' + data[key] + '&';
 		})
-
+		// dataStr+="&token="+token;
 		if (dataStr !== '') {
 			dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
 			url = url + '?' + dataStr;
@@ -21,20 +33,21 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 	}
 
 	if (window.fetch && method == 'fetch') {
-		let requestConfig = {
-			// credentials: 'include',
-			credentials: '*',
-			method: type,
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				"token":this.getLoginUserInfo("token");
-			},
-			mode: "cors",
-			cache: "force-cache"
-		}
+		// let requestConfig = {
+		// 	// credentials: 'include',
+		// 	credentials: '*',
+		// 	method: type,
+		// 	headers: {
+		// 		'Accept': 'application/json',
+		// 		'Content-Type': 'application/json',
+		// 		"token":token,
+		// 	},
+		// 	mode: "cors",
+		// 	cache: "force-cache"
+		// }
 
 		if (type == 'POST') {
+			// data.token=token;
 			Object.defineProperty(requestConfig, 'body', {
 				value: JSON.stringify(data)
 			})
