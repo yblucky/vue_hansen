@@ -15,8 +15,8 @@
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/10.png" class="vip" /></span>
-                      <span class="info-data-middle">购物币</span>
-                      <span class="info-data-bottom"><b>{{parseInt(balance).toFixed(2)}}</b>元</span>
+                      <span class="info-data-middle">支付币</span>
+                      <span class="info-data-bottom"><b>{{parseFloat(payAmt).toFixed(6)}}</b></span>
                   </li>
                   <li to="" @click="selCard(1);" v-bind:class="{active:selCardType==1}" class="info-data-link">
                       <span class="info-data-top-right">
@@ -25,7 +25,7 @@
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/11.png" class="vip" /></span>
                       <span class="info-data-bottom">交易币</span>
-                      <span class="info-data-bottom"><b>{{parseInt(count).toFixed(2)}}</b>元</span>
+                      <span class="info-data-bottom"><b>{{parseFloat(tradeAmt).toFixed(6)}}</b></span>
                   </li>
                   <li to="" @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
                       <span class="info-data-top-right">
@@ -34,20 +34,25 @@
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/12.png" class="vip" /></span>
                       <span class="info-data-bottom">翰森股权</span>
-                      <span class="info-data-bottom"><b>{{parseInt(pointNumber).toFixed(2)}}</b>元</span>
+                      <span class="info-data-bottom"><b>{{parseFloat(equityAmt).toFixed(6)}}</b></span>
                   </li>
               </ul>
           </section>
         </div>
         <section class="input_container">
           <p>
-            <span>收款人账户：<input type="text" size="16" name="uid"></span>
+            <span>收款账户：<input type="text" size="16" name="toUid" v-model.lazy="toUid"></span>
           </p>
           <p>
-            <span>&nbsp;&nbsp;&nbsp;高级密码：<input type="password" size="16" name="pwd"></span>
+            <span>转币数量：<input type="text" size="16" name="amount" v-model.lazy="amount"></span>
+          </p>
+          <p>
+            <span>高级密码：<input type="password" size="16" name="payPassWord"  v-model.lazy="payPassWord"></span>
           </p>
         </section>
-        <div class="login_container" @click="active=2">激活注册</div>
+        <div class="btn">
+            <div class="login_container" @click="coinTransferAction">确认</div>
+        </div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <foot-guide></foot-guide>
         <transition name="router-slid" mode="out-in">
@@ -60,8 +65,10 @@
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
     import footGuide from 'src/components/footer/footGuide'
-    import {localapi, proapi, imgBaseUrl} from 'src/config/env'
+    import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
+    import {coinTransfer} from '../../service/getData'
+
 
     export default {
         data(){
@@ -70,14 +77,23 @@
                 alertText: null, //提示的内容
                 upWay: 0, //升级方式
                 active: 1, //升级方式
-                selCardType: 0, //升级等级
-                balance:1000,//购物币
-                count:1000,//交易币
-                pointNumber:1000,//翰森股权
-                uid:0,//收款账户
-                pwd:0,//高级密码
+                selCardType: 1, //升级等级
+
+                payAmt:0,//购物币
+                tradeAmt:0,//交易币
+                equityAmt:0,//翰森股权
+                toUid:'',//收款账户
+                payPassWord:'',//高级密码
+
+
+                amount:0,//支付个数
+                walletOrderType:1, //1交易币内部转账  4 支付币内部转账  8股权币内部转账
             }
         },
+        mounted(){
+          this.isLogin("/login");
+        },
+        mixins: [isLogin,getLoginUserInfo],
         created(){
         },
         components: {
@@ -95,12 +111,43 @@
             ...mapMutations([
                 'RECORD_USERINFO',
             ]),
+            async coinTransferAction(){
+                if (!this.toUid) {
+                  this.showAlert = true;
+                  this.alertText = '收款账号不能为空';
+                }
+                if (!this.amount) {
+                  this.showAlert = true;
+                  this.alertText = '转币数量不能为空';
+                }
+                if (!this.payPassWord) {
+                  console.log(this.payPassWord);
+                  this.showAlert = true;
+                  this.alertText = '支付密码不能为空';
+                }
+                console.log(this.amount);
+                let res = await coinTransfer(this.toUid, parseFloat(this.amount) ,this.walletOrderType,this.payPassWord);
+                if (res.code==200) {
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                }else {
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                }
+            },
             toggleTabs (index,tabText) {
                  this.active = index;
              },
              selCard (index) {
                   this.selCardType = index;
-
+                  console.log("indexdddddddddddd "+index);
+                  if (index==0) {
+                    this.walletOrderType=4;
+                  }else  if (index==1) {
+                    this.walletOrderType=1;
+                  }else if (index==2) {
+                    this.walletOrderType=8;
+                  }
               },
             closeTip(){
                 this.showAlert = false;

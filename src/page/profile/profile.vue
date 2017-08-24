@@ -27,7 +27,7 @@
                             <b>{{nickName}} </b>
                         </p>
                         <p>
-                            <span class="icon-mobile-number"><b>{{phone}}</b></span>
+                            <span class="icon-mobile-number"><b></b></span>
                         </p>
                         <p>
                           <img src="../../hsimages/22.png" class="vip22" algin="middle" />

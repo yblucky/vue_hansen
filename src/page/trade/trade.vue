@@ -82,41 +82,14 @@
                tradeCoinOutScale:0,
                payPassWord:"",
                walletOrderType:2, //交易币提币 2
-
-
-               id:"A085DEB2E34941B046CDA5107DB24BFD",
-               uid:100000,
                loginName:"test01",
                phone:"",
                userName:null,
                nickName:"test01",
                sex:1,
                headImgUrl:"",
-               createTime:1503493225000,
-               remark:null,
                grade:0,
                cardGrade:0,
-               releaseTime:null,
-               equityAmt:0,
-               payAmt:0,
-               tradeAmt:0,
-               insuranceAmt:0,
-               maxProfits:0,
-               sumProfits:0,
-               cashOutProfits:0,
-               contactUserId:"0.0000",
-               activeCodeNo:0,
-               registerCodeNo:0,
-               remainTaskNo:0,
-               forzenPayAmt:0,
-               forzenTradeAmt:0,
-               forzenEquityAmt:0,
-               inPayAddress:'',
-               inTradeAddress:'',
-               inEquityAddress:'',
-               outPayAddress:'',
-               outEquityAddress:'',
-               outTradeAddress:''
            }
        },
        mounted(){
@@ -162,11 +135,6 @@
              }
          },
          initData(){
-            console.log(this.getLoginUserInfo("token"));
-            console.log(this.getLoginUserInfo("id"));
-            console.log(this.getLoginUserInfo("nickName"));
-
-            this.id=this.getLoginUserInfo("id");
             this.phone=this.getLoginUserInfo("phone");
             this.uid=this.getLoginUserInfo("uid");
             this.loginName=this.getLoginUserInfo("loginName");
@@ -174,46 +142,10 @@
             this.nickName=this.getLoginUserInfo("nickName");
             this.sex=this.getLoginUserInfo("sex");
             this.headImgUrl=this.getLoginUserInfo("headImgUrl");
-            this.createTime=this.getLoginUserInfo("createTime");
-            this.remark=this.getLoginUserInfo("remark");
             this.grade=this.getLoginUserInfo("grade");
             this.cardGrade=this.getLoginUserInfo("cardGrade");
-            this.releaseTime=this.getLoginUserInfo("releaseTime");
-            this.equityAmt=this.getLoginUserInfo("equityAmt");
-            this.payAmt=this.getLoginUserInfo("payAmt")
-            this.tradeAmt=this.getLoginUserInfo("tradeAmt");
-            this.insuranceAmt=this.getLoginUserInfo("insuranceAmt");
-            this.maxProfits=this.getLoginUserInfo("maxProfits");
-            this.sumProfits=this.getLoginUserInfo("sumProfits");
-            this.cashOutProfits=this.getLoginUserInfo("cashOutProfits");
-            this.contactUserId=this.getLoginUserInfo("contactUserId");
-            this.activeCodeNo=this.getLoginUserInfo("activeCodeNo");
-            this.registerCodeNo=this.getLoginUserInfo("registerCodeNo");
-            this.remainTaskNo=this.getLoginUserInfo("remainTaskNo");
-            this.forzenPayAmt=this.getLoginUserInfo("forzenPayAmt");
-            this.forzenTradeAmt=this.getLoginUserInfo("forzenTradeAmt");
-            this.forzenEquityAmt=this.getLoginUserInfo("forzenEquityAmt");
-            this.inPayAddress=this.getLoginUserInfo("inPayAddress");
-            this.inTradeAddress=this.getLoginUserInfo("inTradeAddress");
-            this.inEquityAddress=this.getLoginUserInfo("inEquityAddress");
-            this.outPayAddress=this.getLoginUserInfo("outPayAddress");
-            this.outEquityAddress=this.getLoginUserInfo("outEquityAddress");
             this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
-
-             this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
-
-
-             // if (this.userInfo && this.userInfo.user_id) {
-             //     this.tradeAmt = this.userInfo.avatar;
-             //     this.username = '理财大神';
-             //     this.mobile = this.userInfo.mobile || 'HS10000';
-             //     this.balance = this.userInfo.balance;
-             //     this.count = this.userInfo.gift_amount;
-             //     this.pointNumber = this.userInfo.point;
-             // }else{
-             //     this.username = '登录/注册';
-             //     this.mobile = '13680334542';
-             // }
+            this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
          },
        }
    }
