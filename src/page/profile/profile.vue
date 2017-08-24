@@ -24,7 +24,7 @@
                     <div class="user-info">
 
                         <p>
-                            <b>{{username}} test {{token}}</b>
+                            <b>{{username}}</b>
                         </p>
                         <p>
                             <span class="icon-mobile-number"><b>{{mobile}}</b></span>
@@ -173,7 +173,7 @@ export default {
         }
     },
     mounted(){
-        this.isLogin("/login");
+      this.isLogin("/login");
         this.initData();
     },
     mixins: [getImgPath,setToken,isLogin],
