@@ -7,7 +7,7 @@
        </head-top>
        <section class="topPanel">
          <div class="activateDiv">交易币余额</div>
-         <div class="activateCode"><b>1000.00</b></div>
+         <div class="activateCode"><b>{{tradeAmt}}</b></div>
          <div class="explain">1交易币约2000元</div>
        </section>
        <section class="info-data">
@@ -25,7 +25,7 @@
                   <div class="transfer_div">
                     <section v-if="turnType == true" class="transfer">
                         <div class="div1">
-                          <span class="shi">提币地址：FDJLDSJFOSNFOSJFSJFSLFMS</span>
+                          <span class="shi">提币地址：{{outTradeAddress}}</span>
                           <input type="hidden" name="coinAddr" v-model.lazy="coinAddr">
                         </div>
                         <div>
@@ -67,6 +67,7 @@
 <script>
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
+   import {isLogin,getLoginUserInfo} from 'src/config/env'
 
    export default {
      data(){
@@ -79,11 +80,48 @@
                fee:"",
                currency:"",
                payWord:"",
+
+
+               id:"A085DEB2E34941B046CDA5107DB24BFD",
+               uid:100000,
+               loginName:"test01",
+               phone:"",
+               userName:null,
+               nickName:"test01",
+               sex:1,
+               headImgUrl:"",
+               createTime:1503493225000,
+               remark:null,
+               grade:0,
+               cardGrade:0,
+               releaseTime:null,
+               equityAmt:0,
+               payAmt:0,
+               tradeAmt:0,
+               insuranceAmt:0,
+               maxProfits:0,
+               sumProfits:0,
+               cashOutProfits:0,
+               contactUserId:"0.0000",
+               activeCodeNo:0,
+               registerCodeNo:0,
+               remainTaskNo:0,
+               forzenPayAmt:0,
+               forzenTradeAmt:0,
+               forzenEquityAmt:0,
+               inPayAddress:'',
+               inTradeAddress:'',
+               inEquityAddress:'',
+               outPayAddress:'',
+               outEquityAddress:'',
+               outTradeAddress:''
            }
        },
        mounted(){
-
+         this.isLogin("/login");
+         this.initData();
        },
+      mixins: [isLogin,getLoginUserInfo],
        components: {
            headTop,
            alertTip,
@@ -96,6 +134,56 @@
              this.showAlert = true;
              this.alertText = '手机号码不正确';
              return
+         },
+         initData(){
+            console.log(this.getLoginUserInfo("token"));
+            console.log(this.getLoginUserInfo("id"));
+            console.log(this.getLoginUserInfo("nickName"));
+
+            this.id=this.getLoginUserInfo("id");
+            this.phone=this.getLoginUserInfo("phone");
+            this.uid=this.getLoginUserInfo("uid");
+            this.loginName=this.getLoginUserInfo("loginName");
+            this.userName=this.getLoginUserInfo("userName");
+            this.nickName=this.getLoginUserInfo("nickName");
+            this.sex=this.getLoginUserInfo("sex");
+            this.headImgUrl=this.getLoginUserInfo("headImgUrl");
+            this.createTime=this.getLoginUserInfo("createTime");
+            this.remark=this.getLoginUserInfo("remark");
+            this.grade=this.getLoginUserInfo("grade");
+            this.cardGrade=this.getLoginUserInfo("cardGrade");
+            this.releaseTime=this.getLoginUserInfo("releaseTime");
+            this.equityAmt=this.getLoginUserInfo("equityAmt");
+            this.payAmt=this.getLoginUserInfo("payAmt")
+            this.tradeAmt=this.getLoginUserInfo("tradeAmt");
+            this.insuranceAmt=this.getLoginUserInfo("insuranceAmt");
+            this.maxProfits=this.getLoginUserInfo("maxProfits");
+            this.sumProfits=this.getLoginUserInfo("sumProfits");
+            this.cashOutProfits=this.getLoginUserInfo("cashOutProfits");
+            this.contactUserId=this.getLoginUserInfo("contactUserId");
+            this.activeCodeNo=this.getLoginUserInfo("activeCodeNo");
+            this.registerCodeNo=this.getLoginUserInfo("registerCodeNo");
+            this.remainTaskNo=this.getLoginUserInfo("remainTaskNo");
+            this.forzenPayAmt=this.getLoginUserInfo("forzenPayAmt");
+            this.forzenTradeAmt=this.getLoginUserInfo("forzenTradeAmt");
+            this.forzenEquityAmt=this.getLoginUserInfo("forzenEquityAmt");
+            this.inPayAddress=this.getLoginUserInfo("inPayAddress");
+            this.inTradeAddress=this.getLoginUserInfo("inTradeAddress");
+            this.inEquityAddress=this.getLoginUserInfo("inEquityAddress");
+            this.outPayAddress=this.getLoginUserInfo("outPayAddress");
+            this.outEquityAddress=this.getLoginUserInfo("outEquityAddress");
+            this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
+             // if (this.userInfo && this.userInfo.user_id) {
+             //     this.tradeAmt = this.userInfo.avatar;
+             //     this.username = '理财大神';
+             //     this.mobile = this.userInfo.mobile || 'HS10000';
+             //     this.balance = this.userInfo.balance;
+             //     this.count = this.userInfo.gift_amount;
+             //     this.pointNumber = this.userInfo.point;
+             // }else{
+             //     this.username = '登录/注册';
+             //     this.mobile = '13680334542';
+             // }
          },
        }
    }
