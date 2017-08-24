@@ -41,7 +41,7 @@ export const isLogin = {
 export const setToken = {
 	methods: {
 		setToken(newToken,obj) {
-		 this.token=newToken;
+			localStorage.setItem("token", newToken);
  	 		localStorage.setItem("loginUserInfo", JSON.stringify(obj));
 			return  this.token;
 		}
@@ -60,7 +60,7 @@ export const getLoginUserInfo = {
 			if(!this.obj.hasOwnProperty(key) ){
 				return null;
 			}
-			return this.obj[key]; 
+			return this.obj[key];
 		}
 	}
 }

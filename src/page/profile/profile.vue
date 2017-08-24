@@ -258,7 +258,7 @@ export default {
            this.releaseTime=this.getLoginUserInfo("releaseTime");
            this.equityAmt=this.getLoginUserInfo("equityAmt");
            this.payAmt=this.getLoginUserInfo("payAmt")
-           this.tradeAmt=this.getLoginUserInfo("tradeAmt"); 
+           this.tradeAmt=this.getLoginUserInfo("tradeAmt");
            this.insuranceAmt=this.getLoginUserInfo("insuranceAmt");
            this.maxProfits=this.getLoginUserInfo("maxProfits");
            this.sumProfits=this.getLoginUserInfo("sumProfits");

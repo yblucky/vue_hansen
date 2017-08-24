@@ -26,26 +26,26 @@
                     <section v-if="turnType == true" class="transfer">
                         <div class="div1">
                           <span class="shi">提币地址：{{outTradeAddress}}</span>
-                          <input type="hidden" name="coinAddr" v-model.lazy="coinAddr">
+                          <input type="hidden" name="outTradeAddress" v-model.lazy="outTradeAddress">
                         </div>
                         <div>
                           <span class="shi">提币数量：</span>
-                          <input type="text" name="count" v-model.lazy="count">
+                          <input type="text" name="coinOutAmt" v-model.lazy="coinOutAmt" @change="calcAmount">
                         </div>
                         <div>
                           <span class="wu">提币手续费：</span>
-                          <input type="text" name="fee" v-model.lazy="fee">
+                          <input type="text" name="tradeCoinOutScale" v-model.lazy="tradeCoinOutScale">
                         </div>
                         <div>
                           <span class="wu">实际需支付：</span>
-                          <input type="text" name="currency" v-model.lazy="currency">
+                          <input type="text" name="amount" v-model.lazy="amount">
                         </div>
                         <div>
                           <span class="shi">交易密码：</span>
-                          <input type="text" name="payWord" v-model.lazy="payWord">
+                          <input type="text" name="payPassWord" v-model.lazy="payPassWord">
                         </div>
                         <div class="btn">
-                            <div class="active_container" @click="upGradeAction">确认</div>
+                            <div class="active_container" @click="coninOut">确认</div>
                         </div>
                     </section>
                   </div>
@@ -68,6 +68,7 @@
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
    import {isLogin,getLoginUserInfo} from 'src/config/env'
+   import {cointOut} from '../../service/getData'
 
    export default {
      data(){
@@ -75,11 +76,12 @@
                showAlert: false,
                alertText: null,
                turnType:false,
-               coinAddr:"",
-               count:"",
-               fee:"",
-               currency:"",
-               payWord:"",
+               outTradeAddress:"",
+               coinOutAmt:110,//需要提币支付个数
+               amount:0,//实际支付个数
+               tradeCoinOutScale:0,
+               payPassWord:"",
+               walletOrderType:2, //交易币提币 2
 
 
                id:"A085DEB2E34941B046CDA5107DB24BFD",
@@ -130,10 +132,34 @@
 
        },
        methods: {
-         async upGradeAction(){
-             this.showAlert = true;
-             this.alertText = '手机号码不正确';
-             return
+         calcAmount(){
+           this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
+         },
+         async coninOut(){
+             if (!this.outTradeAddress) {
+               this.showAlert = true;
+               this.alertText = '提币地址不能为空';
+             }
+             if (!this.amount) {
+               this.showAlert = true;
+               this.alertText = '提币地址数量不能为空';
+             }
+             if (!this.walletOrderType) {
+               this.showAlert = true;
+               this.alertText = '提币地址类型不能为空';
+             }
+             if (!this.payPassWord) {
+               this.showAlert = true;
+               this.alertText = '支付密码不能为空';
+             }
+             let res = await cointOut(this.outTradeAddress, parseFloat(this.amount) ,this.walletOrderType,this.payPassWord);
+             if (res.code==200) {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }else {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }
          },
          initData(){
             console.log(this.getLoginUserInfo("token"));
@@ -173,6 +199,10 @@
             this.outPayAddress=this.getLoginUserInfo("outPayAddress");
             this.outEquityAddress=this.getLoginUserInfo("outEquityAddress");
             this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
+
+             this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
+
+
              // if (this.userInfo && this.userInfo.user_id) {
              //     this.tradeAmt = this.userInfo.avatar;
              //     this.username = '理财大神';
