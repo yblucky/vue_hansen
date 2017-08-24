@@ -5,12 +5,12 @@ const profile = r => require.ensure([], () => r(require('../page/profile/profile
 const forget = r => require.ensure([], () => r(require('../page/forget/forget')), 'forget')
 const info = r => require.ensure([], () => r(require('../page/profile/children/info')), 'info')
 const setusername = r => require.ensure([], () => r(require('../page/profile/children/setusername')), 'setusername')
-const balance = r => require.ensure([], () => r(require('../page/balance/balance')), 'balance')
-const balanceDetail = r => require.ensure([], () => r(require('../page/balance/children/detail')), 'balanceDetail')
-const benefit = r => require.ensure([], () => r(require('../page/benefit/benefit')), 'benefit')
-const benefitDetail = r => require.ensure([], () => r(require('../page/benefit/children/benefitDetail')), 'benefitDetail')
-const points = r => require.ensure([], () => r(require('../page/points/points')), 'points')
-const pointsDetail = r => require.ensure([], () => r(require('../page/points/children/detail')), 'pointsDetail')
+const pay = r => require.ensure([], () => r(require('../page/pay/pay')), 'pay')
+const payDetail = r => require.ensure([], () => r(require('../page/pay/children/payDetail')), 'payDetail')
+const trade = r => require.ensure([], () => r(require('../page/trade/trade')), 'trade')
+const tradeDetail = r => require.ensure([], () => r(require('../page/trade/children/tradeDetail')), 'tradeDetail')
+const equity = r => require.ensure([], () => r(require('../page/equity/equity')), 'equity')
+const equityDetail = r => require.ensure([], () => r(require('../page/equity/children/equityDetail')), 'equityDetail')
 const service = r => require.ensure([], () => r(require('../page/service/service')), 'service')
 const questionDetail = r => require.ensure([], () => r(require('../page/service/children/questionDetail')), 'questionDetail')
 const setphone = r => require.ensure([], () => r(require('../page/profile/children/setphone')), 'setphone')
@@ -89,29 +89,29 @@ export default [{
         },
         //购物币
         {
-            path: 'balance',
-            component: balance,
+            path: 'pay',
+            component: pay,
             children: [{
                 path: 'detail', //余额说明
-                component: balanceDetail,
+                component: payDetail,
             }, ]
         },
         //我的优惠页
         {
-            path: 'benefit',
-            component: benefit,
+            path: 'trade',
+            component: trade,
             children: [{
-                path: 'benefitDetail', //代金券说明
-                component: benefitDetail,
+                path: 'tradeDetail', //代金券说明
+                component: tradeDetail,
             },]
         },
         //我的积分页
         {
-            path: 'points',
-            component: points,
+            path: 'equity',
+            component: equity,
             children: [{
                 path: 'detail', //积分说明
-                component: pointsDetail,
+                component: equityDetail,
             }, ]
         },
         //转账汇款

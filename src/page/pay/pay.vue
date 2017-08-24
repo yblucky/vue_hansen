@@ -2,7 +2,7 @@
   <div class="page">
         <head-top head-title="购物币钱包" go-back='true'>
           <div slot="changeLogin" class="change_login">
-            <router-link to="/balance/detail" ><b>交易明细</b></router-link>
+            <router-link to="/pay/detail" ><b>交易明细</b></router-link>
           </div>
         </head-top>
         <section class="topPanel">

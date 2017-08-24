@@ -57,17 +57,17 @@
             </section>
             <section class="info-data">
                 <ul class="clear">
-                    <router-link to="/balance" tag="li" class="info-data-link">
+                    <router-link to="/pay" tag="li" class="info-data-link">
                         <img src="../../hsimages/36.png" class="vip22" />
                         <span class="info-data-middle"><b>{{parseInt(balance).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">购物币</span>
                     </router-link>
-                    <router-link to="/benefit" tag="li" class="info-data-link">
+                    <router-link to="/trade" tag="li" class="info-data-link">
                         <img src="../../hsimages/37.png" class="vip22" />
                         <span class="info-data-middle"><b>{{parseInt(count).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">交易币</span>
                     </router-link>
-                    <router-link to="/points" tag="li" class="info-data-link">
+                    <router-link to="/equity" tag="li" class="info-data-link">
                         <img src="../../hsimages/38.png" class="vip22" />
                         <span class="info-data-middle"><b>{{parseInt(pointNumber).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">翰森股权</span>
