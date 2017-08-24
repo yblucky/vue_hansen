@@ -78,3 +78,15 @@ export const signout = () => fetch('/v2/signout');
  * 改密码
  */
 export const changePassword = (username, oldpassWord, newpassword, confirmpassword, captcha_code) => fetch('/v2/changepassword', {username, oldpassWord, newpassword, confirmpassword, captcha_code}, 'POST');
+/**
+ * 会员升级
+ */
+export const memberUpgrade = (upGradeWay, grade, payWord) => fetch('/user/memberUpgrade', {upGradeWay, grade, payWord}, 'POST');
+/**
+ * 会员等级详细信息
+ */
+export const findUserCardGrade = (grade) => fetch('/user/findUserCardGrade', {grade}, 'GET');
+/**
+ * 会员升级记录
+ */
+export const upGradeRecord = (pageNo,pageSize) => fetch('/user/upGradeRecord', {pageNo,pageSize}, 'GET');

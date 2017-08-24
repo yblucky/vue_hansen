@@ -14,7 +14,8 @@ let routerMode = 'history';
 let imgBaseUrl="http://oum0lyvjq.bkt.clouddn.com/logo.png";
 
 if (process.env.NODE_ENV == 'development') {
-		baseUrl="http://192.168.2.222:8090/api";
+		// baseUrl="http://192.168.2.222:8090/api";
+		baseUrl="http://localhost:8090/hansen";
 }else if(process.env.NODE_ENV == 'production'){
 	// baseUrl = 'http://cangdu.org:8001';
 }
@@ -67,4 +68,28 @@ export const getLoginUserInfo = {
 			return  null;
 		}
 	}
+}
+//格式化日期 eg:formatDate(new Date(),'yyyy-MM-dd hh:mm')
+export function formatDate (date, fmt) {
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+  }
+  let o = {
+    'M+': date.getMonth() + 1,
+    'd+': date.getDate(),
+    'h+': date.getHours(),
+    'm+': date.getMinutes(),
+    's+': date.getSeconds()
+  }
+  for (let k in o) {
+    if (new RegExp(`(${k})`).test(fmt)) {
+      let str = o[k] + ''
+      fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? str : padLeftZero(str))
+    }
+  }
+  return fmt
+}
+
+function padLeftZero (str) {
+  return ('00' + str).substr(str.length)
 }

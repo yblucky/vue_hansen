@@ -4,14 +4,14 @@
        <ul>
           <li class="page" v-for="item in upgradeRecordList">
               <div class="page-record">
-                <span class="">2017-08-15</span>
+                <span class="">{{item.createTime | formatDate}}</span>
                 <div  class="page-record-bottom">
-                  <span>2017-08-15</span>
+                  <span>{{item.historyGrade}}</span>
                   <img src="../../images/rightLogo.png"/>
-                  <span>343434</span>
+                  <span>{{item.currencyGrade}}</span>
                 </div>
               </div>
-              <div>原点升级</div>
+              <div>{{item.upGradeTypeName}}</div>
           </li>
        </ul>
        <foot-guide></foot-guide>
@@ -19,20 +19,42 @@
 </template>
 
 <script>
-   import headTop from 'src/components/header/head'
-   import {mapState, mapMutations} from 'vuex'
-   import footGuide from 'src/components/footer/footGuide'
+
+    import headTop from 'src/components/header/head'
+    import alertTip from 'src/components/common/alertTip'
+    import footGuide from 'src/components/footer/footGuide'
+    import {localapi, proapi, imgBaseUrl,formatDate} from 'src/config/env'
+    import {upGradeRecord,findUserCardGrade} from '../../service/getData'
+    import {mapState, mapMutations} from 'vuex'
+
 
    export default {
      data(){
            return{
-              upgradeRecordList:[1,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6,2,3,4,5,6],//升级记录
+              upgradeRecordList:[],//升级记录
            }
+       },
+       created(){
+         this.getUpGradeRecord();
        },
        components: {
            headTop,
            footGuide,
        },
+       methods: {
+        //获取会员升级记录
+        async getUpGradeRecord () {
+             //从后台获取记录
+             let res = await upGradeRecord(1,100);
+             this.upgradeRecordList = res.result.rows;
+         },
+       },
+       filters:{
+         formatDate(createTime){
+           let date = new Date(createTime);
+           return formatDate(date,'yyyy-MM-dd');
+         }
+       }
    }
 </script>
 
