@@ -65,7 +65,7 @@ var sendLogin = (code, mobile, validate_token) => fetch('/v1/login/app_mobile', 
 /**
  * 账号密码登录
  */
-export const loginIn = (loginName, password, key) => fetch('/login/loginIn', {loginName, password, key}, 'POST');
+export const loginIn = (loginName, password,picCode, key) => fetch('/login/loginIn', {loginName, password,picCode,key}, 'POST');
 
 
 /**
@@ -94,3 +94,11 @@ export const upGradeRecord = (pageNo,pageSize) => fetch('/user/upGradeRecord', {
  * 修改登录密码和支付密码
  */
 export const updatePwd = (pwdType,oldPassWord, newPassWord, confirmPassWord,oldPayWord,newPayWord,confirmPayWord,picCode,picKey) => fetch('/user/updatePwd', {pwdType,oldPassWord, newPassWord, confirmPassWord,oldPayWord,newPayWord,confirmPayWord,picCode,picKey}, 'POST');
+/**
+ * 反馈消息记录
+ */
+export const feedbacklist = (pageNo,pageSize) => fetch('/index/feedbacklist', {pageNo,pageSize}, 'GET');
+/**
+ * 意见反馈
+ */
+export const feedback = (type, title, detail,phone) => fetch('/index/feedback', {type, title, detail,phone}, 'POST');

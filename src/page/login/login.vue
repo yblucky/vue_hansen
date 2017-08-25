@@ -17,7 +17,7 @@
                 </div> -->
             </section>
             <section class="input_container captcha_code_container">
-                <input type="text" placeholder="验证码" maxlength="4" v-model="key">
+                <input type="text" placeholder="验证码" maxlength="4" v-model="picCode">
                 <div class="img_change_img">
                     <img v-show="captchaCodeImg" :src="captchaCodeImg">
                     <div class="change_img" @click="getCaptchaCode">
@@ -47,6 +47,7 @@
                 password: "123456", //密码
                 captchaCodeImg: null, //验证码地址
                 key: null, //传回验证验证码key
+                picCode: null, //传回验证验证码key
                 showPassword:false,
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
@@ -70,7 +71,8 @@
             //获取验证吗，线上环境使用固定的图片，生产环境使用真实的验证码
             async getCaptchaCode(){
                 let res = await getcaptchas();
-                 this.captchaCodeImg = res.result.picCode;
+                this.captchaCodeImg = res.result.picCode;
+                this.key = res.result.key;
             },
             //发送登录信息
             async checkLogin(){
@@ -82,13 +84,13 @@
                     this.showAlert = true;
                     this.alertText = '请输入密码';
                     return
-                }else if(!this.key){
+                }else if(!this.picCode){
                     this.showAlert = true;
                     this.alertText = '请输入验证码';
                     return
                 }
                 //用户名登录
-                this.data = await loginIn(this.loginName, this.password, this.key);
+                this.data = await loginIn(this.loginName, this.password, this.picCode,this.key);
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
                 if (this.data.code == 200) {
                     this.RECORD_USERINFO(this.data.result);
