@@ -163,9 +163,9 @@ export default {
             username: '',           //用户名
             resetname: '',
             mobile: 'HS10000',             //电话号码
-            balance: 342,            //我的余额
-            count : 432,             //优惠券个数
-            pointNumber : 4343,       //积分数
+            balance: 0,            //我的余额
+            count : 0,             //优惠券个数
+            pointNumber : 0,       //积分数
             avatar: '',             //头像地址
             imgBaseUrl,
             messageCount:10,           //消息个数
@@ -355,8 +355,8 @@ export default {
                         display:inline-block;
                         @include sc(.57333rem,$fc);
                         position: absolute;
-                        top: 18.3%;
-                        left: 37.5%;
+                        top: 17.2%;
+                        left: 36.9%;
                         color: #919191;
 
                     }
@@ -370,6 +370,9 @@ export default {
                         display:inline-block;
                     }
                     .vip22{
+                      position: absolute;
+                      top: 17%;
+                      left: 31%;
                       vertical-align:middle;
                       display:inline-block;
                       width:3.5rem;
