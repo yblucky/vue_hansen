@@ -27,7 +27,7 @@
                             <b>{{nickName}} </b>
                         </p>
                         <p>
-                            <span class="icon-mobile-number"><b>{{phone}}</b></span>
+                            <span class="icon-mobile-number"><b></b></span>
                         </p>
                         <p>
                           <img src="../../hsimages/22.png" class="vip22" algin="middle" />
@@ -258,7 +258,7 @@ export default {
            this.releaseTime=this.getLoginUserInfo("releaseTime");
            this.equityAmt=this.getLoginUserInfo("equityAmt");
            this.payAmt=this.getLoginUserInfo("payAmt")
-           this.tradeAmt=this.getLoginUserInfo("tradeAmt"); 
+           this.tradeAmt=this.getLoginUserInfo("tradeAmt");
            this.insuranceAmt=this.getLoginUserInfo("insuranceAmt");
            this.maxProfits=this.getLoginUserInfo("maxProfits");
            this.sumProfits=this.getLoginUserInfo("sumProfits");

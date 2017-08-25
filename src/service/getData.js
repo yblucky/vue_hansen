@@ -78,3 +78,15 @@ export const signout = () => fetch('/v2/signout');
  * 改密码
  */
 export const changePassword = (username, oldpassWord, newpassword, confirmpassword, captcha_code) => fetch('/v2/changepassword', {username, oldpassWord, newpassword, confirmpassword, captcha_code}, 'POST');
+
+
+/**
+ * 用户提币
+ */
+export const cointOut = (address, amount, walletOrderType,payPassWord) => fetch('/wallet/coinout', {address, amount, walletOrderType,payPassWord}, 'POST');
+
+
+/**
+ * 用户相互之间转账--转币
+ */
+export const coinTransfer = (toUid, amount, walletOrderType,payPassWord) => fetch('/wallet/cointransfer', {toUid, amount, walletOrderType,payPassWord}, 'POST');
