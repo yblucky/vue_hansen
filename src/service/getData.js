@@ -90,3 +90,7 @@ export const findUserCardGrade = (grade) => fetch('/user/findUserCardGrade', {gr
  * 会员升级记录
  */
 export const upGradeRecord = (pageNo,pageSize) => fetch('/user/upGradeRecord', {pageNo,pageSize}, 'GET');
+/**
+ * 修改登录密码和支付密码
+ */
+export const updatePwd = (pwdType,oldPassWord, newPassWord, confirmPassWord,oldPayWord,newPayWord,confirmPayWord,picCode,picKey) => fetch('/user/updatePwd', {pwdType,oldPassWord, newPassWord, confirmPassWord,oldPayWord,newPayWord,confirmPayWord,picCode,picKey}, 'POST');

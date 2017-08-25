@@ -6,9 +6,9 @@
               <div class="page-record">
                 <span class="">{{item.createTime | formatDate}}</span>
                 <div  class="page-record-bottom">
-                  <span>{{item.historyGrade}}</span>
+                  <span>{{item.historyGradeName}}</span>
                   <img src="../../images/rightLogo.png"/>
-                  <span>{{item.currencyGrade}}</span>
+                  <span>{{item.currencyGradeName}}</span>
                 </div>
               </div>
               <div>{{item.upGradeTypeName}}</div>
