@@ -44,6 +44,24 @@
               </div>
             </section>
         </transition>
+
+        <button @click="exitlogin">取消</button>
+        <section class="coverpart" v-if="show">
+            <section class="cover-background"></section>
+            <section class="cover-content " :class="{'cover-animate' : isEnter, 'cover-animate-leave' : isLeave}">
+                <div class="sa-icon">
+                    <span class="sa-body"></span>
+                    <span class="sa-dot"></span>
+                </div>
+                <h2>是否保存修改</h2>
+                <div class="sa-botton">
+                    <button class="waiting" @click="waitingThing">取消</button>
+                    <div style="display:inline-block;">
+                        <button class="quitlogin"  @click="outLogin">确认</button>
+                    </div>
+                </div>
+            </section>
+        </section>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
@@ -64,6 +82,10 @@
                 teamList:[1,2,3], //直代
                 memberList:[1,2,3],//二代
                 gradeList:[1,2,3],
+
+                show:false,     //显示提示框
+                isEnter:true,  //是否登录
+                isLeave:false, //是否退出
             }
         },
         components: {
@@ -84,7 +106,30 @@
                 this.turnOn=$index;
                 this.turnRecord = true;
               }
-            }
+            },
+            exitlogin(){
+                this.show=true;
+                this.isEnter=true;
+                this.isLeave=false;
+            },
+            waitingThing(){
+                //取消推出
+                clearTimeout(this.timer)
+                this.isEnter=false;
+                this.isLeave=true;
+                this.timer = setTimeout(() =>{
+                    clearTimeout(this.timer)
+                    this.show=false;
+                },200)
+            },
+            //退出登录
+            async outLogin(){
+                this.OUT_LOGIN();
+                this.waitingThing();
+                this.$router.go(-1);
+                removeStore('user_id')
+                await signout();
+            },
         }
     }
 
@@ -181,4 +226,84 @@
         padding: 3rem 3rem;
       }
     }
+
+    .coverpart{
+        @include wh(100%,100%);
+        @include allcover;
+        .cover-background{
+            @include wh(100%,100%);
+            @include allcover;
+            background:#000;
+            z-index:100;
+            opacity:.2;
+        }
+        .cover-content{
+            width:94%;
+            background:$fc;
+            padding:17px;
+            position:absolute;
+            top:20%;
+            left:3%;
+            z-index:1000;
+            @include borderRadius(5px);
+            .sa-icon{
+                @include wh(90px,90px);
+                border:4px solid #f8bb86;
+                @include borderRadius(50%);
+                margin:20px auto;
+                position:relative;
+                .sa-body{
+                    @include wh(5px,47px);
+                    @include borderRadius(2px);
+                    background:#f8bb86;
+                    @include cl;
+                    top:10px;
+                }
+                .sa-dot{
+                    @include wh(7px,7px);
+                    @include borderRadius(50%);
+                    background:#f8bb86;
+                    @include cl;
+                    bottom:10px;
+                }
+            }
+            h2{
+                width:100%;
+                text-align:center;
+                @include sc(30px,#575757);
+                font-weight:500;
+                margin:25px 0;
+            }
+            .sa-botton{
+                width:100%;
+                text-align:center;
+
+                button{
+                    display:inline-block;
+                    padding:.4rem 1rem;
+                    @include borderRadius(5px);
+                    @include sc(.6rem,$fc);
+                    letter-spacing:1px;
+                    margin-top:26px;
+                }
+                .waiting{
+                    background:#C1C1C1;
+                    margin-right:.4rem;
+                }
+                .quitlogin{
+                    background:rgb(221, 107, 85);
+                }
+            }
+
+        }
+    }
+
+    body .coverpart .cover-animate{
+        transition:all 1s;
+        animation:bounceIn .6s;
+    }
+    body .coverpart .cover-animate-leave{
+        animation:zoomOut .4s;
+    }
+
 </style>

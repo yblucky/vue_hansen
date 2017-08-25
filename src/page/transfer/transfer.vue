@@ -133,11 +133,16 @@
     }
     .selCardType{
       background-color:#fff;
-      .title{
+      /*.title{
         font-size:0.85rem;
         font-weight:500;
         padding:15px 20px;
         margin-bottom:20px;
+      }*/
+      .title{
+        font-size:0.7rem;
+        font-family: "黑体", Verdana, Arial, Helvetica, sans-serif;
+        padding:15px 20px;
       }
     }
     .info-data{

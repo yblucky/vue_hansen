@@ -205,6 +205,7 @@
      height: 7rem;
      .activateDiv{
        color: darkgrey;
+       padding-top:3%;
        padding-left:5%;
        font-size: 0.65rem;
      }
