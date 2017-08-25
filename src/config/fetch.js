@@ -75,7 +75,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 			}
 
 			requestObj.open(type, url, true);
-			requestObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			requestObj.setRequestHeader("Content-type", "application/json;charset=utf-8");
 			requestObj.send(sendData);
 
 			requestObj.onreadystatechange = () => {
