@@ -17,18 +17,18 @@
                       <section v-if="turnCode == true" class="transfer">
                           <div class="div1">
                             <span>会员账户：</span>
-                            <input type="text" name="uid" v-model.lazy="uid">
+                            <input type="text" name="toUid" v-model.lazy="toUid">
                           </div>
                           <div>
                             <span>转让数量：</span>
-                            <input type="text" name="count" v-model.lazy="count">
+                            <input type="text" name="transferNo" v-model.lazy="transferNo">
                           </div>
                           <div>
                             <span>交易密码：</span>
-                            <input type="text" name="payWord" v-model.lazy="payWord">
+                            <input type="text" name="payword" v-model.lazy="payword">
                           </div>
                           <div class="btn">
-                              <div class="active_container" @click="upGradeAction">确认</div>
+                              <div class="active_container" @click="codeTransferAction">确认</div>
                           </div>
                       </section>
                     </div>
@@ -63,33 +63,65 @@
 
 <script>
    import headTop from 'src/components/header/head'
+   import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
+   import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo} from 'src/config/env'
+   import {codeTransfer} from '../../service/getData'
 
    export default {
      data(){
            return{
-              active:0,
-              turnCode:false,
-              turnRecord:false,
-              uid:"",
-              count:"",
-              payWord:"",
-              activeCodeList:[1,2,3],//转让记录
+             showAlert: false, //显示提示组件
+             alertText: null, //提示的内容
+             turnCode:false,
+             turnRecord:false,
+             toUid:"",
+             transferNo:0,
+             payword:"",
+             activeCodeList:[1,2,3],//转让记录
+             codeType:2,//注册码
+             activeCodeNo:0
            }
        },
+       mixins: [isLogin,getLoginUserInfo],
        components: {
            headTop,
+           alertTip,
        },
        methods :{
-         //升级
-         async upGradeAction(){
-             this.showAlert = true;
-             this.alertText = '手机号码不正确';
-             return
+         async codeTransferAction(){
+             if (!this.toUid) {
+               this.showAlert = true;
+               this.alertText = '收款账号不能为空';
+             }
+             if (!this.transferNo) {
+               this.showAlert = true;
+               this.alertText = '注册码数量不能为空';
+             }
+             if (!this.payword) {
+               console.log(this.payword);
+               this.showAlert = true;
+               this.alertText = '支付密码不能为空';
+             }
+
+             let res = await codeTransfer(this.toUid, parseInt(this.transferNo) ,this.codeType,this.payword);
+
+             console.log(res);
+             if (res.code==200) {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }else {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }
          },
          closeTip(){
              this.showAlert = false;
-         }
+         },
+         initData(){
+            this.activeCodeNo=this.getLoginUserInfo("activeCodeNo");
+            this.registerCodeNo=this.getLoginUserInfo("registerCodeNo");
+         },
        }
    }
 </script>

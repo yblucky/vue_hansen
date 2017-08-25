@@ -90,3 +90,11 @@ export const cointOut = (address, amount, walletOrderType,payPassWord) => fetch(
  * 用户相互之间转账--转币
  */
 export const coinTransfer = (toUid, amount, walletOrderType,payPassWord) => fetch('/wallet/cointransfer', {toUid, amount, walletOrderType,payPassWord}, 'POST');
+
+
+
+
+/**
+ * 用户相互之间激活码注册码转让  1:激活码  2:注册码
+ */
+export const codeTransfer = (toUid, transferNo, codeType,payword) => fetch('/code/codetransfer', {toUid, transferNo, codeType,payword}, 'POST');
