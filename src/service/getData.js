@@ -65,7 +65,7 @@ var sendLogin = (code, mobile, validate_token) => fetch('/v1/login/app_mobile', 
 /**
  * 账号密码登录
  */
-export const loginIn = (loginName, password, key) => fetch('/login/loginIn', {loginName, password, key}, 'POST');
+export const loginIn = (loginName, password, picCode,key) => fetch('/login/loginIn', {loginName, password, picCode,key}, 'POST');
 
 
 /**
