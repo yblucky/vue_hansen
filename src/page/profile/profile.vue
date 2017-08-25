@@ -22,13 +22,12 @@
                         </svg>
                     </span>-->
                     <div class="user-info">
-
-                        <p>
+                        <p class="nickName">
                             <b>{{nickName}} </b>
                         </p>
-                        <p>
+                        <!-- <p>
                             <span class="icon-mobile-number"><b></b></span>
-                        </p>
+                        </p> -->
                         <p>
                           <img src="../../hsimages/22.png" class="vip22" algin="middle" />
                           <span class="icon-mobile-number2">普通会员</span>
@@ -334,6 +333,11 @@ export default {
                 -webkit-box-flex: 1;
                 -ms-flex-positive: 1;
                 flex-grow: 1;
+                .nickName{
+                  position: absolute;
+                  top: 10.5%;
+                  left: 31%;
+                }
                 p{
                     font-weight:700;
                     @include sc(.8rem,$fc);
@@ -355,7 +359,7 @@ export default {
                         display:inline-block;
                         @include sc(.57333rem,$fc);
                         position: absolute;
-                        top: 17.2%;
+                        top: 15.2%;
                         left: 36.9%;
                         color: #919191;
 
@@ -371,7 +375,7 @@ export default {
                     }
                     .vip22{
                       position: absolute;
-                      top: 17%;
+                      top: 15%;
                       left: 31%;
                       vertical-align:middle;
                       display:inline-block;
