@@ -92,6 +92,17 @@ export const cointOut = (address, amount, walletOrderType,payPassWord) => fetch(
 export const coinTransfer = (toUid, amount, walletOrderType,payPassWord) => fetch('/wallet/cointransfer', {toUid, amount, walletOrderType,payPassWord}, 'POST');
 
 
+/**
+ * 用户相互之间转账--内部转币记录  orderType :1  4 8 
+ */
+export const coinInnerTransferList = (pageNo,pageSize,orderType) => fetch('/wallet/coininnerlist', {pageNo,pageSize,orderType}, 'GET');
+
+
+/**
+ * 用户提币充币记录--外部转币记录
+ */
+export const coinOuterTransferList = (pageNo,pageSize,orderType) => fetch('/wallet/coinoutterlist', {pageNo,pageSize,orderType}, 'GET');
+
 
 
 /**
