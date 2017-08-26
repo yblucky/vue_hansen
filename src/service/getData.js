@@ -65,7 +65,7 @@ var sendLogin = (code, mobile, validate_token) => fetch('/v1/login/app_mobile', 
 /**
  * 账号密码登录
  */
-export const loginIn = (loginName, password, picCode,key) => fetch('/login/loginIn', {loginName, password, picCode,key}, 'POST');
+export const loginIn = (loginName, password,picCode, key) => fetch('/login/loginIn', {loginName, password,picCode,key}, 'POST');
 
 
 /**
@@ -105,3 +105,27 @@ export const codeTransfer = (toUid, transferNo, codeType,payword) => fetch('/cod
  */
 
 export const codeTransferList = (pageNo,pageSize,codeType) => fetch('/code/list', {pageNo,pageSize,codeType},'GET');
+/**
+ * 会员升级
+ */
+export const memberUpgrade = (upGradeWay, grade, payWord) => fetch('/user/memberUpgrade', {upGradeWay, grade, payWord}, 'POST');
+/**
+ * 会员等级详细信息
+ */
+export const findUserCardGrade = (grade) => fetch('/user/findUserCardGrade', {grade}, 'GET');
+/**
+ * 会员升级记录
+ */
+export const upGradeRecord = (pageNo,pageSize) => fetch('/user/upGradeRecord', {pageNo,pageSize}, 'GET');
+/**
+ * 修改登录密码和支付密码
+ */
+export const updatePwd = (pwdType,oldPassWord, newPassWord, confirmPassWord,oldPayWord,newPayWord,confirmPayWord,picCode,picKey) => fetch('/user/updatePwd', {pwdType,oldPassWord, newPassWord, confirmPassWord,oldPayWord,newPayWord,confirmPayWord,picCode,picKey}, 'POST');
+/**
+ * 反馈消息记录
+ */
+export const feedbacklist = (pageNo,pageSize) => fetch('/index/feedbacklist', {pageNo,pageSize}, 'GET');
+/**
+ * 意见反馈
+ */
+export const feedback = (type, title, detail,phone) => fetch('/index/feedback', {type, title, detail,phone}, 'POST');

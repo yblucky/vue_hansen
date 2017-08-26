@@ -28,6 +28,7 @@ const myTeam = r => require.ensure([], () => r(require('../page/myTeam/myTeam'))
 const message = r => require.ensure([], () => r(require('../page/message/message')), 'message')
 const setMessage = r => require.ensure([], () => r(require('../page/message/setMessage')), 'setMessage')
 const myReward = r => require.ensure([], () => r(require('../page/reward/myReward')), 'myReward')
+const forgetPwd = r => require.ensure([], () => r(require('../page/forgetPwd/forgetPwd')), 'forgetPwd')
 
 export default [{
     path: '/',
@@ -177,6 +178,11 @@ export default [{
         {
           path: '/myReward',
           component: myReward
+        },
+        //忘记密码
+        {
+          path: '/forgetPwd',
+          component: forgetPwd
         },
     ]
 }]
