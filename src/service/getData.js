@@ -122,3 +122,8 @@ export const feedback = (type, title, detail,phone) => fetch('/index/feedback', 
  * 修改用户信息
  */
 export const updateUserInfo = (phone, nickName, headImgUrl,email) => fetch('/user/updateUserInfo', {phone, nickName, headImgUrl,email}, 'POST');
+
+/**
+ * 获取红包金额
+ */
+export const rewardsign = () => fetch('/sign/rewardsign', {},'GET');

@@ -139,21 +139,34 @@
                 </ul>
             </section>
         </section>
+
+        <section class="coverpart" v-if="show">
+            <section class="cover-background"></section>
+            <section class="cover-content">
+                <span class="redbao_text">{{parseFloat(showMoney).toFixed(2)}}</span>
+                <img src="../../hsimages/46.png" class="redbao" />
+                <img src="../../hsimages/47.png" class="redbao_button" @click="closeRedBao" />
+            </section>
+        </section>
+
         <div class="login_container" @click="exitlogin">退出登录</div>
         <!-- <foot-guide></foot-guide> -->
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>
+        <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
 
 <script>
 import headTop from 'src/components/header/head'
+import alertTip from '../../components/common/alertTip'
 // import footGuide from 'src/components/footer/footGuide'
 import progress from 'src/components/progressBar/progress'
 import {mapState, mapMutations} from 'vuex'
 import {imgBaseUrl,token,setToken,isLogin,getLoginUserInfo} from 'src/config/env'
 import {getImgPath} from 'src/components/common/mixin'
+import {rewardsign} from '../../service/getData'
 
 export default {
     data(){
@@ -169,7 +182,10 @@ export default {
             imgBaseUrl,
             messageCount:10,           //消息个数
             token,
-
+            show:false,             //是否显示红包
+            showMoney:0.00,         //显示红包金额
+            showAlert: false, //显示提示组件
+            alertText: null, //提示的内容
 
             id:"A085DEB2E34941B046CDA5107DB24BFD",
             uid:100000,
@@ -206,6 +222,9 @@ export default {
             outTradeAddress:''
         }
     },
+    created(){
+        this.showRedBao();
+    },
     mounted(){
       this.isLogin("/login");
       this.initData();
@@ -213,6 +232,7 @@ export default {
     mixins: [getImgPath,setToken,isLogin,getLoginUserInfo],
     components:{
         headTop,
+        alertTip,
         // footGuide,
     },
 
@@ -232,15 +252,32 @@ export default {
             return path;
         }
     },
-
     methods:{
         ...mapMutations([
             'SAVE_AVANDER'
         ]),
+        async showRedBao(){
+            //调用领取红包接口
+            let res = await rewardsign();
+            if(res.code == 200){
+                //判断红包是否可以打开
+                if(res.result.isCanSign){
+                  //如果是true，就弹出红包，并将金额覆盖
+                  this.show = true;
+                  this.showMoney = res.result.amt;
+                }
+                // this.showAlert = true;
+                // this.alertText = res.result.amt;
+            }else {
+              this.showAlert = true;
+              this.alertText = res.msg;
+            }
+
+        },
         initData(){
-           console.log(this.getLoginUserInfo("token"));
-           console.log(this.getLoginUserInfo("id"));
-           console.log(this.getLoginUserInfo("nickName"));
+          //  console.log(this.getLoginUserInfo("token"));
+          //  console.log(this.getLoginUserInfo("id"));
+          //  console.log(this.getLoginUserInfo("nickName"));
 
            this.id=this.getLoginUserInfo("id");
            this.phone=this.getLoginUserInfo("phone");
@@ -292,6 +329,13 @@ export default {
           localStorage.removeItem("loginUserInfo");
           this.$router.push("/login");
         },
+        //关闭红包
+        closeRedBao(){
+          this.show = false;
+        },
+        closeTip(){
+            this.showAlert = false;
+        }
     },
     watch: {
         userInfo: function (value){
@@ -555,6 +599,61 @@ export default {
         border: 1px;
         border-radius: 1rem;
         text-align: center;
+    }
+
+    .coverpart{
+        @include wh(100%,100%);
+        @include allcover;
+        .cover-background{
+            @include wh(100%,105%);
+            @include allcover;
+            background:#000;
+            z-index:100;
+            opacity:.2;
+        }
+        .cover-content{
+            width:94%;
+            z-index:1000;
+            .redbao{
+              position: absolute;
+              top: 15%;
+              left: 4%;
+              vertical-align:middle;
+              display:inline-block;
+              width:15rem;
+              z-index:1010;
+            }
+            .redbao_button{
+              position: absolute;
+              top: 71%;
+              left: 19%;
+              vertical-align:middle;
+              display:inline-block;
+              width:10rem;
+              z-index:1010;
+            }
+            .redbao_text{
+              position: absolute;
+              top: 0;
+              left: 0;
+              z-index:1020;
+              font-size: 30px;
+              text-align: center;
+              width: 60%;
+              height: 50px;
+              line-height: 50px;
+              color: #DA4E3F;
+              margin: 40% 20% 0 20%;
+            }
+        }
+    }
+
+    body .coverpart .cover-animate{
+        transition:all 1s;
+        animation:bounceIn .6s;
+    }
+    body .coverpart .cover-animate-leave{
+        animation:zoomOut .4s;
     }
 
 </style>
