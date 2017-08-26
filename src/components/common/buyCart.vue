@@ -40,7 +40,7 @@
             }
         },
         mounted(){
-            
+
         },
         computed: {
             ...mapState([
@@ -95,7 +95,7 @@
             showReduceTip(){
                 this.$emit('showReduceTip')
             },
-            
+
         },
     }
 </script>
@@ -159,6 +159,5 @@
         opacity: 0;
         transform: scale(.7);
     }
-    
-</style>
 
+</style>
