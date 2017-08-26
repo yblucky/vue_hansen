@@ -6,11 +6,9 @@ import {getStore} from '../config/mUtils'
  * 获取短信验证码
  */
 
-export const mobileCode = phone => fetch('/v4/mobile/verify_code/send', {
-	mobile: phone,
-	scene: 'login',
-	type: 'sms'
-}, 'POST');
+export const mobileCode = (phoneNumber) => fetch('/common/sendSms', {
+	phoneNumber: phoneNumber
+}, 'GET');
 
 
 /**
@@ -31,16 +29,14 @@ export const checkExsis = (checkNumber, type) => fetch('/v1/users/exists', {
 
 
 /**
- * 发送帐号
+ * 	忘记密码
  */
 
-export const sendMobile = (sendData, captcha_code, type, password) => fetch('/v1/mobile/verify_code/send', {
-	action: "send",
-	captcha_code,
-	[type]: sendData,
-	type: "sms",
-	way: type,
-	password,
+export const forgetPwd = (phoneNumber, newPassWord, confirmPassWord,phoneCode) => fetch('/user/forgetPwd', {
+		phoneNumber: phoneNumber,
+		newPassWord: newPassWord,
+		confirmPassWord: confirmPassWord,
+		phoneCode:phoneCode
 }, 'POST');
 
 
@@ -75,9 +71,9 @@ export const signout = () => fetch('/v2/signout');
 
 
 /**
- * 改密码
+ * 修改登录密码和支付密码
  */
-export const changePassword = (username, oldpassWord, newpassword, confirmpassword, captcha_code) => fetch('/v2/changepassword', {username, oldpassWord, newpassword, confirmpassword, captcha_code}, 'POST');
+export const changePassword = (oldPassWord, newPassWord, confirmPassWord,pwdType) => fetch('/user/updatePwd', {oldPassWord, newPassWord, confirmPassWord, pwdType}, 'POST');
 
 
 /**

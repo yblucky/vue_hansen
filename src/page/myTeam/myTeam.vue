@@ -44,14 +44,14 @@
               </div>
             </section>
         </transition>
-        <payPwd></payPwd>
+        <!-- <payPwd></payPwd> -->
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
 
 <script>
     import headTop from 'src/components/header/head'
-    import payPwd from '../../components/common/payPwd'
+    // import payPwd from '../../components/common/payPwd'
     import alertTip from 'src/components/common/alertTip'
     import {mobileCode, checkExsis, sendMobile, getcaptchas, changePassword} from 'src/service/getData'
 
@@ -74,7 +74,7 @@
         components: {
             headTop,
             alertTip,
-            payPwd,
+            // payPwd,
         },
         created(){
         },

@@ -3,7 +3,7 @@
         <head-top head-title="密码修改" goBack="true"></head-top>
         <section class="category_title">
             <span :class="{choosed: pwdType === 1}" @click="pwdType = 1">登录密码修改</span>
-            <span :class="{choosed: pwdType === 2}" @click="pwdType = 2">高级密码修改</span>
+            <span :class="{choosed: pwdType === 2}" @click="pwdType = 2">支付密码修改</span>
         </section>
         <transition name="router-fade">
             <section v-if="pwdType === 1">
@@ -17,7 +17,7 @@
                   <section class="input_container">
                       <input type="text" placeholder="请确认密码" name="confirmPassWord" v-model="confirmPassWord">
                   </section>
-                  <section class="input_container captcha_code_container">
+                  <!-- <section class="input_container captcha_code_container">
                       <input type="text" placeholder="验证码" name="mobileCode" maxlength="6" v-model="mobileCode">
                       <div class="img_change_img">
                           <img v-show="captchaCodeImg" :src="captchaCodeImg">
@@ -26,7 +26,7 @@
                               <p>换一张</p>
                           </div>
                       </div>
-                  </section>
+                  </section> -->
               </form>
             </section>
         </transition>
@@ -42,7 +42,7 @@
                     <section class="input_container">
                         <input type="text" placeholder="请确认密码" name="confirmPassWord" v-model="confirmPassWord">
                     </section>
-                    <section class="input_container captcha_code_container">
+                    <!-- <section class="input_container captcha_code_container">
                         <input type="text" placeholder="验证码" name="mobileCode" maxlength="6" v-model="mobileCode">
                         <div class="img_change_img">
                             <img v-show="captchaCodeImg" :src="captchaCodeImg">
@@ -51,7 +51,7 @@
                                 <p>换一张</p>
                             </div>
                         </div>
-                    </section>
+                    </section> -->
                 </form>
             </section>
         </transition>
@@ -68,18 +68,12 @@
     export default {
         data(){
             return {
-                phoneNumber: null, //电话号码
                 oldPassWord: null,
                 newPassWord: null, //新密码
-                pwdType:1,     //选择方式
-                rightPhoneNumber: false, //输入的手机号码是否符合要求
                 confirmPassWord: null, //确认密码
-                captchaCodeImg: null, //验证码地址
-                mobileCode: null, //短信验证码
-                computedTime: 0, //倒数记时
+                pwdType:1,     //选择方式
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
-                accountType: 'mobile',//注册方式
                 captchaCodeImg: null,
             }
         },
@@ -88,64 +82,18 @@
             alertTip,
         },
         created(){
-            this.getCaptchaCode()
+            // this.getCaptchaCode()
         },
         methods: {
-            //判断输入的电话号码
-            inputPhone(){
-                if(/.+/gi.test(this.phoneNumber)){
-                    this.rightPhoneNumber = true;
-                }else{
-                    this.rightPhoneNumber = false;
-                }
-            },
-            //获取验证吗
-            async getVerifyCode(){
-                if (this.rightPhoneNumber) {
-                    this.computedTime = 30;
-                    //倒计时
-                    this.timer = setInterval(() => {
-                        this.computedTime --;
-                        if (this.computedTime == 0) {
-                            clearInterval(this.timer)
-                        }
-                    }, 1000)
-                    //判断用户是否存在
-                    // let res = await checkExsis(this.phoneNumber, this.accountType);
-                    let res = {
-                      message:'11111'
-                    };
-                    //判断返回的信息是否正确，用户是否注册
-                    if (res.message) {
-                        this.showAlert = true;
-                        this.alertText = res.message;
-                        return
-                    }else if(!res.is_exists) {
-                        this.showAlert = true;
-                        this.alertText = '您输入的手机号尚未绑定';
-                        return
-                    }
-                    //获取验证信息
-                    let getCode = await mobileCode(this.phoneNumber);
-                    if (getCode.message) {
-                        this.showAlert = true;
-                        this.alertText = getCode.message;
-                        return
-                    }
-                    this.validate_token = getCode.validate_token;
-                }
-            },
-             async getCaptchaCode(){
-                let res = await getcaptchas();
-                this.captchaCodeImg = res.code;
-            },
+            //获取图片验证吗
+            // async getCaptchaCode(){
+            //     let res = await getcaptchas();
+            //     this.captchaCodeImg = res.code;
+            // },
+
             //重置密码
             async resetButton(){
-                if (!this.phoneNumber) {
-                    this.showAlert = true;
-                    this.alertText = '请输入正确的账号';
-                    return
-                }else if(!this.oldPassWord){
+                if(!this.oldPassWord){
                     this.showAlert = true;
                     this.alertText = '请输入旧密码';
                     return
@@ -161,21 +109,18 @@
                     this.showAlert = true;
                     this.alertText = '两次输入的密码不一致';
                     return
-                }else if(!this.mobileCode){
-                    this.showAlert = true;
-                    this.alertText = '请输验证码';
-                    return
                 }
                 // 发送重置信息
-                let res = await changePassword(this.phoneNumber, this.oldPassWord, this.newPassWord, this.confirmPassWord, this.mobileCode);
-                if (res.message) {
-                    this.showAlert = true;
-                    this.alertText = res.message;
-                    this.getCaptchaCode()
-                    return
-                }else{
+                let res = await changePassword(this.oldPassWord, this.newPassWord, this.confirmPassWord, this.pwdType);
+                
+                if (res.code == 200) {
                     this.showAlert = true;
                     this.alertText = '密码修改成功';
+                    return
+                }else{
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                  return
                 }
             },
             closeTip(){

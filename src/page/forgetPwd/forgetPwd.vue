@@ -5,16 +5,17 @@
           <form class="restForm">
               <section class="input_container">
                   <input type="text" placeholder="手机号" name="phoneNumber" v-model="phoneNumber">
-                  <div class="code">获取验证码</div>
+                  <div class="code" v-if="code_state" @click="getVerifyCode">获取验证码</div>
+                  <div class="code_time" v-else="!code_state">{{computedTime}}</div>
+              </section>
+              <section class="input_container">
+                  <input type="password" placeholder="新密码" name="newPassWord" v-model="newPassWord">
+              </section>
+              <section class="input_container">
+                  <input type="password" placeholder="确认新密码" name="confirmPassWord" v-model="confirmPassWord">
               </section>
               <section class="input_container">
                   <input type="text" placeholder="输入验证码" name="phoneCode" v-model="phoneCode">
-              </section>
-              <section class="input_container">
-                  <input type="text" placeholder="新密码" name="newPassWord" v-model="newPassWord">
-              </section>
-              <section class="input_container">
-                  <input type="text" placeholder="确认新密码" name="confirmPassWord" v-model="confirmPassWord">
               </section>
           </form>
         </section>
@@ -26,7 +27,7 @@
 <script>
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
-    import {mobileCode, checkExsis, sendMobile, getcaptchas, changePassword} from 'src/service/getData'
+    import {mobileCode,  sendMobile, getcaptchas,forgetPwd} from 'src/service/getData'
 
     export default {
         data(){
@@ -40,6 +41,9 @@
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
                 accountType: 'mobile',//注册方式
+                code_state:true,
+                timer:null,
+                successCode:0,
             }
         },
         components: {
@@ -47,62 +51,50 @@
             alertTip,
         },
         created(){
-            this.getVerifyCode()
+            //this.getVerifyCode()
         },
         methods: {
-            //判断输入的电话号码
-            inputPhone(){
-                if(/.+/gi.test(this.phoneNumber)){
+
+            //获取验证吗
+            async getVerifyCode(){
+                //判断输入的电话号码
+                if(/^1\d{10}$/gi.test(this.phoneNumber)){
                     this.rightPhoneNumber = true;
                 }else{
                     this.rightPhoneNumber = false;
+                    this.showAlert = true;
+                    this.alertText = "手机号格式不正确";
                 }
-            },
-            //获取验证吗
-            async getVerifyCode(){
+
                 if (this.rightPhoneNumber) {
-                    this.computedTime = 30;
-                    //倒计时
-                    this.timer = setInterval(() => {
-                        this.computedTime --;
-                        if (this.computedTime == 0) {
-                            clearInterval(this.timer)
-                        }
-                    }, 1000)
-                    //判断用户是否存在
-                    // let res = await checkExsis(this.phoneNumber, this.accountType);
-                    let res = {
-                      message:'11111'
-                    };
-                    //判断返回的信息是否正确，用户是否注册
-                    if (res.message) {
-                        this.showAlert = true;
-                        this.alertText = res.message;
-                        return
-                    }else if(!res.is_exists) {
-                        this.showAlert = true;
-                        this.alertText = '您输入的手机号尚未绑定';
-                        return
-                    }
                     //获取验证信息
                     let getCode = await mobileCode(this.phoneNumber);
-                    if (getCode.message) {
+                    // let res = await getcaptchas();
+                    if (getCode.code == 200) {
+                        //启动到计时
+                        this.computedTime = 60;
+                        //倒计时
+                        this.timer = setInterval(() => {
+                            this.computedTime --;
+                            this.code_state = false;
+                            if (this.computedTime == 0) {
+                                clearInterval(this.timer)
+                                this.code_state = true;
+                            }
+                        }, 1000)
+                    }else {
                         this.showAlert = true;
-                        this.alertText = getCode.message;
+                        this.alertText = getCode.msg;
                         return
                     }
-                    this.validate_token = getCode.validate_token;
                 }
             },
             //重置密码
             async resetButton(){
+
                 if (!this.phoneNumber) {
                     this.showAlert = true;
                     this.alertText = '请输入正确的账号';
-                    return
-                }else if(!this.oldPassWord){
-                    this.showAlert = true;
-                    this.alertText = '请输入旧密码';
                     return
                 }else if(!this.newPassWord){
                     this.showAlert = true;
@@ -112,29 +104,37 @@
                     this.showAlert = true;
                     this.alertText = '请输确认密码';
                     return
-                }else if(this.newPassWord !== this.confirmPassWord){
+                }else if(this.newPassWord != this.confirmPassWord){
                     this.showAlert = true;
                     this.alertText = '两次输入的密码不一致';
                     return
-                }else if(!this.mobileCode){
+                }else if(!this.phoneCode){
                     this.showAlert = true;
                     this.alertText = '请输验证码';
                     return
                 }
+
                 // 发送重置信息
-                let res = await changePassword(this.phoneNumber, this.oldPassWord, this.newPassWord, this.confirmPassWord, this.mobileCode);
-                if (res.message) {
+                let res = await forgetPwd(this.phoneNumber,this.newPassWord, this.confirmPassWord, this.phoneCode);
+                if (res.code != 200) {
                     this.showAlert = true;
-                    this.alertText = res.message;
-                    this.getCaptchaCode()
+                    this.alertText = res.msg;
                     return
                 }else{
                     this.showAlert = true;
-                    this.alertText = '密码修改成功';
+                    this.alertText = '找回密码成功';
+                    this.successCode = 1;
                 }
+                //不再计时
+                clearInterval(this.timer)
+                this.code_state = true;
             },
             closeTip(){
                 this.showAlert = false;
+                if(this.successCode == 1){
+                  //找回密码成功，调回登录页面
+                  this.$router.push("/login");
+                }
             }
         }
     }
@@ -165,6 +165,17 @@
               @include sc(.3rem, #fff);
               background-color: $blue;
               padding: .3rem .3rem;
+              border: 1px;
+              border-radius: 0.85rem;
+              text-align: center;
+            }
+            .code_time{
+              display: flex;
+              align-items: center;
+              /*margin: 1rem .5rem;*/
+              @include sc(.3rem, #fff);
+              background-color: $blue;
+              padding: 0.3rem 1.28rem;
               border: 1px;
               border-radius: 0.85rem;
               text-align: center;
