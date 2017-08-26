@@ -41,16 +41,13 @@
                </li>
                <transition name="router-fade">
                    <section v-if="turnRecord == true" class="show-data">
-                     <div v-for="item in activeCodeList">
-                       <span class="showDate">2017-08-12</span>
+                     <div v-for="item in registerCodeList">
+                       <span class="showDate">{{item.createTime}}</span>
                        <ul>
-                          <li class="page">
-                              <span class="">激活账户HS10000</span>
-                              <div class="">-3</div>
-                          </li>
                          <li class="page">
-                             <span class="">会员HS10001转让注册码</span>
-                             <div class="">+3</div>
+                           <span class="">{{item.sendUserNick}}</span>
+                             <span class="">{{item.remarkStr}}</span>
+                             <div class="">{{item.transferNoStr}}</div>
                          </li>
                        </ul>
                      </div>
@@ -66,11 +63,13 @@
    import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
    import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo} from 'src/config/env'
-   import {codeTransfer} from '../../service/getData'
+   import {codeTransfer,codeTransferList} from '../../service/getData'
 
    export default {
      data(){
            return{
+             pageNo:1,
+             pageSize:30,
              showAlert: false, //显示提示组件
              alertText: null, //提示的内容
              turnCode:false,
@@ -78,15 +77,21 @@
              toUid:"",
              transferNo:0,
              payword:"",
-             activeCodeList:[1,2,3],//转让记录
+             registerCodeList:[],//转让记录
              codeType:2,//注册码
-             activeCodeNo:0
+             registerCodeNo:0,
+             id:"",
+             nickName:""
            }
        },
        mixins: [isLogin,getLoginUserInfo],
        components: {
            headTop,
            alertTip,
+       },
+       mounted(){
+         this.isLogin("/login");
+         this.initData();
        },
        methods :{
          async codeTransferAction(){
@@ -118,9 +123,29 @@
          closeTip(){
              this.showAlert = false;
          },
-         initData(){
+        async initData(){
             this.activeCodeNo=this.getLoginUserInfo("activeCodeNo");
             this.registerCodeNo=this.getLoginUserInfo("registerCodeNo");
+            this.id=this.getLoginUserInfo("id");
+            this.nickName=this.getLoginUserInfo("nickName");
+            let res =  await codeTransferList(this.pageNo,this.pageSize,this.codeType);
+            if (res.code==200) {
+              this.registerCodeList=res.result.rows;
+              if (this.registerCodeList) {
+                for (var i = 0; i < this.registerCodeList.length; i++) {
+                  if (this.registerCodeList[i].sendUserId==this.id) {
+                    this.registerCodeList[i].transferNoStr="-"+this.registerCodeList[i].transferNo;
+                    this.registerCodeList[i].remarkStr="会员"+this.nickName+"使用注册码";
+                  }else {
+                    this.registerCodeList[i].transferNoStr="+"+this.registerCodeList[i].transferNo;
+                    this.registerCodeList[i].remarkStr="会员"+this.nickName+"获赠注册码";
+                  }
+                }
+              }
+            }else {
+              this.showAlert = true;
+              this.alertText = res.msg;
+            }
          },
        }
    }
