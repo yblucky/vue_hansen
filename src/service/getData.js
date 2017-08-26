@@ -98,3 +98,10 @@ export const coinTransfer = (toUid, amount, walletOrderType,payPassWord) => fetc
  * 用户相互之间激活码注册码转让  1:激活码  2:注册码
  */
 export const codeTransfer = (toUid, transferNo, codeType,payword) => fetch('/code/codetransfer', {toUid, transferNo, codeType,payword}, 'POST');
+
+
+/**
+ * 获取用户激活码转账记录  1:激活码  2:注册码
+ */
+
+export const codeTransferList = (pageNo,pageSize,codeType) => fetch('/code/list', {pageNo,pageSize,codeType},'GET');
