@@ -31,16 +31,14 @@ export const checkExsis = (checkNumber, type) => fetch('/v1/users/exists', {
 
 
 /**
- * 发送帐号
+ * 	忘记密码
  */
 
-export const sendMobile = (sendData, captcha_code, type, password) => fetch('/v1/mobile/verify_code/send', {
-	action: "send",
-	captcha_code,
-	[type]: sendData,
-	type: "sms",
-	way: type,
-	password,
+export const forgetPwd = (phoneNumber, newPassWord, confirmPassWord,phoneCode) => fetch('/user/forgetPwd', {
+		phoneNumber: phoneNumber,
+		newPassWord: newPassWord,
+		confirmPassWord: confirmPassWord,
+		phoneCode:phoneCode
 }, 'POST');
 
 
@@ -92,30 +90,12 @@ export const cointOut = (address, amount, walletOrderType,payPassWord) => fetch(
 export const coinTransfer = (toUid, amount, walletOrderType,payPassWord) => fetch('/wallet/cointransfer', {toUid, amount, walletOrderType,payPassWord}, 'POST');
 
 
-/**
- * 用户相互之间转账--内部转币记录  orderType :1  4 8 
- */
-export const coinInnerTransferList = (pageNo,pageSize,orderType) => fetch('/wallet/coininnerlist', {pageNo,pageSize,orderType}, 'GET');
-
-
-/**
- * 用户提币充币记录--外部转币记录
- */
-export const coinOuterTransferList = (pageNo,pageSize,orderType) => fetch('/wallet/coinoutterlist', {pageNo,pageSize,orderType}, 'GET');
-
 
 
 /**
  * 用户相互之间激活码注册码转让  1:激活码  2:注册码
  */
 export const codeTransfer = (toUid, transferNo, codeType,payword) => fetch('/code/codetransfer', {toUid, transferNo, codeType,payword}, 'POST');
-
-
-/**
- * 获取用户激活码转账记录  1:激活码  2:注册码
- */
-
-export const codeTransferList = (pageNo,pageSize,codeType) => fetch('/code/list', {pageNo,pageSize,codeType},'GET');
 /**
  * 会员升级
  */
@@ -140,16 +120,3 @@ export const feedbacklist = (pageNo,pageSize) => fetch('/index/feedbacklist', {p
  * 意见反馈
  */
 export const feedback = (type, title, detail,phone) => fetch('/index/feedback', {type, title, detail,phone}, 'POST');
-/**
- * 获取开卡等级信息
- */
-export const findCardGrade = (cardGrade) => fetch('/cardgrade/info', {cardGrade}, 'GET');
-
-/**
- * 获取开卡等级列表
- */
-export const findCardGradeList = (cardGrade) => fetch('/cardgrade/list', {}, 'GET');
-/**
- * 邀请会员注册
- */
-export const innerCreateUser = (loginName,phone,email,cardGrade,password,confirmPassword,payword,confirmPayWord,firstReferrer,contactUserId) => fetch('/user/innercreateuser', {loginName,phone,email,cardGrade,password,confirmPassword,payword,confirmPayWord,firstReferrer,contactUserId},'POST');

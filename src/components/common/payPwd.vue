@@ -4,12 +4,13 @@
           <section class="cover-background"></section>
           <section class="cover-content">
               <div class="head">
+                  <span class="close" @click="closePwd">×</span>
                   <h4>请输入支付密码</h4>
               </div>
 
               <div class="head_name">
                   <h4>向(李小龙)支付</h4>
-                  <h5>￥500.00</h5>
+                  <h5>￥{{parseInt(payMoney).toFixed(2)}}</h5>
               </div>
 
               <div class="enter-box" @click="openkey()">
@@ -50,7 +51,9 @@
                       <li>
                           <div class="grey-key" @click="noZuo()"></div>
                           <div>0</div>
-                          <div class="grey-key iconfont icon-delete" @click="deleteKey()">删除</div>
+                          <div class="grey-key iconfont icon-delete" @click="deleteKey()">
+                              <img src="../../hsimages/48.png" class="privateImg" />
+                          </div>
                       </li>
                   </ul>
               </div>
@@ -65,15 +68,18 @@
           return {
               show:true,     //显示提示框
               key_show:false,
-              tradePwd: '',
-              pwdIndex: 0
+              tradePwd: "",
+              pwdIndex: 0,
+              payMoney:0,
           }
+      },
+      components: {
       },
       props:{
             reset: Boolean,
         },
         watch:{
-            reset(val){
+            resetPwd(val){
                 if(val){
                     console.log('reset',val);
                     this.tradePwd = '';
@@ -85,7 +91,6 @@
             getKey(e){
                 let target = e.target;
                 let n = target.innerText;
-
                 target.className = 'active';
                 setTimeout(()=>{
                     target.className = '';
@@ -99,6 +104,8 @@
                         setTimeout(()=>{
                             this.$emit('pwdCompleted',this.tradePwd);
                         },1000);
+                        this.show = false;
+                        this.key_show = true;
                     }
                 }
             },
@@ -126,7 +133,11 @@
             },
             openkey(){
               this.key_show = !this.key_show;
-            }
+            },
+            //关闭支付密码框
+            closePwd(){
+              this.show = false;
+            },
         }
     };
 </script>
@@ -168,6 +179,16 @@
                     font-weight:700;
                     margin-bottom:4%;
                 }
+                .close{
+                  position: absolute;
+                  top: 0;
+                  left: 10px;
+                  font-size: 30px;
+                  width: 16px;
+                  height: 100%;
+                  line-height: 30px;
+                  color: #ccc;
+                }
             }
             .head_name{
                 width: 100%;
@@ -179,9 +200,9 @@
                     margin-bottom:4%;
                 }
                 h5{
-                    padding-left: 25%;
-                    @include sc(36px,#575757);
-                    font-weight:700;
+                    padding-left: 32%;
+                    @include sc(32px,#575757);
+                    font-weight:300;
                     margin-bottom:4%;
                 }
             }
@@ -198,6 +219,7 @@
                 width: 100%;
                 text-align: center;
                 .privateImg{
+                    width: 1rem;
                     transform: rotate(90deg);
                 }
             }
@@ -217,14 +239,15 @@
             .code-box {
                 display: flex;
                 margin: 0px 20px;
-                border: 1px solid #000;
+                /*border: 1px solid #000;*/
+                border: 1px solid #e5e5e5;
                 li {
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     flex: 1;
                     height: 50px;
-                    border-right: 1px solid #000;
+                    border-right: 1px solid #e5e5e5;
                     &:last-child{
                         border-right: none;
                     }
@@ -259,7 +282,7 @@
                     flex: 1;
                     text-align: center;
                     width: 33.33%;
-                    line-height: 55px;
+                    line-height: 59px;
                     font-size: 30px;
                     &:nth-child(2){
                         width: 32%;
@@ -273,6 +296,11 @@
                         &.active{
                             background: #CCCCCC;
                             color: #EEEE00;
+                        }
+                        .privateImg{
+
+                            width: 1.5rem;
+                            /*transform: rotate(90deg);*/
                         }
                     }
                     &.active{
