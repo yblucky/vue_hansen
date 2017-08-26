@@ -5,42 +5,24 @@
           <span class="title">选择账户等级</span>
           <section class="info-data">
               <ul class="clear">
-                  <li @click="selCard(0);" v-bind:class="{active:selCardType==0}" class="info-data-link">
+                  <li   @click="selCard(item.grade)"   class="info-data-link" v-for="(item,index) in cardGradeList">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType === 0" src="../../images/check.png"/>
+                        <img v-if='selCardType==item.grade' src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
-                      <span class="info-data-middle">铜卡</span>
-                      <div class="info-data-bottom">1万</div>
+                      <span class="info-data-middle">{{item.remark}}</span>
+                      <div class="info-data-bottom">{{item.insuranceAmt}}</div>
                   </li>
-                  <li to="" @click="selCard(1);" v-bind:class="{active:selCardType==1}" class="info-data-link">
-                      <span class="info-data-top-right">
-                        <img v-if="selCardType == 1" src="../../images/check.png"/>
-                        <img v-else src="../../images/uncheck.png"/>
-                      </span>
-                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
-                      <span class="info-data-bottom">银卡</span>
-                      <div class="info-data-bottom">1万</div>
-                  </li>
-                  <li to="" @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
+                    <!-- <li to="" @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
                       <span class="info-data-top-right">
                         <img v-if="selCardType == 2" src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
-                      <span class="info-data-bottom">金卡</span>
-                      <div class="info-data-bottom">1万</div>
-                  </li>
-                  <li to="" @click="selCard(3);" v-bind:class="{active:selCardType==3}" class="info-data-link">
-                      <span class="info-data-top-right">
-                        <img v-if="selCardType == 3" src="../../images/check.png"/>
-                        <img v-else src="../../images/uncheck.png"/>
-                      </span>
-                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
-                      <span class="info-data-bottom">钻石卡</span>
-                      <div class="info-data-bottom">1万</div>
-                  </li>
+                      <span class="info-data-bottom">铜卡</span>
+                      <div class="info-data-bottom">{{insuranceAmt}}</div>
+                  </li> -->
               </ul>
           </section>
         </div>
@@ -48,10 +30,10 @@
         <div class="middle">
             <p>
               <span class="registerCode">
-                  账户注册码：<b>{{registerCode}}</b>个
+                  账户注册码：<b>{{registerCodeNo}}</b>个
               </span>
               <span class="activeCode">
-                  账户激活码：<b>{{registerCode}}</b>个
+                  账户激活码：<b>{{registerCodeNo}}</b>个
               </span>
             </p>
 
@@ -94,14 +76,14 @@
               </div>
               <div>
                 <span>高级密码：</span>
-                <input type="text" name="payWord" v-model.lazy="payWord">
+                <input type="text" name="payword" v-model.lazy="payword">
               </div>
               <div>
                 <span>确认高级密码：</span>
                 <input type="text" name="confirmPayWord" v-model.lazy="confirmPayWord">
               </div>
             </section>
-            <div class="active_container" @click="upGradeAction">激活注册</div>
+            <div class="active_container" @click="innerCreateUserAction">注册</div>
         </div>
 
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
@@ -112,30 +94,42 @@
 <script>
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
-    // import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
+    import {isLogin,getLoginUserInfo} from 'src/config/env'
+    import {findCardGrade,findCardGradeList,innerCreateUser} from '../../service/getData'
 
     export default {
         data(){
             return {
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
-                registerCode: 1, //注册码
-                activeCode: 1, //激活码
-                tradeAmt:500000,//交易币
-                payAmt:300000,  //购物币
-                selCardType: 0, //升级等级
+                registerCodeNo: "", //注册码
+                activeCodeNo: "", //激活码
+                tradeAmt:"",//交易币
+                payAmt:"",  //购物币
+                insuranceAmt:"",
+                outMultiple:"",
+                selCardType: 1, //升级等级
                 phone: "", //手机号
                 email:"",//邮箱
-                firstReferrer:"HS200016",//邀请人
+                firstReferrer:"",//邀请人
                 contactUserId:"",//接点人
                 password:"",//登录密码
                 confirmPassword:"",//确认登录密码
-                payWord:"",//高级密码
-                confirmPayWord:""//确认高级密码
+                payword:"",//高级密码
+                confirmPayWord:"",//确认高级密码
+                cardGrade:1,
+                cardGradeList:[],
+                uid:"",
+                id:"",
             }
         },
+        mounted(){
+          this.isLogin("/login");
+          this.initData();
+        },
+       mixins: [isLogin,getLoginUserInfo],
         created(){
         },
         components: {
@@ -157,16 +151,96 @@
                  this.active = index;
              },
              selCard (index) {
-                  this.selCardType = index;
+               console.log(index);
+                  this.selCardType =  index;
+                  this.cardGrade=parseInt(index)+1;
               },
-            //升级
-            async upGradeAction(){
-                this.showAlert = true;
-                this.alertText = '手机号码不正确';
-                return
-            },
             closeTip(){
                 this.showAlert = false;
+            },
+            async innerCreateUserAction(){
+                if (!this.phone) {
+                  this.showAlert = true;
+                  this.alertText = '手机号不能为空';
+                }
+                if (!this.email) {
+                  this.showAlert = true;
+                  this.alertText = '邮箱不能为空';
+                }
+                if (!this.cardGrade) {
+                  this.showAlert = true;
+                  this.alertText = '开卡等级不能为空';
+                }
+                if (!this.password) {
+                  this.showAlert = true;
+                  this.alertText = '登录密码不能为空';
+                }
+                if (!this.confirmPassword) {
+                  this.showAlert = true;
+                  this.alertText = '确认登录密码不能为空';
+                }
+                if (this.confirmPassword!=this.password) {
+                  this.showAlert = true;
+                  this.alertText = '两次登录密码不能为空';
+                }
+                if (!this.payword) {
+                  this.showAlert = true;
+                  this.alertText = '支付密码不能为空';
+                }
+                if (!this.confirmPayWord) {
+                  this.showAlert = true;
+                  this.alertText = '确认支付密码不能为空';
+                }
+                if (this.confirmPayWord!=this.payword) {
+                  this.showAlert = true;
+                  this.alertText = '两次支付密码不能为空';
+                }
+                let res = await innerCreateUser(this.phone,this.phone,this.email,this.cardGrade,this.password,this.confirmPassword,this.payword,this.confirmPayWord,parseInt(this.firstReferrer),this.contactUserId);
+                if (res.code==200) {
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                }else {
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                }
+            },
+            async initData(){
+               this.cardGrade=1;
+               this.id=this.getLoginUserInfo("id");
+               this.phone=this.getLoginUserInfo("phone");
+               this.uid=this.getLoginUserInfo("uid");
+               this.headImgUrl=this.getLoginUserInfo("headImgUrl");
+               this.firstReferrer=this.uid;
+               this.contactUserId=this.uid;
+               console.log(this.cardGrade);
+               this.findCardGrade();
+               this.findCardGradeList();
+               console.log(this.cardGrade);
+            },
+            async  findCardGradeList(){
+              let res =  await findCardGradeList();
+              if (res.code==200) {
+                console.log(res);
+                this.cardGradeList= res.result;
+              }else {
+                this.showAlert = true;
+                this.alertText = res.msg;
+              }
+            },
+            async  findCardGrade(){
+              let res =  await findCardGrade(this.cardGrade);
+              if (res.code==200) {
+                console.log(res);
+                this.registerCodeNo= res.result.registerCodeNo; //注册码
+                this.activeCodeNo= res.result.activeCodeNo; //激活码
+                this.tradeAmt=res.result.tradeAmt;//交易币
+                this.payAmt=res.result.payAmt;  //购物币
+                this.insuranceAmt=res.result.insuranceAmt;
+                this.outMultiple=res.result.outMultiple;
+              }else {
+                this.showAlert = true;
+                this.alertText = res.msg;
+              }
             }
         }
     }
@@ -185,13 +259,13 @@
       }
     }
     .info-data{
-         width:100%;
+         width:98%;
          margin-top: 3%;
          box-sizing: border-box;
          ul{
              .info-data-link{
                  float:left;
-                 width:24.9%;
+                 width:19.9%;
                  display:inline-block;
                  border-right:1px solid #fcfcfc;
                  span{

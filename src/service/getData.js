@@ -129,3 +129,16 @@ export const feedbacklist = (pageNo,pageSize) => fetch('/index/feedbacklist', {p
  * 意见反馈
  */
 export const feedback = (type, title, detail,phone) => fetch('/index/feedback', {type, title, detail,phone}, 'POST');
+/**
+ * 获取开卡等级信息
+ */
+export const findCardGrade = (cardGrade) => fetch('/cardgrade/info', {cardGrade}, 'GET');
+
+/**
+ * 获取开卡等级列表
+ */
+export const findCardGradeList = (cardGrade) => fetch('/cardgrade/list', {}, 'GET');
+/**
+ * 邀请会员注册
+ */
+export const innerCreateUser = (loginName,phone,email,cardGrade,password,confirmPassword,payword,confirmPayWord,firstReferrer,contactUserId) => fetch('/user/innercreateuser', {loginName,phone,email,cardGrade,password,confirmPassword,payword,confirmPayWord,firstReferrer,contactUserId},'POST');
