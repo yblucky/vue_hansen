@@ -6,41 +6,61 @@
            </div>
        </head-top>
        <ul>
-          <li class="page">
+          <li class="page" v-for="item in msgList">
               <div class="page-record">
                   <div class="imgdiv">
                     <img src="../../hsimages/6.png"  class="privateImage"/>
                   </div>
                   <div class="rightContent">
                       <div class="top">
-                          <span class="spanLeft">系统升级提示</span>
-                          <span class="spanRight">2016年11月12日</span>
+                          <span class="spanLeft">{{item.title}}</span>
+                          <span class="spanRight">{{item.createTime | formatDate}}</span>
                       </div>
                       <div class="bottom">
-                          hello vue_world 21245445erreeedddd333342222dfdfcvcxvxcvdsfsdfeeeeeeededsfsdfsdfsdfsdfsfddddddddddd
+                          {{item.detail}}
                       </div>
                   </div>
               </div>
           </li>
        </ul>
-       <foot-guide></foot-guide>
+       <!-- <foot-guide></foot-guide> -->
    </div>
 </template>
 
 <script>
    import headTop from 'src/components/header/head'
    import {mapState, mapMutations} from 'vuex'
-   import footGuide from 'src/components/footer/footGuide'
+  //  import footGuide from 'src/components/footer/footGuide'
+   import {formatDate, proapi, imgBaseUrl,token,setToken} from 'src/config/env'
+   import {feedbacklist} from '../../service/getData'
 
    export default {
      data(){
            return{
+             msgList:[],
            }
+       },
+       created(){
+         this.getfeedbacklist();
        },
        components: {
            headTop,
-           footGuide,
+          //  footGuide,
        },
+       methods: {
+        //获取会员升级记录
+        async getfeedbacklist () {
+             //从后台获取记录
+             let res = await feedbacklist(1,100);
+             this.msgList = res.result.rows;
+         },
+       },
+       filters:{
+         formatDate(createTime){
+           let date = new Date(createTime);
+           return formatDate(date,'yyyy年MM月dd日');
+         }
+       }
    }
 </script>
 

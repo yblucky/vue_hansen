@@ -139,7 +139,7 @@
                 </ul>
             </section>
         </section>
-        <div class="login_container" @click="active=2">退出登录</div>
+        <div class="login_container" @click="exitlogin">退出登录</div>
         <!-- <foot-guide></foot-guide> -->
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
@@ -286,6 +286,11 @@ export default {
             //     this.username = '登录/注册';
             //     this.mobile = '13680334542';
             // }
+        },
+        exitlogin(){
+          localStorage.removeItem("token");
+          localStorage.removeItem("loginUserInfo");
+          this.$router.push("/login");
         },
     },
     watch: {

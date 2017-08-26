@@ -5,24 +5,24 @@
         <section class="input_container">
           <div>
             <span>反馈类型：</span>
-            <select name="msgType" placeholder="请选择">
+            <select name="msgType" placeholder="请选择" v-model="type">
               <option value="1">test1</option>
-              <option value="1">test1</option>
+              <option value="2">test2</option>
             </select>
           </div>
           <div>
             <span>标题：</span>
-            <input type="text" placeholder="">
+            <input type="text" placeholder="" v-model="title">
           </div>
           <div>
-            <textarea rows="10" cols="55"  placeholder="请输入反馈内容"></textarea>
+            <textarea rows="10" cols="55"  placeholder="请输入反馈内容" v-model="detail"></textarea>
           </div>
           <div>
             <span>反馈结果邮箱：</span>
-            <input class="msgMaill" type="text" placeholder="" >
+            <input class="msgMaill" type="text" placeholder=""  v-model="phone">
           </div>
         </section>
-        <div class="active_container" @click="upGradeAction">提交反馈</div>
+        <div class="active_container" @click="addfeedback">提交反馈</div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <foot-guide></foot-guide>
     </div>
@@ -34,12 +34,18 @@
     import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
+    import {feedback} from '../../service/getData'
 
     export default {
         data(){
             return {
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
+                title:null,
+                detail:null,
+                phone:null,
+                type:1,
+                isAdd:false,
             }
         },
         created(){
@@ -59,11 +65,43 @@
             ...mapMutations([
                 'RECORD_USERINFO',
             ]),
+            async addfeedback () {
+                if(!this.title){
+                    this.showAlert = true;
+                    this.alertText = '请输入标题';
+                    return
+                }
+                if(!this.detail){
+                    this.showAlert = true;
+                    this.alertText = '请输入内容';
+                    return
+                }
+                if(!this.phone){
+                    this.showAlert = true;
+                    this.alertText = '请输入联系消息';
+                    return
+                }
+                 //从后台获取记录
+                 let res = await feedback(this.type, this.title, this.detail,this.phone);
+                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
+                 if (res.code == 200) {
+                   this.showAlert = true;
+                   this.alertText = res.msg;
+                   this.isAdd = true;
+                 }else{
+                   this.showAlert = true;
+                   this.alertText = res.msg;
+                 }
+             },
             toggleTabs (index,tabText) {
                  this.active = index;
              },
             closeTip(){
                 this.showAlert = false;
+                if(this.isAdd){
+                  this.$router.push("/message");
+                }
+
             }
         }
     }

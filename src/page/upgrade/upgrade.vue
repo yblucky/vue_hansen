@@ -6,43 +6,43 @@
             </div>
         </head-top>
         <section class="category_title">
-            <span :class="{choosed: active === 1}" @click="active = 1">原点升级</span>
-            <span :class="{choosed: active === 2}" @click="active = 2">覆盖升级</span>
+            <span :class="{choosed: active === 2}" @click="active = 2">原点升级</span>
+            <span :class="{choosed: active === 3}" @click="active = 3">覆盖升级</span>
         </section>
         <div class="selCardType">
           <span class="title">选择账户等级</span>
           <section class="info-data">
               <ul class="clear">
-                  <li @click="selCard(0);" v-bind:class="{active:selCardType==0}" class="info-data-link">
+                  <li @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType === 0" src="../../images/check.png"/>
+                        <img v-if="selCardType === 2" src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-middle">铜卡</span>
                       <div class="info-data-bottom">1万</div>
                   </li>
-                  <li to="" @click="selCard(1);" v-bind:class="{active:selCardType==1}" class="info-data-link">
+                  <li to="" @click="selCard(3);" v-bind:class="{active:selCardType==3}" class="info-data-link">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType == 1" src="../../images/check.png"/>
+                        <img v-if="selCardType == 3" src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-bottom">银卡</span>
                       <div class="info-data-bottom">1万</div>
                   </li>
-                  <li to="" @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
+                  <li to="" @click="selCard(4);" v-bind:class="{active:selCardType==4}" class="info-data-link">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType == 2" src="../../images/check.png"/>
+                        <img v-if="selCardType == 4" src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-bottom">金卡</span>
                       <div class="info-data-bottom">1万</div>
                   </li>
-                  <li to="" @click="selCard(3);" v-bind:class="{active:selCardType==3}" class="info-data-link">
+                  <li to="" @click="selCard(5);" v-bind:class="{active:selCardType==5}" class="info-data-link">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType == 3" src="../../images/check.png"/>
+                        <img v-if="selCardType == 5" src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
@@ -55,19 +55,19 @@
         <section class="input_container">
           <div>
             <span>最大收益：</span>
-            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="needActiveNum">
+            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="cardMaxproft">
           </div>
           <div>
             <span>补充激活码：</span>
-            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="needActiveNum">
+            <input type="text" disabled="disabled" placeholder="补充激活码：" v-model.lazy="needActiveNum">
           </div>
           <div>
             <span>补充购物币：</span>
-            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="needActiveNum">
+            <input type="text" disabled="disabled" placeholder="补充购物币：" v-model.lazy="needBuyNum">
           </div>
           <div>
             <span>补充交易币：</span>
-            <input type="text" disabled="disabled" placeholder="最大收益" v-model.lazy="needActiveNum">
+            <input type="text" disabled="disabled" placeholder="补充交易币：" v-model.lazy="needChangeNum">
           </div>
         </section>
         <div class="active_container" @click="upGradeAction">激活注册</div>
@@ -81,6 +81,7 @@
     import alertTip from 'src/components/common/alertTip'
     import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl} from 'src/config/env'
+    import {memberUpgrade,findUserCardGrade} from '../../service/getData'
     import {mapState, mapMutations} from 'vuex'
 
     export default {
@@ -89,16 +90,17 @@
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
                 upWay: 0, //升级方式
-                active: 1, //升级方式
-                selCardType: 0, //升级等级
+                active:2, //升级方式
+                selCardType: 2, //升级等级
                 cardMaxproft: 0, //最大收益
                 needActiveNum:0,//需要补充激活码数量
                 needBuyNum:0,//需要补充购物币数量
                 needChangeNum:0,//需要补充交易数量
-
+                password:'123456',//密码
             }
         },
         created(){
+          this.selCard(2);
         },
         components: {
             headTop,
@@ -118,13 +120,29 @@
             toggleTabs (index,tabText) {
                  this.active = index;
              },
-             selCard (index) {
+             //获取会员等级信息
+             async selCard (index) {
                   this.selCardType = index;
+                  //从后台获取等级信息
+                  let res = await findUserCardGrade(index);
+                  this.cardMaxproft=res.result.cardMaxproft; //最大收益
+                  this.needActiveNum=res.result.needActiveNum//需要补充激活码数量
+                  this.needBuyNum=res.result.needBuyNum//需要补充购物币数量
+                  this.needChangeNum=res.result.needChangeNum//需要补充交易数量
               },
             //升级
             async upGradeAction(){
-                this.showAlert = true;
-                this.alertText = '手机号码不正确';
+                //触发会员升级方法
+                let rs = await memberUpgrade(this.active,this.selCardType,this.password);
+                //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
+                if (rs.code == 200) {
+                    this.showAlert = true;
+                    this.alertText = '升级成功';
+                    this.$router.push("/upgrade");
+                }else{
+                  this.showAlert = true;
+                  this.alertText = rs.msg;
+                }
                 return
             },
             closeTip(){
@@ -231,7 +249,7 @@
         border: 1px;
         border-radius: 0.15rem;
         text-align: center;
- 
+
         background: #3b95e9; /* Old browsers */
       	background: -moz-linear-gradient(top,  #3b95e9 0%, #39a0be 100%); /* FF3.6+ */
       	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3b95e9), color-stop(100%,#39a0be)); /* Chrome,Safari4+ */

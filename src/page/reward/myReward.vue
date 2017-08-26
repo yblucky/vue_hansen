@@ -22,15 +22,13 @@
              </li>
             </ul>
           </div>
-        </section>
-        <foot-guide></foot-guide>
+        </section> 
     </div>
 </template>
 
 <script>
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
-    import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
 
@@ -51,7 +49,6 @@
         components: {
             headTop,
             alertTip,
-            footGuide,
         },
         computed: {
             //判断手机号码

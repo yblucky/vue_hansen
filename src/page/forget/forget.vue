@@ -112,7 +112,7 @@
                 }
                 // 发送重置信息
                 let res = await changePassword(this.oldPassWord, this.newPassWord, this.confirmPassWord, this.pwdType);
-                
+
                 if (res.code == 200) {
                     this.showAlert = true;
                     this.alertText = '密码修改成功';

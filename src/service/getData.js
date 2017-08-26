@@ -61,7 +61,7 @@ var sendLogin = (code, mobile, validate_token) => fetch('/v1/login/app_mobile', 
 /**
  * 账号密码登录
  */
-export const loginIn = (loginName, password, picCode,key) => fetch('/login/loginIn', {loginName, password, picCode,key}, 'POST');
+export const loginIn = (loginName, password,picCode, key) => fetch('/login/loginIn', {loginName, password,picCode,key}, 'POST');
 
 
 /**
@@ -94,3 +94,31 @@ export const coinTransfer = (toUid, amount, walletOrderType,payPassWord) => fetc
  * 用户相互之间激活码注册码转让  1:激活码  2:注册码
  */
 export const codeTransfer = (toUid, transferNo, codeType,payword) => fetch('/code/codetransfer', {toUid, transferNo, codeType,payword}, 'POST');
+/**
+ * 会员升级
+ */
+export const memberUpgrade = (upGradeWay, grade, payWord) => fetch('/user/memberUpgrade', {upGradeWay, grade, payWord}, 'POST');
+/**
+ * 会员等级详细信息
+ */
+export const findUserCardGrade = (grade) => fetch('/user/findUserCardGrade', {grade}, 'GET');
+/**
+ * 会员升级记录
+ */
+export const upGradeRecord = (pageNo,pageSize) => fetch('/user/upGradeRecord', {pageNo,pageSize}, 'GET');
+/**
+ * 修改登录密码和支付密码
+ */
+export const updatePwd = (pwdType,oldPassWord, newPassWord, confirmPassWord,oldPayWord,newPayWord,confirmPayWord,picCode,picKey) => fetch('/user/updatePwd', {pwdType,oldPassWord, newPassWord, confirmPassWord,oldPayWord,newPayWord,confirmPayWord,picCode,picKey}, 'POST');
+/**
+ * 反馈消息记录
+ */
+export const feedbacklist = (pageNo,pageSize) => fetch('/index/feedbacklist', {pageNo,pageSize}, 'GET');
+/**
+ * 意见反馈
+ */
+export const feedback = (type, title, detail,phone) => fetch('/index/feedback', {type, title, detail,phone}, 'POST');
+/**
+ * 修改用户信息
+ */
+export const updateUserInfo = (phone, nickName, headImgUrl,email) => fetch('/user/updateUserInfo', {phone, nickName, headImgUrl,email}, 'POST');
