@@ -20,6 +20,8 @@
     import headTop from 'src/components/header/head'
     import {getImgPath} from 'src/components/common/mixin'
     import {mapMutations,mapState} from 'vuex'
+    import {updateUserInfo} from '../../../service/getData'
+    import {updateLocalUser} from 'src/config/env'
     export default {
       data(){
             return{
@@ -27,7 +29,7 @@
                 bordercolor: false,  //输入框边框颜色
                 opacityall: false,   //字体透明度
                 inputValue: '',       //输入框的内容
-                newusername: ''         //新用户名
+                userName: ''         //新用户名
             }
         },
         created(){
@@ -62,9 +64,17 @@
                     this.opacityall=true;
                 }
             },
-            resetName(){
-                this.RETSET_NAME(this.inputValue);
-                this.$router.go(-1);
+            async resetName(){
+                let res = await updateUserInfo('', this.inputValue, '','');
+                //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
+                if (res.code == 200) {
+                    //更改本地存储对象的json
+                    updateLocalUser("nickName",this.inputValue);
+                    this.$router.go(-1);
+                }else{
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                }
             }
         }
     }
