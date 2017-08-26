@@ -153,7 +153,8 @@
              selCard (index) {
                console.log(index);
                   this.selCardType =  index;
-                  this.cardGrade=parseInt(index)+1;
+                  this.cardGrade=index;
+                  this.findCardGrade();
               },
             closeTip(){
                 this.showAlert = false;
@@ -362,14 +363,16 @@
     .fillInformation{
         margin-top:3%;
         .title{
+          margin-left: 36%;
           font-size:0.80rem;
           font-family: "黑体", Verdana, Arial, Helvetica, sans-serif;
           padding:15px 20px;
         }
         .input_container{
+            margin-top: 20px;
             font-size: 0.75rem;
             font-weight:500;
-            width:94%;
+            width:89.5%;
             display:block;
             div{
               padding: .15rem .15rem;
