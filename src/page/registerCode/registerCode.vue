@@ -17,18 +17,18 @@
                       <section v-if="turnCode == true" class="transfer">
                           <div class="div1">
                             <span>会员账户：</span>
-                            <input type="text" name="uid" v-model.lazy="uid">
+                            <input type="text" name="toUid" v-model.lazy="toUid">
                           </div>
                           <div>
                             <span>转让数量：</span>
-                            <input type="text" name="count" v-model.lazy="count">
+                            <input type="text" name="transferNo" v-model.lazy="transferNo">
                           </div>
                           <div>
                             <span>交易密码：</span>
-                            <input type="text" name="payWord" v-model.lazy="payWord">
+                            <input type="text" name="payword" v-model.lazy="payword">
                           </div>
                           <div class="btn">
-                              <div class="active_container" @click="upGradeAction">确认</div>
+                              <div class="active_container" @click="codeTransferAction">确认</div>
                           </div>
                       </section>
                     </div>
@@ -41,16 +41,13 @@
                </li>
                <transition name="router-fade">
                    <section v-if="turnRecord == true" class="show-data">
-                     <div v-for="item in activeCodeList">
-                       <span class="showDate">2017-08-12</span>
+                     <div v-for="item in registerCodeList">
+                       <span class="showDate">{{item.createTime}}</span>
                        <ul>
-                          <li class="page">
-                              <span class="">激活账户HS10000</span>
-                              <div class="">-3</div>
-                          </li>
                          <li class="page">
-                             <span class="">会员HS10001转让注册码</span>
-                             <div class="">+3</div>
+                           <span class="">{{item.sendUserNick}}</span>
+                             <span class="">{{item.remarkStr}}</span>
+                             <div class="">{{item.transferNoStr}}</div>
                          </li>
                        </ul>
                      </div>
@@ -63,33 +60,93 @@
 
 <script>
    import headTop from 'src/components/header/head'
+   import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
+   import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo} from 'src/config/env'
+   import {codeTransfer,codeTransferList} from '../../service/getData'
 
    export default {
      data(){
            return{
-              active:0,
-              turnCode:false,
-              turnRecord:false,
-              uid:"",
-              count:"",
-              payWord:"",
-              activeCodeList:[1,2,3],//转让记录
+             pageNo:1,
+             pageSize:30,
+             showAlert: false, //显示提示组件
+             alertText: null, //提示的内容
+             turnCode:false,
+             turnRecord:false,
+             toUid:"",
+             transferNo:0,
+             payword:"",
+             registerCodeList:[],//转让记录
+             codeType:2,//注册码
+             registerCodeNo:0,
+             id:"",
+             nickName:""
            }
        },
+       mixins: [isLogin,getLoginUserInfo],
        components: {
            headTop,
+           alertTip,
+       },
+       mounted(){
+         this.isLogin("/login");
+         this.initData();
        },
        methods :{
-         //升级
-         async upGradeAction(){
-             this.showAlert = true;
-             this.alertText = '手机号码不正确';
-             return
+         async codeTransferAction(){
+             if (!this.toUid) {
+               this.showAlert = true;
+               this.alertText = '收款账号不能为空';
+             }
+             if (!this.transferNo) {
+               this.showAlert = true;
+               this.alertText = '注册码数量不能为空';
+             }
+             if (!this.payword) {
+               console.log(this.payword);
+               this.showAlert = true;
+               this.alertText = '支付密码不能为空';
+             }
+
+             let res = await codeTransfer(this.toUid, parseInt(this.transferNo) ,this.codeType,this.payword);
+
+             console.log(res);
+             if (res.code==200) {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }else {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }
          },
          closeTip(){
              this.showAlert = false;
-         }
+         },
+        async initData(){
+            this.activeCodeNo=this.getLoginUserInfo("activeCodeNo");
+            this.registerCodeNo=this.getLoginUserInfo("registerCodeNo");
+            this.id=this.getLoginUserInfo("id");
+            this.nickName=this.getLoginUserInfo("nickName");
+            let res =  await codeTransferList(this.pageNo,this.pageSize,this.codeType);
+            if (res.code==200) {
+              this.registerCodeList=res.result.rows;
+              if (this.registerCodeList) {
+                for (var i = 0; i < this.registerCodeList.length; i++) {
+                  if (this.registerCodeList[i].sendUserId==this.id) {
+                    this.registerCodeList[i].transferNoStr="-"+this.registerCodeList[i].transferNo;
+                    this.registerCodeList[i].remarkStr="会员"+this.nickName+"使用注册码";
+                  }else {
+                    this.registerCodeList[i].transferNoStr="+"+this.registerCodeList[i].transferNo;
+                    this.registerCodeList[i].remarkStr="会员"+this.nickName+"获赠注册码";
+                  }
+                }
+              }
+            }else {
+              this.showAlert = true;
+              this.alertText = res.msg;
+            }
+         },
        }
    }
 </script>

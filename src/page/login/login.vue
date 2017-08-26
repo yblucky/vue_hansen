@@ -27,8 +27,9 @@
                 </div>
             </section>
         </form>
+        {{token}}
         <div class="login_container" @click="checkLogin">登录</div>
-        <router-link to="/forget" class="to_forget">重置密码？</router-link>
+        <router-link to="/forgetPwd" class="to_forget">重置密码？</router-link>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
@@ -46,12 +47,12 @@
                 loginName: "test01", //用户名
                 password: "123456", //密码
                 captchaCodeImg: null, //验证码地址
-                key: null, //传回验证验证码key
-                picCode: null, //传回验证验证码key
+                picCode: null, //传回验证验证码picCode
                 showPassword:false,
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
                 token,
+                key:"",
             }
         },
         created(){
@@ -71,8 +72,8 @@
             //获取验证吗，线上环境使用固定的图片，生产环境使用真实的验证码
             async getCaptchaCode(){
                 let res = await getcaptchas();
-                this.captchaCodeImg = res.result.picCode;
-                this.key = res.result.key;
+                 this.captchaCodeImg = res.result.picCode;
+                 this.key= res.result.key;
             },
             //发送登录信息
             async checkLogin(){

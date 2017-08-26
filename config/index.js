@@ -21,7 +21,7 @@ module.exports = {
         env: {
             NODE_ENV: '"development"'
         },
-        port: 8000,
+        port: 9000,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         context: [ //代理路径
@@ -39,7 +39,7 @@ module.exports = {
             '/api',
         ],
         // proxypath: 'http://cangdu.org:8001',
-        proxypath: 'http://192.168.2.222:8090/api',
+        proxypath: 'http://127.0.0.1:8090/api',
 
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README

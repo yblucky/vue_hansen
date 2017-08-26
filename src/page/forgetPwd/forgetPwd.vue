@@ -1,0 +1,183 @@
+<template>
+    <div class="restContainer">
+        <head-top head-title="忘记密码" goBack="true"></head-top>
+        <section>
+          <form class="restForm">
+              <section class="input_container">
+                  <input type="text" placeholder="手机号" name="phoneNumber" v-model="phoneNumber">
+                  <div class="code">获取验证码</div>
+              </section>
+              <section class="input_container">
+                  <input type="text" placeholder="输入验证码" name="phoneCode" v-model="phoneCode">
+              </section>
+              <section class="input_container">
+                  <input type="text" placeholder="新密码" name="newPassWord" v-model="newPassWord">
+              </section>
+              <section class="input_container">
+                  <input type="text" placeholder="确认新密码" name="confirmPassWord" v-model="confirmPassWord">
+              </section>
+          </form>
+        </section>
+        <div class="login_container" @click="resetButton">完成</div>
+        <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
+    </div>
+</template>
+
+<script>
+    import headTop from 'src/components/header/head'
+    import alertTip from 'src/components/common/alertTip'
+    import {mobileCode, checkExsis, sendMobile, getcaptchas, changePassword} from 'src/service/getData'
+
+    export default {
+        data(){
+            return {
+                phoneNumber: null, //电话号码
+                phoneCode: null,  //短信验证码
+                newPassWord: null, //新密码
+                rightPhoneNumber: false, //输入的手机号码是否符合要求
+                confirmPassWord: null, //确认密码
+                computedTime: 0, //倒数记时
+                showAlert: false, //显示提示组件
+                alertText: null, //提示的内容
+                accountType: 'mobile',//注册方式
+            }
+        },
+        components: {
+            headTop,
+            alertTip,
+        },
+        created(){
+            this.getVerifyCode()
+        },
+        methods: {
+            //判断输入的电话号码
+            inputPhone(){
+                if(/.+/gi.test(this.phoneNumber)){
+                    this.rightPhoneNumber = true;
+                }else{
+                    this.rightPhoneNumber = false;
+                }
+            },
+            //获取验证吗
+            async getVerifyCode(){
+                if (this.rightPhoneNumber) {
+                    this.computedTime = 30;
+                    //倒计时
+                    this.timer = setInterval(() => {
+                        this.computedTime --;
+                        if (this.computedTime == 0) {
+                            clearInterval(this.timer)
+                        }
+                    }, 1000)
+                    //判断用户是否存在
+                    // let res = await checkExsis(this.phoneNumber, this.accountType);
+                    let res = {
+                      message:'11111'
+                    };
+                    //判断返回的信息是否正确，用户是否注册
+                    if (res.message) {
+                        this.showAlert = true;
+                        this.alertText = res.message;
+                        return
+                    }else if(!res.is_exists) {
+                        this.showAlert = true;
+                        this.alertText = '您输入的手机号尚未绑定';
+                        return
+                    }
+                    //获取验证信息
+                    let getCode = await mobileCode(this.phoneNumber);
+                    if (getCode.message) {
+                        this.showAlert = true;
+                        this.alertText = getCode.message;
+                        return
+                    }
+                    this.validate_token = getCode.validate_token;
+                }
+            },
+            //重置密码
+            async resetButton(){
+                if (!this.phoneNumber) {
+                    this.showAlert = true;
+                    this.alertText = '请输入正确的账号';
+                    return
+                }else if(!this.oldPassWord){
+                    this.showAlert = true;
+                    this.alertText = '请输入旧密码';
+                    return
+                }else if(!this.newPassWord){
+                    this.showAlert = true;
+                    this.alertText = '请输入新密码';
+                    return
+                }else if(!this.confirmPassWord){
+                    this.showAlert = true;
+                    this.alertText = '请输确认密码';
+                    return
+                }else if(this.newPassWord !== this.confirmPassWord){
+                    this.showAlert = true;
+                    this.alertText = '两次输入的密码不一致';
+                    return
+                }else if(!this.mobileCode){
+                    this.showAlert = true;
+                    this.alertText = '请输验证码';
+                    return
+                }
+                // 发送重置信息
+                let res = await changePassword(this.phoneNumber, this.oldPassWord, this.newPassWord, this.confirmPassWord, this.mobileCode);
+                if (res.message) {
+                    this.showAlert = true;
+                    this.alertText = res.message;
+                    this.getCaptchaCode()
+                    return
+                }else{
+                    this.showAlert = true;
+                    this.alertText = '密码修改成功';
+                }
+            },
+            closeTip(){
+                this.showAlert = false;
+            }
+        }
+    }
+
+</script>
+
+<style lang="scss" scoped>
+    @import 'src/style/mixin';
+
+    .restContainer{
+        padding-top: 1.95rem;
+    }
+    .restForm{
+        background-color: #fff;
+        margin-top: .6rem;
+        .input_container{
+            display: flex;
+            justify-content: space-between;
+            padding: .6rem .8rem;
+            border-bottom: 1px solid #f1f1f1;
+            input{
+                @include sc(.7rem, #666);
+            }
+            .code{
+              display: flex;
+              align-items: center;
+              /*margin: 1rem .5rem;*/
+              @include sc(.3rem, #fff);
+              background-color: $blue;
+              padding: .3rem .3rem;
+              border: 1px;
+              border-radius: 0.85rem;
+              text-align: center;
+            }
+        }
+    }
+    .login_container{
+        margin: 1rem .5rem;
+        @include sc(.7rem, #fff);
+        background-color: $blue;
+        padding: .5rem 0;
+        border: 1px;
+        border-radius: 0.85rem;
+        text-align: center;
+    }
+</style>

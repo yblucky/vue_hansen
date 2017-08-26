@@ -81,6 +81,7 @@
       .activateDiv{
         color: darkgrey;
         padding-left:5%;
+        padding-top: 3%;
         font-size: 0.65rem;
       }
       .activateCode{

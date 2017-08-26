@@ -44,12 +44,14 @@
               </div>
             </section>
         </transition>
+        <payPwd></payPwd>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
 
 <script>
     import headTop from 'src/components/header/head'
+    import payPwd from '../../components/common/payPwd'
     import alertTip from 'src/components/common/alertTip'
     import {mobileCode, checkExsis, sendMobile, getcaptchas, changePassword} from 'src/service/getData'
 
@@ -64,11 +66,15 @@
                 teamList:[1,2,3], //直代
                 memberList:[1,2,3],//二代
                 gradeList:[1,2,3],
+                show:true,     //显示提示框
+                isEnter:true,  //是否登录
+                isLeave:false, //是否退出
             }
         },
         components: {
             headTop,
             alertTip,
+            payPwd,
         },
         created(){
         },
@@ -84,7 +90,30 @@
                 this.turnOn=$index;
                 this.turnRecord = true;
               }
-            }
+            },
+            exitlogin(){
+                this.show=true;
+                this.isEnter=true;
+                this.isLeave=false;
+            },
+            waitingThing(){
+                //取消推出
+                clearTimeout(this.timer)
+                this.isEnter=false;
+                this.isLeave=true;
+                this.timer = setTimeout(() =>{
+                    clearTimeout(this.timer)
+                    this.show=false;
+                },200)
+            },
+            //退出登录
+            async outLogin(){
+                this.OUT_LOGIN();
+                this.waitingThing();
+                this.$router.go(-1);
+                removeStore('user_id')
+                await signout();
+            },
         }
     }
 
