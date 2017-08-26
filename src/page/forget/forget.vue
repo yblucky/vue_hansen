@@ -3,7 +3,7 @@
         <head-top head-title="密码修改" goBack="true"></head-top>
         <section class="category_title">
             <span :class="{choosed: pwdType === 1}" @click="pwdType = 1">登录密码修改</span>
-            <span :class="{choosed: pwdType === 2}" @click="pwdType = 2">支付密码修改</span>
+            <span :class="{choosed: pwdType === 2}" @click="pwdType = 2">高级密码修改</span>
         </section>
         <transition name="router-fade">
             <section v-if="pwdType === 1">
