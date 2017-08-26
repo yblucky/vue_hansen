@@ -174,11 +174,13 @@
                     let input = document.querySelector('.profileinfopanel-upload')
                     let data = new FormData();
                     data.append('file', input.files[0]);
+                    alert(input.files[0]);
                     try{
-                        let response = await fetch('/eus/v1/users/' + this.userInfo.user_id + '/avatar',
+                        let response = await fetch('/user/fileUpload',
                         {
                               method: 'POST',
                               credentials: 'include',
+                              enctype:'multipart/form-data',
                               body: data
                             })
                         let res = await response.json();

@@ -122,3 +122,11 @@ export const feedback = (type, title, detail,phone) => fetch('/index/feedback', 
  * 修改用户信息
  */
 export const updateUserInfo = (phone, nickName, headImgUrl,email) => fetch('/user/updateUserInfo', {phone, nickName, headImgUrl,email}, 'POST');
+/**
+ * 我的团队
+ */
+export const myteam = (pageNo,pageSize,parentUserId) => fetch('/user/myteam', {pageNo,pageSize,parentUserId}, 'GET');
+/**
+ * 我的团队
+ */
+export const signlist = (pageNo,pageSize) => fetch('/sign/signlist', {pageNo,pageSize}, 'GET');

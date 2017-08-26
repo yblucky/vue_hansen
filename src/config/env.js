@@ -15,7 +15,7 @@ let imgBaseUrl="http://oum0lyvjq.bkt.clouddn.com/logo.png";
 
 if (process.env.NODE_ENV == 'development') {
 		// baseUrl="http://192.168.2.222:8090/api";
-		baseUrl="http://192.168.2.132:8090/hansen";
+		baseUrl="http://192.168.2.105:8090/hansen";
 }else if(process.env.NODE_ENV == 'production'){
 	// baseUrl = 'http://cangdu.org:8001';
 }
