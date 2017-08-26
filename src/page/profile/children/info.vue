@@ -96,7 +96,7 @@
     import {signout} from 'src/service/getData'
     import alertTip from 'src/components/common/alertTip'
     import {getImgPath} from 'src/components/common/mixin'
-    import {imgBaseUrl} from 'src/config/env'
+    import {imgBaseUrl,token,setToken,formatDate,getUserInfo} from 'src/config/env'
     import {removeStore} from 'src/config/mUtils'
 
     export default {
@@ -115,6 +115,9 @@
                 imgBaseUrl,
             }
         },
+        created(){
+          this.initData();
+        },
         beforeDestroy(){
             clearTimeout(this.timer)
         },
@@ -132,7 +135,12 @@
             ...mapMutations([
                 'OUT_LOGIN', 'SAVE_AVANDER'
             ]),
-
+            initData(){
+                this.uid=getUserInfo("uid");
+                this.username=getUserInfo("nickName");
+                this.phone=getUserInfo("phone");
+                this.mail=getUserInfo("email");
+            },
             exitlogin(){
                 this.show=true;
                 this.isEnter=true;
@@ -167,7 +175,7 @@
                     let data = new FormData();
                     data.append('file', input.files[0]);
                     try{
-                        let response = await fetch('/eus/v1/users/' + this.userInfo.user_id + '/avatar', 
+                        let response = await fetch('/eus/v1/users/' + this.userInfo.user_id + '/avatar',
                         {
                               method: 'POST',
                               credentials: 'include',

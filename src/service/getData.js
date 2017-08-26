@@ -122,3 +122,7 @@ export const feedbacklist = (pageNo,pageSize) => fetch('/index/feedbacklist', {p
  * 意见反馈
  */
 export const feedback = (type, title, detail,phone) => fetch('/index/feedback', {type, title, detail,phone}, 'POST');
+/**
+ * 修改用户信息
+ */
+export const updateUserInfo = (phone, nickName, headImgUrl,email) => fetch('/user/updateUserInfo', {phone, nickName, headImgUrl,email}, 'POST');
