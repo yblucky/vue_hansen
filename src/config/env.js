@@ -15,7 +15,7 @@ let imgBaseUrl="http://oum0lyvjq.bkt.clouddn.com/logo.png";
 
 if (process.env.NODE_ENV == 'development') {
 		// baseUrl="http://192.168.2.222:8090/api";
-		baseUrl="http://192.168.2.132:8090/hansen";
+		baseUrl="http://192.168.2.105:8090/hansen";
 }else if(process.env.NODE_ENV == 'production'){
 	// baseUrl = 'http://cangdu.org:8001';
 }
@@ -65,17 +65,31 @@ export const getLoginUserInfo = {
 		}
 	}
 }
+//根据key值获取本地存储的用户信息
 export function getUserInfo (key) {
-	let userinfo=localStorage.getItem("loginUserInfo");
-	if (!userinfo) {
-		return null;
-	}
-
-  let obj = JSON.parse(userinfo);
+	let obj = getUserJson();
 	if(!obj.hasOwnProperty(key) ){
 		return null;
 	}
 	return obj[key];
+}
+//根据key-value值修改本地存储的用户信息
+export function updateLocalUser(key,value) {
+	let obj = getUserJson();
+	if(!obj.hasOwnProperty(key) ){
+		return null;
+	}
+	obj[key]=value;
+	localStorage.setItem("loginUserInfo", JSON.stringify(obj));
+}
+//获取本地存储的用户json对象
+function getUserJson(){
+	let userinfo=localStorage.getItem("loginUserInfo");
+	if (!userinfo) {
+		return null;
+	}
+  let obj = JSON.parse(userinfo);
+	return obj;
 }
 //格式化日期 eg:formatDate(new Date(),'yyyy-MM-dd hh:mm')
 export function formatDate (date, fmt) {

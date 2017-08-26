@@ -1,22 +1,20 @@
 <template>
     <div class="restContainer">
         <head-top head-title="我的团队" goBack="true"></head-top>
-        <section class="category_title">
-            <span :class="{choosed: chooseType === 1}" @click="chooseType = 1">团队成员</span>
-            <span :class="{choosed: chooseType === 2}" @click="chooseType = 2">部门业绩</span>
-        </section>
         <transition name="router-fade">
             <section v-if="chooseType === 1">
               <section class="info-data">
-                  <ul class="clear" v-for="(index, item) in teamList">
-                      <li @click="getIndex(index)" class="info-data-link">
-                        <span class="info-data-center">理财大神[HS10001]</span>
+                  <ul class="clear" v-for="(item,index) in teamList">
+                      <li @click="getIndex(index,item.userId)" class="info-data-link">
+                        <span class="info-data-center">{{item.nickName}}[{{item.uid}}]</span>
+                        <span class="spaPer">{{item.performance}}</span>
                         <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnRecord, 'closeImg' : !turnRecord }"/></span>
                       </li>
                       <transition name="router-fade">
                           <section v-if="index === turnOn " class="member-data">
-                            <div v-for="item in memberList">
-                              <span class="showDate">理财大神[HS10001]</span>
+                            <div v-for="ele in memberList">
+                              <span class="showDate">{{ele.nickName}}[{{ele.uid}}]</span>
+                              <span class="spaPer2">{{ele.performance}}</span>
                             </div>
                           </section>
                       </transition>
@@ -24,36 +22,16 @@
               </section>
             </section>
         </transition>
-        <transition name="router-fade">
-            <section v-if="chooseType === 2" class="show-data">
-              <div>
-                <ul>
-                   <li class="page">
-                       <span class="">团队总业绩</span>
-                       <div class="">9000</div>
-                   </li>
-                </ul>
-              </div>
-              <div v-for="(index,item) in gradeList">
-                <ul>
-                   <li class="page">
-                       <span class="">第{{index}}部业绩</span>
-                       <div class="">3000</div>
-                   </li>
-                </ul>
-              </div>
-            </section>
-        </transition>
-        <!-- <payPwd></payPwd> -->
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
 
-<script>
+<script> 
     import headTop from 'src/components/header/head'
     // import payPwd from '../../components/common/payPwd'
     import alertTip from 'src/components/common/alertTip'
-    import {mobileCode, checkExsis, sendMobile, getcaptchas, changePassword} from 'src/service/getData'
+    import {getUserInfo} from 'src/config/env'
+    import {mobileCode, checkExsis, sendMobile, getcaptchas, myteam} from 'src/service/getData'
 
     export default {
         data(){
@@ -63,12 +41,13 @@
                 alertText: null, //提示的内容
                 turnRecord:false,   //打开
                 turnOn:0,
-                teamList:[1,2,3], //直代
-                memberList:[1,2,3],//二代
-                gradeList:[1,2,3],
+                teamList:[], //直代
+                memberList:[],//二代
+                gradeList:[],
                 show:true,     //显示提示框
                 isEnter:true,  //是否登录
                 isLeave:false, //是否退出
+                showHtml:"",
             }
         },
         components: {
@@ -76,13 +55,27 @@
             alertTip,
             // payPwd,
         },
+        watch:{
+        },
         created(){
         },
+        mounted(){
+            this.getMyTeam(1,3,getUserInfo("id"));
+        },
         methods: {
+            async getMyTeam(pageno,pageSize,parentUserId){
+                let res = await myteam(pageno,pageSize,parentUserId);
+                this.teamList = res.result.rows;
+            },
+            async getmemberList(pageNo,pageSize,parentUserId){
+                let res = await myteam(pageNo,pageSize,parentUserId);
+                this.memberList = res.result.rows;
+            },
             closeTip(){
                 this.showAlert = false;
             },
-            getIndex:function($index){
+            getIndex:function($index,parentUserId){
+              this.getmemberList(1,3,parentUserId);
               if(this.turnOn === $index){
                 this.turnOn = 0;
                 this.turnRecord = false;
@@ -165,10 +158,24 @@
                width: 1rem;
            }
          }
+         .spaPer{
+            text-align: right;
+            position: absolute;
+            right: 15%;
+            color: red;
+         }
          .info-data-center{
            font-size:16px;
            font-family:"微软雅黑",Courier New, Courier, monospace;
          }
+      }
+
+      .spaPer2{
+         text-align: right;
+         position: absolute;
+         right: 15%;
+         color: red;
+         font-size: 0.85rem;
       }
     }
 

@@ -2,49 +2,48 @@
     <div class="upGradeContainer">
         <head-top :head-title="'任务奖励红包'" goBack="true"></head-top>
         <section class="show-data">
-          <div v-for="item in pushRecordList">
+          <div v-for="item in recordList">
             <div class="showLine">
-              <span class="showDate">2017-08-12</span>
-              <span class="showAmount">￥999</span>
+              <span class="showDate">{{item.signTime | formatDate}}</span>
+              <span class="showAmount">￥{{item.amt}}</span>
             </div>
             <ul>
                <li class="page">
-                   <span class=""><img  src="../../images/add_address.png"/>交易币<b>1JYB 约1000元</b></span>
-                   <div class="">+100</div>
+                   <span class=""><img  src="../../images/add_address.png"/>交易币<b>{{item.tradeAmt}}JYB 约{{item.tradeAmtRmb}}元</b></span>
+                   <div class="">+{{item.tradeAmtRmb}}</div>
                </li>
               <li class="page">
-                  <span class=""><img  src="../../images/add_address.png"/>购物币<b>1GWB 约1000元</b></span>
-                  <div class="">+100</div>
+                  <span class=""><img  src="../../images/add_address.png"/>购物币<b>{{item.equityAmt}}GWB 约{{item.equityAmtRmb}}元</b></span>
+                  <div class="">+{{item.equityAmtRmb}}</div>
               </li>
              <li class="page">
-                 <span class=""><img  src="../../images/add_address.png"/>股权币<b>1GQB 约1000元</b></span>
-                 <div class="">+100</div>
+                 <span class=""><img  src="../../images/add_address.png"/>股权币<b>{{item.payAmt}}GQB 约{{item.payAmtRmb}}元</b></span>
+                 <div class="">+{{item.payAmtRmb}}</div>
              </li>
             </ul>
           </div>
-        </section> 
+        </section>
     </div>
 </template>
 
 <script>
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
-    import {localapi, proapi, imgBaseUrl} from 'src/config/env'
+    import {localapi, proapi, imgBaseUrl,formatDate} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
+    import {signlist} from 'src/service/getData'
 
     export default {
         data(){
             return {
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
-                active: 1, //切换tab查看不同的记录
-                manageRecordList:[1,2,3],//管理奖记录
-                pushRecordList:[1,2,3],//管理奖记录
-                diffRecordList:[1,2,3],//管理奖记录
+                recordList:[1,2,3],//任务奖励
 
             }
         },
         created(){
+          this.getSignlist();
         },
         components: {
             headTop,
@@ -60,6 +59,10 @@
             ...mapMutations([
                 'RECORD_USERINFO',
             ]),
+            async getSignlist(){
+                  let res = await signlist(1,20);
+                  this.recordList = res.result.rows;
+            },
             toggleTabs (index,tabText) {
                  this.active = index;
              },
@@ -69,6 +72,12 @@
             closeTip(){
                 this.showAlert = false;
             }
+        },
+        filters:{
+          formatDate(createTime){
+            let date = new Date(createTime);
+            return formatDate(date,'yyyy-MM-dd');
+          }
         }
     }
 

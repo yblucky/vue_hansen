@@ -27,7 +27,6 @@
                 </div>
             </section>
         </form>
-        {{token}}
         <div class="login_container" @click="checkLogin">登录</div>
         <router-link to="/forgetPwd" class="to_forget">重置密码？</router-link>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>

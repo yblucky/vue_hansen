@@ -127,3 +127,12 @@ export const updateUserInfo = (phone, nickName, headImgUrl,email) => fetch('/use
  * 获取红包金额
  */
 export const rewardsign = () => fetch('/sign/rewardsign', {},'GET');
+
+/**
+ * 我的团队
+ */
+export const myteam = (pageNo,pageSize,parentUserId) => fetch('/user/myteam', {pageNo,pageSize,parentUserId}, 'GET');
+/**
+ * 我的团队
+ */
+export const signlist = (pageNo,pageSize) => fetch('/sign/signlist', {pageNo,pageSize}, 'GET');
