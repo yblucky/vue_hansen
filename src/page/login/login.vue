@@ -30,14 +30,12 @@
         {{token}}
         <div class="login_container" @click="checkLogin">登录</div>
         <router-link to="/forgetPwd" class="to_forget">重置密码？</router-link>
-        <payPwd></payPwd>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
 
 <script>
     import headTop from '../../components/header/head'
-    import payPwd from '../../components/common/payPwd'
     import alertTip from '../../components/common/alertTip'
     import {localapi, proapi, imgBaseUrl,token,setToken} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
@@ -64,7 +62,6 @@
         components: {
             headTop,
             alertTip,
-            payPwd
         },
         computed: {
 
