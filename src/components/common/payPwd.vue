@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-      <section class="coverpart" v-if="show">
+      <section class="coverpart">
           <section class="cover-background"></section>
           <section class="cover-content">
               <div class="head">
@@ -9,8 +9,9 @@
               </div>
 
               <div class="head_name">
-                  <h4>向(李小龙)支付</h4>
-                  <h5>￥{{parseInt(payMoney).toFixed(2)}}</h5>
+                  <!-- <h4>支付金额</h4> -->
+                  <!-- <h5>￥{{parseInt(payMoney).toFixed(2)}}</h5> -->
+                  <h4>请输入6位支付密码</h4>
               </div>
 
               <div class="enter-box" @click="openkey()">
@@ -136,7 +137,8 @@
             },
             //关闭支付密码框
             closePwd(){
-              this.show = false;
+              //this.show = false;
+              this.$emit('closePwd')
             },
         }
     };

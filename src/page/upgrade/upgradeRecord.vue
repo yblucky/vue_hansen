@@ -14,7 +14,7 @@
               <div>{{item.upGradeTypeName}}</div>
           </li>
        </ul>
-       <foot-guide></foot-guide>
+       <!-- <foot-guide></foot-guide> -->
    </div>
 </template>
 
