@@ -46,14 +46,15 @@
           <p>
             <span>转币数量：<input type="text" size="16" name="amount" v-model.lazy="amount"></span>
           </p>
-          <p>
+          <p class="pay_display">
             <span>高级密码：<input type="password" size="16" name="payPassWord"  v-model.lazy="payPassWord"></span>
           </p>
         </section>
         <div class="btn">
-            <div class="login_container" @click="coinTransferAction">确认</div>
+            <div class="login_container" @click="showPayPwd()">确认</div>
         </div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
+        <payPwd @pwdCompleted="coinTransferAction($event)" v-if="showPwd" :showHide="showPwd" @closePwd='closePwd'></payPwd>
         <foot-guide></foot-guide>
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
@@ -66,7 +67,9 @@
     import alertTip from 'src/components/common/alertTip'
     import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo} from 'src/config/env'
+    import payPwd from 'src/components/common/payPwd'
     import {mapState, mapMutations} from 'vuex'
+    import {coinTransfer} from '../../service/getData'
 
 
 
@@ -88,6 +91,7 @@
 
                 amount:0,//支付个数
                 walletOrderType:1, //1交易币内部转账  4 支付币内部转账  8股权币内部转账
+                showPwd:false,
 
 
             }
@@ -102,6 +106,7 @@
             headTop,
             alertTip,
             footGuide,
+            payPwd
         },
         computed: {
             //判断手机号码
@@ -113,7 +118,8 @@
             ...mapMutations([
                 'RECORD_USERINFO',
             ]),
-            async coinTransferAction(){
+            async coinTransferAction(pwd){
+                this.payPassWord=pwd;
                 if (!this.toUid) {
                   this.showAlert = true;
                   this.alertText = '收款账号不能为空';
@@ -156,6 +162,13 @@
               },
             closeTip(){
                 this.showAlert = false;
+            },
+            closePwd(){
+                this.showPwd = false;
+            },
+            showPayPwd(){
+              this.turnType = false;
+              this.showPwd=true;
             }
         }
     }
@@ -304,6 +317,9 @@
         p{
             text-align: center;
             margin-top:20px;
+        }
+        .pay_display{
+          display: none;
         }
     }
 

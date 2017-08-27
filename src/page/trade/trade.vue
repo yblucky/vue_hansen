@@ -44,12 +44,12 @@
                           <span class="wu">实际需支付：</span>
                           <input type="text" name="amount" v-model.lazy="amount">
                         </div>
-                        <div>
+                        <div class="pay_display">
                           <span class="shi">交易密码：</span>
                           <input type="text" name="payPassWord" v-model.lazy="payPassWord">
                         </div>
                         <div class="btn">
-                            <div class="active_container" @click="coninOut">确认</div>
+                            <div class="active_container" @click="showPayPwd()">确认提币</div>
                         </div>
                     </section>
                   </div>
@@ -73,16 +73,19 @@
          </section>
       </div>
        <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip>
+       <payPwd @pwdCompleted="coninOut($event)" v-if="showPwd" :showHide="showPwd" @closePwd='closePwd'></payPwd>
        <transition name="router-slid" mode="out-in">
            <router-view></router-view>
        </transition>
    </div>
+
 </template>
 
 <script>
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
    import {isLogin,getLoginUserInfo} from 'src/config/env'
+   import payPwd from 'src/components/common/payPwd'
    import {cointOut,updateUserInfoOutAddress} from '../../service/getData'
 
    export default {
@@ -108,7 +111,8 @@
                cardGrade:0,
                uid:0,
                addOutTradeAddress:"121",
-               isShowOutTradeAddress:false
+               isShowOutTradeAddress:false,
+               showPwd:false,
            }
        },
        mounted(){
@@ -119,6 +123,7 @@
        components: {
            headTop,
            alertTip,
+           payPwd
        },
        computed: {
 
@@ -126,6 +131,7 @@
        methods: {
          addOutAddressAction(){
             this.isShowOutTradeAddress=!this.isShowOutTradeAddress;
+            this.turnType=false;
          },
       async   updateUserInfoAction(){
             this.isShowOutTradeAddress=true;
@@ -152,7 +158,9 @@
          calcAmount(){
            this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
          },
-         async coninOut(){
+         async coninOut(pwd){
+             this.payPassWord=pwd;
+             this.closePwd();
              if (!this.outTradeAddress) {
                this.showAlert = true;
                this.alertText = '提币地址不能为空';
@@ -197,6 +205,13 @@
             this.tradeAmt=this.getLoginUserInfo("tradeAmt");
 
          },
+         closePwd(){
+             this.showPwd = false;
+         },
+         showPayPwd(){
+           this.turnType = false;
+           this.showPwd=true;
+         }
        }
    }
 </script>
@@ -250,7 +265,7 @@
    .change_login{
        position: absolute;
        @include ct;
-       right: 0.75rem;
+       right: 0.65rem;
        @include sc(.7rem, #fff);
        b{
          color:white;
@@ -287,7 +302,7 @@
           }
         }
         .info-data-center{
-          font-size:16px;
+          font-size:18px;
           font-family:"微软雅黑",Courier New, Courier, monospace;
         }
      }
@@ -297,7 +312,7 @@
      width: 100%;
      background-color:#F5F5F5;
      span{
-       font-size: 18px;
+       font-size: 15px;
        font-family: "黑体", Verdana, Arial, Helvetica, sans-serif;
      }
      .div1{
@@ -323,17 +338,20 @@
        background-color: white;
      }
      .shi{
-       margin-left:10.1%;
-       font-size: 11px;
+       margin-left:15%;
+       font-size: 15px;
      }
      .wu{
-        margin-left:7%;
-        font-size: 11px;
+        margin-left:10.4%;
+        font-size: 15px;
      }
+     .pay_display{
+        display: none;
+      }
      input{
          @include sc(0.85rem, #666);
          border:1px solid #dedede;
-         width:9rem;
+         width:5rem;
          height:1.45rem;
          font-size: 16px;
          text-align: center;
@@ -342,12 +360,15 @@
      .addAddress{
        width: 100%;
        margin-top: 3%;
+       font-size: 0.6em;
      }
    }
 
    .active_container{
        margin: 0.35rem 5rem;
-       @include sc(.5rem, #fff);
+       width: 43%;
+       margin-top: 4%;
+       @include sc(.7rem, #fff);
        background-color: #3b95e9;
        padding: .5rem 0.5rem;
        border: 1px;
