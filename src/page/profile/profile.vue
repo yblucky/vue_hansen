@@ -88,11 +88,11 @@
                       </span>
                         <span class="info-data-bottom">任务奖励</span>
                     </router-link>
-                    <router-link to="/staticProfit" tag="li" class="info-data-link">
+                    <router-link to="/taskInfo" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../hsimages/15.png" class="vip" />
                       </span>
-                        <span class="info-data-bottom">静态分红</span>
+                        <span class="info-data-bottom">任务列表</span>
                     </router-link>
                 </ul>
 
@@ -576,13 +576,16 @@ export default {
         top:1.1rem;
         right: 0.65rem;
         @include sc(.8rem, #fff);
+        img{
+          width:1.5rem;
+        }
     }
     .message_count{
       position: absolute;
       @include ct;
-      top:0.5rem;
-      right: 0.85rem;
-      @include sc(.7rem, #fff);
+      top:0.58rem;
+      right: 0.74rem;
+      @include sc(.6rem, #fff);
       span{
         color: white;
       }

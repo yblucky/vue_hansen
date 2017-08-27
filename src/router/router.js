@@ -29,6 +29,8 @@ const message = r => require.ensure([], () => r(require('../page/message/message
 const setMessage = r => require.ensure([], () => r(require('../page/message/setMessage')), 'setMessage')
 const myReward = r => require.ensure([], () => r(require('../page/reward/myReward')), 'myReward')
 const forgetPwd = r => require.ensure([], () => r(require('../page/forgetPwd/forgetPwd')), 'forgetPwd')
+const taskInfo = r => require.ensure([], () => r(require('../page/taskInfo/taskInfo')), 'taskInfo')
+
 
 export default [{
     path: '/',
@@ -183,6 +185,11 @@ export default [{
         {
           path: '/forgetPwd',
           component: forgetPwd
+        },
+        //任务列表
+        {
+          path: '/taskInfo',
+          component: taskInfo
         },
     ]
 }]

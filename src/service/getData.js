@@ -125,6 +125,12 @@ export const findUserCardGrade = (grade) => fetch('/user/findUserCardGrade', {gr
 export const findCardGradeList = (cardGrade) => fetch('/cardgrade/list', {}, 'GET');
 
 /**
+ * 获取开卡等级
+ */
+export const findCardGrade = (cardGrade) => fetch('/cardgrade/info', {cardGrade}, 'GET');
+
+
+/**
  * 会员升级记录
  */
 export const upGradeRecord = (pageNo,pageSize) => fetch('/user/upGradeRecord', {pageNo,pageSize}, 'GET');
