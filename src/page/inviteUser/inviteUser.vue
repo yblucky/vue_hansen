@@ -163,38 +163,47 @@
                 if (!this.phone) {
                   this.showAlert = true;
                   this.alertText = '手机号不能为空';
+                  return;
                 }
                 if (!this.email) {
                   this.showAlert = true;
                   this.alertText = '邮箱不能为空';
+                  return;
                 }
                 if (!this.cardGrade) {
                   this.showAlert = true;
                   this.alertText = '开卡等级不能为空';
+                  return;
                 }
                 if (!this.password) {
                   this.showAlert = true;
                   this.alertText = '登录密码不能为空';
+                  return;
                 }
                 if (!this.confirmPassword) {
                   this.showAlert = true;
                   this.alertText = '确认登录密码不能为空';
+                  return;
                 }
                 if (this.confirmPassword!=this.password) {
                   this.showAlert = true;
                   this.alertText = '两次登录密码不能为空';
+                  return;
                 }
                 if (!this.payword) {
                   this.showAlert = true;
                   this.alertText = '支付密码不能为空';
+                  return;
                 }
                 if (!this.confirmPayWord) {
                   this.showAlert = true;
                   this.alertText = '确认支付密码不能为空';
+                  return;
                 }
                 if (this.confirmPayWord!=this.payword) {
                   this.showAlert = true;
                   this.alertText = '两次支付密码不能为空';
+                  return;
                 }
                 let res = await innerCreateUser(this.phone,this.phone,this.email,this.cardGrade,this.password,this.confirmPassword,this.payword,this.confirmPayWord,parseInt(this.firstReferrer),this.contactUserId);
                 if (res.code==200) {

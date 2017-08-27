@@ -104,15 +104,18 @@
              if (!this.toUid) {
                this.showAlert = true;
                this.alertText = '收款账号不能为空';
+               return;
              }
              if (!this.transferNo) {
                this.showAlert = true;
                this.alertText = '注册码数量不能为空';
+               return;
              }
              if (!this.payword) {
                console.log(this.payword);
                this.showAlert = true;
                this.alertText = '支付密码不能为空';
+               return;
              }
 
              let res = await codeTransfer(this.toUid, parseInt(this.transferNo) ,this.codeType,this.payword);
