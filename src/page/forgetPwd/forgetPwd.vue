@@ -124,6 +124,9 @@
                     this.showAlert = true;
                     this.alertText = '找回密码成功';
                     this.successCode = 1;
+                    if (res.code==0 || res.code==-1) {
+                      localStorage.clear();
+                    }
                 }
                 //不再计时
                 clearInterval(this.timer)

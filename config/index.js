@@ -40,7 +40,7 @@ module.exports = {
         ],
         // proxypath: 'http://cangdu.org:8001',
         // proxypath: 'http://127.0.0.1:8090/api',
-        proxypath: 'http://192.168.2.222:8090/api',
+        proxypath: 'http://hs.6pyun.com/api',
 
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README

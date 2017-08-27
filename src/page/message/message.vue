@@ -52,7 +52,16 @@
         async getfeedbacklist () {
              //从后台获取记录
              let res = await feedbacklist(1,100);
-             this.msgList = res.result.rows;
+               if (res.code==200) {
+                 this.msgList = res.result.rows;
+             }else {
+               this.showAlert = true;
+               this.alertText = res.msg;
+               if (res.code==0 || res.code==-1) {
+                 localStorage.clear();
+               }
+             }
+
          },
        },
        filters:{

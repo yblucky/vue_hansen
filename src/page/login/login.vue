@@ -189,7 +189,7 @@
     .login_container{
         margin: 1rem .5rem 1rem;
         @include sc(.7rem, #fff);
-        background-color: #4cd964;
+        background-color: #3b95e9;
         padding: .5rem 0;
         border: 1px;
         border-radius: 0.15rem;

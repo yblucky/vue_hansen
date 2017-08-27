@@ -137,7 +137,7 @@
                   this.needChangeNum=res.result.needChangeNum//需要补充交易数量
               },
             //升级
-            async upGradeAction(pwd){ 
+            async upGradeAction(pwd){
                 this.closePwd();
                 if(this.needActiveNum>0){
                   this.showAlert = true;
@@ -164,6 +164,9 @@
                 }else{
                   this.showAlert = true;
                   this.alertText = rs.msg;
+                  if (res.code==0 || res.code==-1) {
+                     localStorage.clear();
+                  }
                 }
                 return
             },

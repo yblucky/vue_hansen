@@ -133,6 +133,9 @@
              }else {
                this.showAlert = true;
                this.alertText = res.msg;
+               if (res.code==0 || res.code==-1) {
+                  localStorage.clear();
+               }
              }
          },
          closeTip(){
@@ -160,6 +163,9 @@
             }else {
               this.showAlert = true;
               this.alertText = res.msg;
+              if (res.code==0 || res.code==-1) {
+                 localStorage.clear();
+              }
             }
          },
          closePwd(){

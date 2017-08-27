@@ -14,7 +14,7 @@ let routerMode = 'history';
 let imgBaseUrl="http://oum0lyvjq.bkt.clouddn.com/logo.png";
 
 if (process.env.NODE_ENV == 'development') {
-		baseUrl="http://192.168.2.222:8090/api";
+		baseUrl="http://hs.6pyun.com/api";
 		// baseUrl="http://127.0.0.1:8090/api";
 }else if(process.env.NODE_ENV == 'production'){
 	// baseUrl = 'http://cangdu.org:8001';

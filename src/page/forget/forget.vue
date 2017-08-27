@@ -120,7 +120,9 @@
                 }else{
                   this.showAlert = true;
                   this.alertText = res.msg;
-                  return
+                  if (res.code==0 || res.code==-1) {
+                    localStorage.clear();
+                  } 
                 }
             },
             closeTip(){

@@ -271,6 +271,9 @@ export default {
             }else {
               this.showAlert = true;
               this.alertText = res.msg;
+              if (res.code==0 || res.code==-1) {
+                 localStorage.clear();
+             }
             }
 
         },
@@ -583,7 +586,7 @@ export default {
     .message_count{
       position: absolute;
       @include ct;
-      top:0.58rem;
+      top:0.75rem;
       right: 0.74rem;
       @include sc(.6rem, #fff);
       span{

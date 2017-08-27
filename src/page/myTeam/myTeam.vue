@@ -26,7 +26,7 @@
     </div>
 </template>
 
-<script> 
+<script>
     import headTop from 'src/components/header/head'
     // import payPwd from '../../components/common/payPwd'
     import alertTip from 'src/components/common/alertTip'
@@ -69,7 +69,15 @@
             },
             async getmemberList(pageNo,pageSize,parentUserId){
                 let res = await myteam(pageNo,pageSize,parentUserId);
-                this.memberList = res.result.rows;
+                if (res.code==200) {
+                    this.memberList = res.result.rows;
+                }else {
+                    this.showAlert = true;
+                    this.alertText = res.msg;
+                    if (res.code==0 || res.code==-1) {
+                       localStorage.clear();
+                   }
+                }
             },
             closeTip(){
                 this.showAlert = false;

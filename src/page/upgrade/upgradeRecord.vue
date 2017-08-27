@@ -46,7 +46,15 @@
         async getUpGradeRecord () {
              //从后台获取记录
              let res = await upGradeRecord(1,100);
-             this.upgradeRecordList = res.result.rows;
+             if(res.code==200){
+               this.upgradeRecordList = res.result.rows;
+             }else {
+               if (res.code==0 || res.code==-1) {
+                  this.showAlert = true;
+                  this.alertText = this.data.msg;
+                  localStorage.clear();
+               }
+             }
          },
        },
        filters:{
