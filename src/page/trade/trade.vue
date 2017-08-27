@@ -2,7 +2,7 @@
  <div class="page">
        <head-top head-title="交易币钱包" go-back='true'>
          <div slot="changeLogin" class="change_login">
-           <router-link to="/benefit/benefitDetail" ><b>明细</b></router-link>
+           <router-link to="/trade/tradeDetail" ><b>明细</b></router-link>
          </div>
        </head-top>
        <section class="topPanel">
@@ -53,8 +53,16 @@
              <li @click="" class="info-data-link">
                <span class="info-data-left"><img src="../../hsimages/7.png" /></span>
                <span class="info-data-center">我的提币地址</span>
-               <span class="info-data-right"><b>添加</b></span>
+               <span class="info-data-right" @click="addOutAddressAction"><b>添加</b></span>
              </li>
+             <div class="transfer_div">
+               <section v-if="turnType == true" class="transfer">
+                     <input type="text" name="addOutTradeAddress" v-model.lazy="addOutTradeAddress"> 
+                   <div class="btn">
+                       <div class="active_container" @click="updateUserInfoAction">保存</div>
+                   </div>
+               </section>
+             </div>
            </ul>
        </section>
        <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip>
@@ -68,7 +76,7 @@
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
    import {isLogin,getLoginUserInfo} from 'src/config/env'
-   import {cointOut} from '../../service/getData'
+   import {cointOut,updateUserInfoOutAddress} from '../../service/getData'
 
    export default {
      data(){
@@ -77,6 +85,7 @@
                alertText: null,
                turnType:false,
                outTradeAddress:"",
+               tradeAmt:0,
                coinOutAmt:110,//需要提币支付个数
                amount:0,//实际支付个数
                tradeCoinOutScale:0,
@@ -90,6 +99,9 @@
                headImgUrl:"",
                grade:0,
                cardGrade:0,
+               uid:0,
+               addOutTradeAddress:"",
+               isShowOutTradeAddress:false
            }
        },
        mounted(){
@@ -105,6 +117,24 @@
 
        },
        methods: {
+         addOutAddressAction(){
+            this.isShowOutTradeAddress=true;
+         },
+      async   updateUserInfoAction(){
+            this.isShowOutTradeAddress=true;
+            if (!this.addOutTradeAddress) {
+              this.showAlert = true;
+              this.alertText = '交易币提币地址不能为空';
+            }
+             let res = await updateUserInfoOutAddress("", "",this.addOutTradeAddress);
+             if (res.code==200) {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }else {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }
+         },
          calcAmount(){
            this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
          },
@@ -146,6 +176,8 @@
             this.cardGrade=this.getLoginUserInfo("cardGrade");
             this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
             this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
+            this.tradeAmt=this.getLoginUserInfo("tradeAmt");
+
          },
        }
    }

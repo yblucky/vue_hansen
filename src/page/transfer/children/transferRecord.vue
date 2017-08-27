@@ -1,42 +1,43 @@
 <template>
    <div class="upGradeRecordContainer">
-       <head-top head-title="升级记录" go-back='true'></head-top>
+       <head-top head-title="转账记录" go-back='true'></head-top>
        <ul>
-          <li class="page">
+          <li class="page"  v-for="item in coinList">
               <div class="page-record">
                   <div class="imgdiv">
-                    <img v-if="coinType === 0" src="../../../hsimages/39.png"  class="privateImage"/>
-                    <img v-if="coinType === 1" src="../../../hsimages/40.png"  class="privateImage"/>
-                    <img v-if="coinType === 2" src="../../../hsimages/41.png"  class="privateImage"/>
+                    <img v-if="item.orderType == 1" src="../../../hsimages/39.png"  class="privateImage"/>
+                    <img v-if="item.orderType  == 4" src="../../../hsimages/40.png"  class="privateImage"/>
+                    <img v-if="item.orderType  == 8" src="../../../hsimages/41.png"  class="privateImage"/>
                   </div>
                   <div class="pdiv">
                       <p>
                           <span class="icon-mobile-number">
-                              HS12000
+                              {{uid}}
                           </span>
                       </p>
                       <p>
-                          <span class="icon-mobile-number">
-                              购物币
-                          </span>
+                          <span class="icon-mobile-number" v-if="item.orderType == 1"> 交易币 </span>
+                          <span class="icon-mobile-number" v-if="item.orderType == 4"> 支付币 </span>
+                          <span class="icon-mobile-number" v-if="item.orderType == 8"> 股权币 </span>
                       </p>
                   </div>
 
                   <div class="rightdiv">
                       <p>
                           <span class="icon-mobile-number">
-                              2017-08-08
+                               {{item.createTime | formatDate}}
+
                           </span>
                       </p>
                       <p>
                           <span class="icon-mobile-number1">
-                              -500
+                             {{item.amountStr  }}
                           </span>
                       </p>
                   </div>
               </div>
           </li>
-          <li class="page">
+          <!-- <li class="page">
               <div class="page-record">
                 <div class="imgdiv">
                   <img v-if="coinType === 0" src="../../../hsimages/39.png"  class="privateImage"/>
@@ -69,7 +70,7 @@
                       </p>
                   </div>
               </div>
-          </li>
+          </li> -->
        </ul>
        <foot-guide></foot-guide>
    </div>
@@ -79,17 +80,64 @@
    import headTop from 'src/components/header/head'
    import {mapState, mapMutations} from 'vuex'
    import footGuide from 'src/components/footer/footGuide'
+   import {isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
+   import {coinInnerTransferList} from '../../../service/getData'
 
    export default {
      data(){
            return{
                 coinType:0,
+                id:"",
+                uid:0,
+                coinList:[],
+                pageNo:1,
+                pageSize:30,
+                orderType:[1,4,8]
            }
        },
        components: {
            headTop,
            footGuide,
        },
+       mounted(){
+         this.isLogin("/login");
+         this.coinInnerTransferListAction();
+         this.initData();
+       },
+       mixins: [isLogin,getLoginUserInfo],
+       filters:{
+         formatDate(createTime){
+           let date = new Date(createTime);
+           return formatDate(date,'yyyy-MM-dd');
+         }
+       },
+       methods: {
+         async coinInnerTransferListAction(){
+             let res = await coinInnerTransferList(this.pageNo, this.pageSize,this.orderType);
+             if (res.code==200) {
+                this.coinList=res.result.rows;
+                console.log(" 交易币交易记录   "+JSON.stringify(this.coinList));
+                for (var i = 0; i < this.coinList.length; i++) {
+                  if (this.coinList[i].sendUserId==this.id) {
+                      this.coinList[i].amountStr="+"+this.coinList[i].amount;
+                  }else if (this.coinList[i].receviceUserId==this.id) {
+                      this.coinList[i].amountStr="-"+this.coinList[i].amount;
+                  }
+                }
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }else {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }
+         },
+         initData(){
+            this.id=this.getLoginUserInfo("id");
+            this.uid=this.getLoginUserInfo("uid");
+            this.nickName=this.getLoginUserInfo("nickName");
+            this.headImgUrl=this.getLoginUserInfo("headImgUrl");
+         }
+       }
    }
 </script>
 

@@ -42,7 +42,7 @@
                <transition name="router-fade">
                    <section v-if="turnRecord == true" class="show-data">
                      <div v-for="item in registerCodeList">
-                       <span class="showDate">{{item.createTime}}</span>
+                       <span class="showDate">{{item.createTime|formatDate}}</span>
                        <ul>
                          <li class="page">
                            <span class="">{{item.sendUserNick}}</span>
@@ -62,7 +62,7 @@
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
-   import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo} from 'src/config/env'
+   import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
    import {codeTransfer,codeTransferList} from '../../service/getData'
 
    export default {
@@ -92,6 +92,12 @@
        mounted(){
          this.isLogin("/login");
          this.initData();
+       },
+       filters:{
+         formatDate(createTime){
+           let date = new Date(createTime);
+           return formatDate(date,'yyyy-MM-dd');
+         }
        },
        methods :{
          async codeTransferAction(){

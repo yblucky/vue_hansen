@@ -83,6 +83,11 @@ export const changePassword = (username, oldpassWord, newpassword, confirmpasswo
  */
 export const cointOut = (address, amount, walletOrderType,payPassWord) => fetch('/wallet/coinout', {address, amount, walletOrderType,payPassWord}, 'POST');
 
+/**
+ * 获取用户激活码转账记录  1:激活码  2:注册码
+ */
+
+export const codeTransferList = (pageNo,pageSize,codeType) => fetch('/code/list', {pageNo,pageSize,codeType},'GET');
 
 /**
  * 用户相互之间转账--转币
@@ -90,7 +95,16 @@ export const cointOut = (address, amount, walletOrderType,payPassWord) => fetch(
 export const coinTransfer = (toUid, amount, walletOrderType,payPassWord) => fetch('/wallet/cointransfer', {toUid, amount, walletOrderType,payPassWord}, 'POST');
 
 
+/**
+ * 用户相互之间转账--内部转币记录  orderType :1  4 8
+ */
+export const coinInnerTransferList = (pageNo,pageSize,orderType) => fetch('/wallet/coininnerlist', {pageNo,pageSize,orderType}, 'GET');
 
+
+/**
+ * 用户提币充币记录--外部转币记录
+ */
+export const coinOuterTransferList = (pageNo,pageSize,orderType) => fetch('/wallet/coinoutterlist', {pageNo,pageSize,orderType}, 'GET');
 
 /**
  * 用户相互之间激活码注册码转让  1:激活码  2:注册码
@@ -104,6 +118,12 @@ export const memberUpgrade = (upGradeWay, grade, payWord) => fetch('/user/member
  * 会员等级详细信息
  */
 export const findUserCardGrade = (grade) => fetch('/user/findUserCardGrade', {grade}, 'GET');
+
+/**
+ * 获取开卡等级列表
+ */
+export const findCardGradeList = (cardGrade) => fetch('/cardgrade/list', {}, 'GET');
+
 /**
  * 会员升级记录
  */
@@ -120,3 +140,32 @@ export const feedbacklist = (pageNo,pageSize) => fetch('/index/feedbacklist', {p
  * 意见反馈
  */
 export const feedback = (type, title, detail,phone) => fetch('/index/feedback', {type, title, detail,phone}, 'POST');
+/**
+ * 邀请会员注册
+ */
+export const innerCreateUser = (loginName,phone,email,cardGrade,password,confirmPassword,payword,confirmPayWord,firstReferrer,contactUserId) => fetch('/user/innercreateuser', {loginName,phone,email,cardGrade,password,confirmPassword,payword,confirmPayWord,firstReferrer,contactUserId},'POST');
+
+/**
+ * 我的团队
+ */
+export const myteam = (pageNo,pageSize,parentUserId) => fetch('/user/myteam', {pageNo,pageSize,parentUserId}, 'GET');
+/**
+ * 我的团队
+ */
+export const signlist = (pageNo,pageSize) => fetch('/sign/signlist', {pageNo,pageSize}, 'GET');
+
+/**
+ * 获取红包金额
+ */
+export const rewardsign = () => fetch('/sign/rewardsign', {},'GET');
+
+/**
+ * 修改用户信息
+ */
+export const updateUserInfo = (phone, nickName, headImgUrl,email) => fetch('/user/updateUserInfo', {phone, nickName, headImgUrl,email}, 'POST');
+
+
+/**
+ * 修改用户提币地址
+ */
+export const updateUserInfoOutAddress = (outPayAddress, outEquityAddress, outTradeAddress) => fetch('/user/updateUserInfo', {outPayAddress, outEquityAddress, outTradeAddress}, 'POST');

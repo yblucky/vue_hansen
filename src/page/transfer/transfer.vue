@@ -67,7 +67,7 @@
     import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
-    import {coinTransfer} from '../../service/getData'
+
 
 
     export default {
@@ -88,6 +88,8 @@
 
                 amount:0,//支付个数
                 walletOrderType:1, //1交易币内部转账  4 支付币内部转账  8股权币内部转账
+
+
             }
         },
         mounted(){
