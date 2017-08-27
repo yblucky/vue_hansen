@@ -23,12 +23,12 @@
                             <span>转让数量：</span>
                             <input type="text" name="transferNo" v-model.lazy="transferNo">
                           </div>
-                          <div>
+                          <div class="pay_display">
                             <span>交易密码：</span>
                             <input type="text" name="payword" v-model.lazy="payword">
                           </div>
                           <div class="btn">
-                              <div class="active_container" @click="codeTransferAction">确认</div>
+                              <div class="active_container" @click="showPayPwd()">确认</div>
                           </div>
                       </section>
                     </div>
@@ -53,6 +53,8 @@
                      </div>
                    </section>
                </transition>
+               <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
+               <payPwd @pwdCompleted="codeTransferAction($event)" v-if="showPwd" :showHide="showPwd" @closePwd='closePwd'></payPwd>
            </ul>
        </section>
    </div>
@@ -64,6 +66,7 @@
    import {mapState, mapMutations} from 'vuex'
    import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
    import {codeTransfer,codeTransferList} from '../../service/getData'
+   import payPwd from 'src/components/common/payPwd'
 
    export default {
      data(){
@@ -81,13 +84,15 @@
              codeType:2,//注册码
              registerCodeNo:0,
              id:"",
-             nickName:""
+             nickName:"",
+             showPwd:false,
            }
        },
        mixins: [isLogin,getLoginUserInfo],
        components: {
            headTop,
            alertTip,
+           payPwd
        },
        mounted(){
          this.isLogin("/login");
@@ -100,19 +105,23 @@
          }
        },
        methods :{
-         async codeTransferAction(){
+         async codeTransferAction(pwd){
+            this.payword=pwd;
              if (!this.toUid) {
                this.showAlert = true;
                this.alertText = '收款账号不能为空';
+               return;
              }
              if (!this.transferNo) {
                this.showAlert = true;
                this.alertText = '注册码数量不能为空';
+               return;
              }
              if (!this.payword) {
                console.log(this.payword);
                this.showAlert = true;
                this.alertText = '支付密码不能为空';
+               return;
              }
 
              let res = await codeTransfer(this.toUid, parseInt(this.transferNo) ,this.codeType,this.payword);
@@ -153,6 +162,13 @@
               this.alertText = res.msg;
             }
          },
+         closePwd(){
+             this.showPwd = false;
+         },
+         showPayPwd(){
+           this.turnType = false;
+           this.showPwd=true;
+         }
        }
    }
 </script>
@@ -262,6 +278,9 @@
          font-size: 16px;
          text-align: center;
          margin-bottom:5px;
+     }
+     .pay_display{
+          display: none;
      }
    }
 

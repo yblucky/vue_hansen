@@ -70,15 +70,18 @@
             <input type="text" disabled="disabled" placeholder="补充交易币：" v-model.lazy="needChangeNum">
           </div>
         </section>
-        <div class="active_container" @click="upGradeAction">激活注册</div>
+        <div class="active_container" @click="showPwd=true">激活注册</div>
+
+        <payPwd @pwdCompleted="upGradeAction($event)" v-if="showPwd" :showHide="showPwd" @closePwd='closePwd'></payPwd>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
-        <foot-guide></foot-guide>
+        <!-- <foot-guide></foot-guide> -->
     </div>
 </template>
 
 <script>
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
+    import payPwd from 'src/components/common/payPwd'
     import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl} from 'src/config/env'
     import {memberUpgrade,findUserCardGrade} from '../../service/getData'
@@ -97,6 +100,8 @@
                 needBuyNum:0,//需要补充购物币数量
                 needChangeNum:0,//需要补充交易数量
                 password:'123456',//密码
+                isUpgrade:false,
+                showPwd:false,
             }
         },
         created(){
@@ -106,6 +111,7 @@
             headTop,
             alertTip,
             footGuide,
+            payPwd,
         },
         computed: {
             //判断手机号码
@@ -131,14 +137,30 @@
                   this.needChangeNum=res.result.needChangeNum//需要补充交易数量
               },
             //升级
-            async upGradeAction(){
+            async upGradeAction(pwd){ 
+                this.closePwd();
+                if(this.needActiveNum>0){
+                  this.showAlert = true;
+                  this.alertText = "您的激活码不足，请先充值激活码";
+                  return;
+                }
+                if(this.needBuyNum>0){
+                  this.showAlert = true;
+                  this.alertText = "您的购物币不足，请先充值购物币";
+                  return;
+                }
+                if(this.needBuyNum>0){
+                  this.showAlert = true;
+                  this.alertText = "您的交易币不足，请先充值交易币";
+                  return;
+                }
                 //触发会员升级方法
-                let rs = await memberUpgrade(this.active,this.selCardType,this.password);
+                let rs = await memberUpgrade(this.active,this.selCardType,pwd);
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
                 if (rs.code == 200) {
                     this.showAlert = true;
                     this.alertText = '升级成功';
-                    this.$router.push("/upgrade");
+                    this.isUpgrade=true;
                 }else{
                   this.showAlert = true;
                   this.alertText = rs.msg;
@@ -147,6 +169,12 @@
             },
             closeTip(){
                 this.showAlert = false;
+                if(this.isUpgrade){
+                  this.$router.push("/profile");
+                }
+            },
+            closePwd(){
+                this.showPwd = false;
             }
         }
     }

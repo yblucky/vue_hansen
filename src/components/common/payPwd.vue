@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-      <section class="coverpart" v-if="show">
+      <section class="coverpart">
           <section class="cover-background"></section>
           <section class="cover-content">
               <div class="head">
@@ -9,8 +9,9 @@
               </div>
 
               <div class="head_name">
-                  <h4>向(李小龙)支付</h4>
-                  <h5>￥{{parseInt(payMoney).toFixed(2)}}</h5>
+                  <!-- <h4>支付金额</h4> -->
+                  <!-- <h5>￥{{parseInt(payMoney).toFixed(2)}}</h5> -->
+                  <h4>请输入6位支付密码</h4>
               </div>
 
               <div class="enter-box" @click="openkey()">
@@ -121,7 +122,7 @@
                     this.tradePwd = this.tradePwd.substring(0,tradePwdlength-1);
                     this.pwdIndex --;
                 }
-                this.$emit('inputIndex',this.pwdIndex);
+                this.$emit('inputIndex',this.pwdIndex);``
             },
             noZuo(){
               event.stopPropagation();
@@ -136,7 +137,8 @@
             },
             //关闭支付密码框
             closePwd(){
-              this.show = false;
+              //this.show = false;
+              this.$emit('closePwd')
             },
         }
     };
@@ -150,9 +152,13 @@
         background-color: white;
     }
     .coverpart{
+        top:0%; /**遮罩全屏top,left都为0,width,height为100%**/
+        left:0%;
+        height: auto;
         @include wh(100%,100%);
         @include allcover;
         .cover-background{
+            height: auto;
             @include wh(100%,100%);
             @include allcover;
             background:#000;
@@ -211,8 +217,8 @@
         .cover-content_key{
             width:100%;
             background:$fc;
-            position:absolute;
-            top:59%;
+            position:relative;
+            top:53%;
             z-index:1000;
             @include borderRadius(5px);
             .head{
