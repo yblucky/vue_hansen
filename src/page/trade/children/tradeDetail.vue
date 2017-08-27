@@ -2,7 +2,7 @@
    <div class="upGradeRecordContainer">
        <head-top head-title="交易币明细" go-back='true'></head-top>
        <ul>
-          <li class="page">
+          <!-- <li class="page">
               <div class="page-record">
                   <div class="coindiv">
                       充币
@@ -33,9 +33,9 @@
                       </p>
                   </div>
               </div>
-          </li>
+          </li> -->
 
-          <li class="page">
+          <li class="page" v-for="item in  coinList">
               <div class="page-record">
                   <div class="coindiv">
                       提币
@@ -43,7 +43,7 @@
                   <div class="pdiv">
                       <p>
                           <span>
-                              NO.4832798274
+                            NO.4832798274
                           </span>
                       </p>
                       <p>
@@ -68,25 +68,68 @@
               </div>
           </li>
        </ul>
-       <foot-guide></foot-guide>
    </div>
 </template>
 
 <script>
    import headTop from 'src/components/header/head'
+   import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
-   import footGuide from 'src/components/footer/footGuide'
+   import {isLogin,getLoginUserInfo} from 'src/config/env'
+   import {coinOuterTransferList} from '../../../service/getData'
 
    export default {
      data(){
            return{
+                showAlert: false,
+                alertText: null,
+                nickName:"test01",
+                headImgUrl:"",
+                uid:0,
                 coinType:0,
+                coinList:[],
+                pageNo:1,
+                pageSize:30,
+                orderType:[2,3]
            }
        },
        components: {
            headTop,
-           footGuide,
+           alertTip,
        },
+       mounted(){
+         this.isLogin("/login");
+         this.coinOuterTransferListAction();
+       },
+      mixins: [isLogin,getLoginUserInfo],
+       components: {
+           headTop,
+           alertTip,
+       },
+       computed: {
+
+       },
+       methods: {
+         async coinOuterTransferListAction(){
+             let res = await coinOuterTransferList(this.pageNo, this.pageSize,this.orderType);
+
+             if (res.code==200) {
+               this.coinList=res.result.rows;
+                console.log(" 交易币交易记录   "+JSON.stringify(this.coinList));
+               this.showAlert = true;
+               this.alertText = res.msg;
+               this.coinList=res.result;
+             }else {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }
+         },
+         initData(){
+            this.uid=this.getLoginUserInfo("uid");
+            this.nickName=this.getLoginUserInfo("nickName");
+            this.headImgUrl=this.getLoginUserInfo("headImgUrl");
+         },
+       }
    }
 </script>
 

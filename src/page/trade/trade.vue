@@ -2,7 +2,7 @@
  <div class="page">
        <head-top head-title="交易币钱包" go-back='true'>
          <div slot="changeLogin" class="change_login">
-           <router-link to="/benefit/benefitDetail" ><b>明细</b></router-link>
+           <router-link to="/trade/tradeDetail" ><b>明细</b></router-link>
          </div>
        </head-top>
        <section class="topPanel">
@@ -16,7 +16,7 @@
                <span class="info-data-left"><img src="../../hsimages/5.png" /></span>
                <span class="info-data-center">充值交易币</span>
              </li>
-             <li @click="turnType=!turnType" class="info-data-link">
+             <li @click="turnType=!turnType,isShowOutTradeAddress=false" class="info-data-link">
                <span class="info-data-left"><img src="../../hsimages/3.png" /></span>
                <span class="info-data-center">交易币提取</span>
                <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnType, 'closeImg' : !turnType  }"/></span>
@@ -24,9 +24,13 @@
              <transition name="router-fade">
                   <div class="transfer_div">
                     <section v-if="turnType == true" class="transfer">
-                        <div class="div1">
-                          <span class="shi">提币地址：{{outTradeAddress}}</span>
-                          <input type="hidden" name="outTradeAddress" v-model.lazy="outTradeAddress">
+                      <div class="div1">
+                        <span class="shi">提币地址</span>
+                        <!-- <input type="hidden" name="outTradeAddress" v-model.lazy="outTradeAddress"> -->
+                      </div>
+                        <div class="div2">
+                          <span class="address">{{outTradeAddress}}</span>
+                          <!-- <input type="hidden" name="outTradeAddress" v-model.lazy="outTradeAddress"> -->
                         </div>
                         <div>
                           <span class="shi">提币数量：</span>
@@ -50,13 +54,24 @@
                     </section>
                   </div>
              </transition>
-             <li @click="" class="info-data-link">
-               <span class="info-data-left"><img src="../../hsimages/7.png" /></span>
-               <span class="info-data-center">我的提币地址</span>
-               <span class="info-data-right"><b>添加</b></span>
-             </li>
            </ul>
        </section>
+       <div class="transfer_div">
+         <section class="info-data">
+               <li @click="" class="info-data-link">
+                 <span class="info-data-left"><img src="../../hsimages/7.png" /></span>
+                 <span class="info-data-center">我的提币地址</span>
+                 <span class="info-data-right" @click="addOutAddressAction"><b>添加</b></span>
+               </li>
+             </ul>
+         </section>
+         <section v-if="isShowOutTradeAddress" class=" ">
+             <input type="text"class="addAddress" name="addOutTradeAddress" v-model.lazy="addOutTradeAddress">
+             <div class="btn">
+                 <div class="active_container" @click="updateUserInfoAction">保存</div>
+             </div>
+         </section>
+      </div>
        <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip>
        <transition name="router-slid" mode="out-in">
            <router-view></router-view>
@@ -68,7 +83,7 @@
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
    import {isLogin,getLoginUserInfo} from 'src/config/env'
-   import {cointOut} from '../../service/getData'
+   import {cointOut,updateUserInfoOutAddress} from '../../service/getData'
 
    export default {
      data(){
@@ -77,6 +92,7 @@
                alertText: null,
                turnType:false,
                outTradeAddress:"",
+               tradeAmt:0,
                coinOutAmt:110,//需要提币支付个数
                amount:0,//实际支付个数
                tradeCoinOutScale:0,
@@ -90,6 +106,9 @@
                headImgUrl:"",
                grade:0,
                cardGrade:0,
+               uid:0,
+               addOutTradeAddress:"121",
+               isShowOutTradeAddress:false
            }
        },
        mounted(){
@@ -105,6 +124,31 @@
 
        },
        methods: {
+         addOutAddressAction(){
+            this.isShowOutTradeAddress=!this.isShowOutTradeAddress;
+         },
+      async   updateUserInfoAction(){
+            this.isShowOutTradeAddress=true;
+            if (!this.addOutTradeAddress) {
+              this.showAlert = true;
+              this.alertText = '交易币提币地址不能为空';
+              return;
+            }
+            if (this.addOutTradeAddress.length<28 || this.addOutTradeAddress.length>64) {
+              this.showAlert = true;
+              this.alertText = '不是有效的提币地址';
+              return;
+            }
+             let res = await updateUserInfoOutAddress("", "",this.addOutTradeAddress);
+             if (res.code==200) {
+               this.showAlert = true;
+               this.alertText = res.msg;
+               this.isShowOutTradeAddress=!this.isShowOutTradeAddress;
+             }else {
+               this.showAlert = true;
+               this.alertText = res.msg;
+             }
+         },
          calcAmount(){
            this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
          },
@@ -112,18 +156,22 @@
              if (!this.outTradeAddress) {
                this.showAlert = true;
                this.alertText = '提币地址不能为空';
+               return;
              }
              if (!this.amount) {
                this.showAlert = true;
                this.alertText = '提币地址数量不能为空';
+               return;
              }
              if (!this.walletOrderType) {
                this.showAlert = true;
                this.alertText = '提币地址类型不能为空';
+               return;
              }
              if (!this.payPassWord) {
                this.showAlert = true;
                this.alertText = '支付密码不能为空';
+               return;
              }
              let res = await cointOut(this.outTradeAddress, parseFloat(this.amount) ,this.walletOrderType,this.payPassWord);
              if (res.code==200) {
@@ -146,6 +194,8 @@
             this.cardGrade=this.getLoginUserInfo("cardGrade");
             this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
             this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
+            this.tradeAmt=this.getLoginUserInfo("tradeAmt");
+
          },
        }
    }
@@ -219,6 +269,7 @@
         border-bottom: 0.1rem solid #eee;
         width: 100%;
         padding: 0.75rem;
+        background-color: white;
         .info-data-left img{
           width: 1rem;
         }
@@ -250,16 +301,34 @@
        font-family: "黑体", Verdana, Arial, Helvetica, sans-serif;
      }
      .div1{
-       padding-top: 3%;
+       padding-top: 2%;
+       background-color: white;
+       padding-bottom: -2%;
+     }
+     .div2{
+       padding-top: 2%;
+       background-color: white;
+       margin-bottom: 14px;
+       padding-bottom: 6%;
      }
      .btn{
        padding-bottom:1%;
      }
+     .backcolor{
+       background-color: white;
+     }
+     .address{
+       margin-left:10.1%;
+       font-size: 0.7em;
+       background-color: white;
+     }
      .shi{
-       margin-left:12%;
+       margin-left:10.1%;
+       font-size: 11px;
      }
      .wu{
         margin-left:7%;
+        font-size: 11px;
      }
      input{
          @include sc(0.85rem, #666);
@@ -269,6 +338,10 @@
          font-size: 16px;
          text-align: center;
          margin-bottom:5px;
+     }
+     .addAddress{
+       width: 100%;
+       margin-top: 3%;
      }
    }
 
