@@ -3,7 +3,7 @@
         <head-top :head-title="profiletitle" style="background-color:white;">
             <div slot="changeLogin" class="change_login">
               <router-link to="/message" >
-                  <img v-if="messageCount === 0" src="../../hsimages/26.png" />
+                  <img v-if="messageCount != 0" src="../../hsimages/26.png" />
                   <img v-else src="../../hsimages/27.png" />
               </router-link>
             </div>
@@ -15,7 +15,8 @@
             <section class="profile-number">
                 <ul class="profile-link">
                     <!--<img :src="imgBaseUrl + userInfo.avatar" class="privateImage" v-if="userInfo&&userInfo.user_id">-->
-                  <img src="../../hsimages/1.png" class="privateImage" />
+                  <span v-if="headImgUrl == null"><img src="../../hsimages/1.png" class="privateImage" /></span>
+                  <span v-else><img :src="headImgUrl" class="privateImage" /></span>
                   <!--  <span class="privateImage" v-else>
                         <svg class="privateImage-svg">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
@@ -23,22 +24,24 @@
                     </span>-->
                     <div class="user-info">
                         <p class="nickName">
-                            <b>{{nickName}} </b>
+                            <b>{{uid}} </b><span style="font-size:14px;font-weight:700;">(uid)</span>
                         </p>
                         <!-- <p>
                             <span class="icon-mobile-number"><b></b></span>
                         </p> -->
                         <p>
                           <img src="../../hsimages/22.png" class="vip22" algin="middle" />
-                          <span class="icon-mobile-number2">普通会员</span>
+                          <span v-if="this.grade == 0" class="icon-mobile-number2">{{gradeName}}</span>
+                          <span v-else class="icon-mobile-number3">{{gradeName}}</span>
                         </p>
                     </div>
 
                     <div class="rightdiv">
-                      <b>普卡账户</b>
+                      <b>{{cardName}}</b>
                       <span class="icon-mobile-number1">
                            <router-link to="/upgrade" class="info-data-link">
-                                <img src="../../hsimages/23.png" class="vip22" algin="middle" />
+                                <img v-if="this.status != 3" src="../../hsimages/23.png" class="vip22" algin="middle" />
+                                <img v-else src="../../hsimages/51.png" class="vip22" algin="middle" />
                            </router-link>
                       </span>
                     </div>
@@ -186,6 +189,8 @@ export default {
             showMoney:0.00,         //显示红包金额
             showAlert: false, //显示提示组件
             alertText: null, //提示的内容
+            cardName:null,            //卡的名称
+            gradeName:null,         //用户等级
 
             id:"A085DEB2E34941B046CDA5107DB24BFD",
             uid:100000,
@@ -219,11 +224,13 @@ export default {
             inEquityAddress:'',
             outPayAddress:'',
             outEquityAddress:'',
-            outTradeAddress:''
+            outTradeAddress:'',
+            status:0,
         }
     },
     created(){
         this.showRedBao();
+        this.showMessageCount();
     },
     mounted(){
       this.isLogin("/login");
@@ -275,7 +282,26 @@ export default {
                  localStorage.clear();
              }
             }
-
+        },
+        async showMessageCount(){
+            //调用领取红包接口
+            let res = await rewardsign();
+            if(res.code == 200){
+                //判断红包是否可以打开
+                if(res.result.isCanSign){
+                  //如果是true，就弹出红包，并将金额覆盖
+                  this.show = true;
+                  this.showMoney = res.result.amt;
+                }
+                // this.showAlert = true;
+                // this.alertText = res.result.amt;
+            }else {
+              this.showAlert = true;
+              this.alertText = res.msg;
+              if (res.code==0 || res.code==-1) {
+                 localStorage.clear();
+             }
+            }
         },
         initData(){
           //  console.log(this.getLoginUserInfo("token"));
@@ -315,6 +341,43 @@ export default {
            this.outPayAddress=this.getLoginUserInfo("outPayAddress");
            this.outEquityAddress=this.getLoginUserInfo("outEquityAddress");
            this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
+           this.status=this.getLoginUserInfo("status");
+           if(this.status != 3){
+                if(this.cardGrade == 0){
+                  this.cardName = "普卡用户";
+                }else if(this.cardGrade == 1){
+                    this.cardName = "铜卡用户";
+                }else if (this.cardGrade == 2 ) {
+                  this.cardName = "银卡用户";
+                }else if (this.cardGrade == 3 ) {
+                  this.cardName = "金卡用户";
+                }else if (this.cardGrade == 4 ) {
+                  this.cardName = "钻石用户";
+                }
+           }else {
+             this.cardName = "未激活";
+           }
+
+           if(this.grade == 0){
+             this.gradeName = "普通用户";
+           }else if (this.grade == 1) {
+              this.gradeName = "专员";
+           }else if (this.grade == 2) {
+              this.gradeName = "主任";
+           }else if (this.grade == 3) {
+              this.gradeName = "经理";
+           }else if (this.grade == 4) {
+              this.gradeName = "区代";
+           }else if (this.grade == 5) {
+              this.gradeName = "县代";
+           }else if (this.grade == 6) {
+              this.gradeName = "市代";
+           }else if (this.grade == 7) {
+              this.gradeName = "省代";
+           }else if (this.grade == 8) {
+              this.gradeName = "董事";
+           }
+
             // if (this.userInfo && this.userInfo.user_id) {
             //     this.tradeAmt = this.userInfo.avatar;
             //     this.username = '理财大神';
@@ -412,7 +475,16 @@ export default {
                         @include sc(.57333rem,$fc);
                         position: absolute;
                         top: 15.2%;
-                        left: 36.9%;
+                        left: 37.5%;
+                        color: #919191;
+
+                    }
+                    .icon-mobile-number3{
+                        display:inline-block;
+                        @include sc(.57333rem,$fc);
+                        position: absolute;
+                        top: 15.2%;
+                        left: 40.5%;
                         color: #919191;
 
                     }
@@ -480,10 +552,10 @@ export default {
                     text-align:center;
                 }
                 .vip22{
-                  margin-top:15%;
-                  margin-left: 23%;
+                  margin-top:8%;
+                  margin-left: 35%;
                   vertical-align:bottom;
-                  width:2.5rem;
+                  width:1.5rem;
                 }
                 .info-data-top{
                     @include sc(.55rem,#333);

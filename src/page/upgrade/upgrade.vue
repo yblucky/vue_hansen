@@ -6,7 +6,7 @@
             </div>
         </head-top>
         <section class="category_title">
-            <span :class="{choosed: active === 2}" @click="active = 2">原点升级</span>
+            <span :class="{choosed: active === 2}" @click="active = 2">补差价升级</span>
             <span :class="{choosed: active === 3}" @click="active = 3">覆盖升级</span>
         </section>
         <div class="selCardType">
