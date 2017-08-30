@@ -44,9 +44,9 @@
                <transition name="router-fade">
                    <section v-if="turnRecord == true" class="show-data">
                      <div v-for="item in activeCodeList">
-                       <span class="showDate">{{item.createTime|formatDate}}</span>
+                       <span  v-if="item.isShowNextPage" class="showDate">{{item.createTime|formatDate}}</span>
                        <ul>
-                         <li class="page">
+                         <li  class="page">
                            <span class="">{{item.sendUserNick}}</span>
                              <span class="">{{item.remarkStr}}</span>
                              <div class="">{{item.transferNoStr}}</div>
@@ -86,6 +86,7 @@
               id:"",
               nickName:"",
               showPwd:false,
+              isShowNextPage:true
            }
        },
 
@@ -93,7 +94,8 @@
        components: {
            headTop,
            alertTip,
-           payPwd
+           payPwd,
+
        },
        mounted(){
          this.isLogin("/login");
@@ -106,6 +108,10 @@
          }
        },
        methods :{
+         formatDateTime(createTime){
+           let date = new Date(createTime);
+           return formatDate(date,'yyyy-MM-dd');
+         },
          async codeTransferAction(pwd){
              this.payword=pwd;
              if (!this.toUid) {
@@ -152,11 +158,21 @@
             let res =  await codeTransferList(this.pageNo,this.pageSize,this.codeType);
             if (res.code==200) {
               this.activeCodeList=res.result.rows;
+              let flag=true;
+              let time="";
               if (this.activeCodeList) {
                 for (var i = 0; i < this.activeCodeList.length; i++) {
+                  let nextTime=this.formatDateTime(this.activeCodeList[i].createTime,"yyyy-MM-dd");
+                  if (nextTime==time) {
+                    flag=false;
+                  }else {
+                    time=nextTime;
+                  }
+                  this.activeCodeList[i].isShowNextPage=flag;
                   if (this.activeCodeList[i].sendUserId==this.id) {
-                    this.activeCodeList[i].transferNoStr="-"+this.activeCodeList[i].transferNo;
+                    this.activeCodeList[i].transferNoStr=""+this.activeCodeList[i].transferNo;
                     this.activeCodeList[i].remarkStr="会员"+this.nickName+"使用激活码";
+
                   }else {
                     this.activeCodeList[i].transferNoStr="+"+this.activeCodeList[i].transferNo;
                     this.activeCodeList[i].remarkStr="会员"+this.nickName+"获赠激活码";
@@ -290,13 +306,14 @@
    }
 
    .show-data{
-      background-color: #eee;
+      background-color: #eee; 
       .showDate{
         font-family: Helvetica Neue,Tahoma,Arial;
         font-size: 0.65rem;
         font-weight: normal;
         color: darkgrey;
         padding: 0 0.55rem;
+
       }
       ul{
         background-color: white;
@@ -304,7 +321,7 @@
      .page{
         border-bottom: 0.1rem solid #eee;
         font-family: Helvetica Neue,Tahoma,Arial;
-        font-size: 0.75rem;
+        font-size: 0.45rem;
         font-weight: normal;;
         width: 100%;
         height: 2rem;
