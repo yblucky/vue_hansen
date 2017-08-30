@@ -75,11 +75,11 @@
                 <input type="text" name="confirmPassword" v-model.lazy="confirmPassword">
               </div>
               <div>
-                <span>高级密码：</span>
+                <span>支付密码：</span>
                 <input type="text" name="payword" v-model.lazy="payword">
               </div>
               <div>
-                <span>确认高级密码：</span>
+                <span>确认密码：</span>
                 <input type="text" name="confirmPayWord" v-model.lazy="confirmPayWord">
               </div>
             </section>

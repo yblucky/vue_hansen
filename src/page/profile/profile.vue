@@ -296,7 +296,7 @@ export default {
            this.cardGrade=this.getLoginUserInfo("cardGrade");
            this.releaseTime=this.getLoginUserInfo("releaseTime");
            this.equityAmt=this.getLoginUserInfo("equityAmt");
-           this.payAmt=this.getLoginUserInfo("payAmt")
+           this.payAmt=this.getLoginUserInfo("payAmt");
            this.tradeAmt=this.getLoginUserInfo("tradeAmt");
            this.insuranceAmt=this.getLoginUserInfo("insuranceAmt");
            this.maxProfits=this.getLoginUserInfo("maxProfits");
@@ -586,7 +586,7 @@ export default {
     .message_count{
       position: absolute;
       @include ct;
-      top:0.75rem;
+      top:0.71rem;
       right: 0.74rem;
       @include sc(.6rem, #fff);
       span{
