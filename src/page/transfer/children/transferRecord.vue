@@ -26,7 +26,6 @@
                       <p>
                           <span class="icon-mobile-number">
                                {{item.createTime | formatDate}}
-
                           </span>
                       </p>
                       <p>
@@ -37,42 +36,11 @@
                   </div>
               </div>
           </li>
-          <!-- <li class="page">
-              <div class="page-record">
-                <div class="imgdiv">
-                  <img v-if="coinType === 0" src="../../../hsimages/39.png"  class="privateImage"/>
-                  <img v-if="coinType === 1" src="../../../hsimages/40.png"  class="privateImage"/>
-                  <img v-if="coinType === 2" src="../../../hsimages/41.png"  class="privateImage"/>
-                </div>
-                  <div class="pdiv">
-                      <p>
-                          <span class="icon-mobile-number">
-                              HS12000
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number">
-                              购物币
-                          </span>
-                      </p>
-                  </div>
-
-                  <div class="rightdiv">
-                      <p>
-                          <span class="icon-mobile-number">
-                              2017-08-08
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number1">
-                              -500
-                          </span>
-                      </p>
-                  </div>
-              </div>
-          </li> -->
        </ul>
-       <foot-guide></foot-guide>
+       <div v-if="coinList == null || coinList == ''">
+           <nullData></nullData>
+       </div>
+       <!-- <foot-guide></foot-guide> -->
    </div>
 </template>
 
@@ -82,6 +50,7 @@
    import footGuide from 'src/components/footer/footGuide'
    import {isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
    import {coinInnerTransferList} from '../../../service/getData'
+   import nullData from 'src/components/common/nullData'
 
    export default {
      data(){
@@ -97,6 +66,7 @@
        },
        components: {
            headTop,
+           nullData,
            footGuide,
        },
        mounted(){

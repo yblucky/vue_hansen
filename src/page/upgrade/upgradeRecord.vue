@@ -14,6 +14,9 @@
               <div>{{item.upGradeTypeName}}</div>
           </li>
        </ul>
+      <div v-if="upgradeRecordList == null || upgradeRecordList == ''">
+          <nullData></nullData>
+       </div>
        <!-- <foot-guide></foot-guide> -->
    </div>
 </template>
@@ -26,6 +29,7 @@
     import {localapi, proapi, imgBaseUrl,formatDate} from 'src/config/env'
     import {upGradeRecord,findUserCardGrade} from '../../service/getData'
     import {mapState, mapMutations} from 'vuex'
+    import nullData from 'src/components/common/nullData'
 
 
    export default {
@@ -39,6 +43,7 @@
        },
        components: {
            headTop,
+           nullData,
            footGuide,
        },
        methods: {
@@ -51,7 +56,7 @@
              }else {
                if (res.code==0 || res.code==-1) {
                   this.showAlert = true;
-                  this.alertText = this.data.msg;
+                  this.alertText = res.msg;
                   localStorage.clear();
                }
              }

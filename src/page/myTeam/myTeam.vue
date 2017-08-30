@@ -22,8 +22,12 @@
               </section>
             </section>
         </transition>
+        <div v-if="teamList == null || teamList == ''">
+           <nullData></nullData>
+        </div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
+
 </template>
 
 <script>
@@ -32,6 +36,7 @@
     import alertTip from 'src/components/common/alertTip'
     import {getUserInfo} from 'src/config/env'
     import {mobileCode, checkExsis, sendMobile, getcaptchas, myteam} from 'src/service/getData'
+    import nullData from 'src/components/common/nullData'
 
     export default {
         data(){
@@ -53,6 +58,7 @@
         components: {
             headTop,
             alertTip,
+            nullData,
             // payPwd,
         },
         watch:{

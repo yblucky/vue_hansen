@@ -22,6 +22,9 @@
              </li>
             </ul>
           </div>
+          <div v-if="recordList == null || recordList == ''">
+              <nullData></nullData>
+          </div>
         </section>
     </div>
 </template>
@@ -32,14 +35,14 @@
     import {localapi, proapi, imgBaseUrl,formatDate} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
     import {signlist} from 'src/service/getData'
+    import nullData from 'src/components/common/nullData'
 
     export default {
         data(){
             return {
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
-                recordList:[1,2,3],//任务奖励
-
+                recordList:[],//任务奖励
             }
         },
         created(){
@@ -48,6 +51,7 @@
         components: {
             headTop,
             alertTip,
+            nullData,
         },
         computed: {
             //判断手机号码

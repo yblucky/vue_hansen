@@ -55,7 +55,7 @@
         </div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <payPwd @pwdCompleted="coinTransferAction($event)" v-if="showPwd" :showHide="showPwd" @closePwd='closePwd'></payPwd>
-        <foot-guide></foot-guide>
+        <!-- <foot-guide></foot-guide> -->
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>

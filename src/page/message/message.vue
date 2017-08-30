@@ -23,6 +23,9 @@
               </div>
           </li>
        </ul>
+       <div v-if="msgList == null || msgList == ''">
+          <nullData></nullData>
+       </div>
        <!-- <foot-guide></foot-guide> -->
    </div>
 </template>
@@ -33,6 +36,7 @@
   //  import footGuide from 'src/components/footer/footGuide'
    import {formatDate, proapi, imgBaseUrl,token,setToken} from 'src/config/env'
    import {feedbacklist} from '../../service/getData'
+   import nullData from 'src/components/common/nullData'
 
    export default {
      data(){
@@ -45,6 +49,7 @@
        },
        components: {
            headTop,
+           nullData,
           //  footGuide,
        },
        methods: {
