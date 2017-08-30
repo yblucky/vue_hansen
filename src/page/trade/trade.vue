@@ -14,7 +14,8 @@
            <ul class="clear">
              <li class="info-data-link">
                <span class="info-data-left"><img src="../../hsimages/5.png" /></span>
-               <span class="info-data-center">充值交易币</span>
+               <span class="info-data-center">充值交易币地址</span>
+               <div class="info-data-center">{{inTradeAddress}}</div>
              </li>
              <li @click="turnType=!turnType,isShowOutTradeAddress=false" class="info-data-link">
                <span class="info-data-left"><img src="../../hsimages/3.png" /></span>
@@ -94,6 +95,7 @@
                showAlert: false,
                alertText: null,
                turnType:false,
+               inTradeAddress:"",
                outTradeAddress:"",
                tradeAmt:0,
                coinOutAmt:110,//需要提币支付个数
@@ -150,6 +152,8 @@
                this.showAlert = true;
                this.alertText = res.msg;
                this.isShowOutTradeAddress=!this.isShowOutTradeAddress;
+               this.outTradeAddress=this.addOutTradeAddress;
+               this.turnType=false;
              }else {
                this.showAlert = true;
                this.alertText = res.msg;
@@ -206,6 +210,7 @@
             this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
             this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
             this.tradeAmt=this.getLoginUserInfo("tradeAmt");
+            this.inTradeAddress=this.getLoginUserInfo("inTradeAddress");
 
          },
          closePwd(){
