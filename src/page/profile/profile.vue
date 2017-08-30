@@ -40,8 +40,8 @@
                       <b>{{cardName}}</b>
                       <span class="icon-mobile-number1">
                            <router-link to="/upgrade" class="info-data-link">
-                                <img v-if="this.status != 3" src="../../hsimages/23.png" class="vip22" algin="middle" />
-                                <img v-else src="../../hsimages/51.png" class="vip22" algin="middle" />
+                                <!-- <img v-if="this.status != 3" src="../../hsimages/23.png" class="vip22" algin="middle" /> -->
+                                <img v-if="status == 3" src="../../hsimages/23.png" class="vip22" algin="middle" />
                            </router-link>
                       </span>
                     </div>
@@ -342,22 +342,22 @@ export default {
            this.outEquityAddress=this.getLoginUserInfo("outEquityAddress");
            this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
            this.status=this.getLoginUserInfo("status");
-           if(this.status != 3){
-                if(this.cardGrade == 0){
-                  this.cardName = "普卡用户";
-                }else if(this.cardGrade == 1){
-                    this.cardName = "铜卡用户";
-                }else if (this.cardGrade == 2 ) {
-                  this.cardName = "银卡用户";
-                }else if (this.cardGrade == 3 ) {
-                  this.cardName = "金卡用户";
-                }else if (this.cardGrade == 4 ) {
-                  this.cardName = "钻石用户";
-                }
-           }else {
-             this.cardName = "未激活";
-           }
 
+
+            //用户卡等级
+            if(this.cardGrade == 0){
+              this.cardName = "普卡用户";
+            }else if(this.cardGrade == 1){
+                this.cardName = "铜卡用户";
+            }else if (this.cardGrade == 2 ) {
+              this.cardName = "银卡用户";
+            }else if (this.cardGrade == 3 ) {
+              this.cardName = "金卡用户";
+            }else if (this.cardGrade == 4 ) {
+              this.cardName = "钻石用户";
+            }
+
+            //用户等级
            if(this.grade == 0){
              this.gradeName = "普通用户";
            }else if (this.grade == 1) {

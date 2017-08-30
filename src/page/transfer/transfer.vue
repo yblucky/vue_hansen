@@ -41,7 +41,7 @@
         </div>
         <section class="input_container">
           <p>
-            <span>收款账户：<input type="text" size="16" name="toUid" v-model.lazy="toUid"></span>
+            <span>收款用户：<input type="text" size="16" name="toUid" v-model.lazy="toUid"></span>
           </p>
           <p>
             <span>转币数量：<input type="text" size="16" name="amount" v-model.lazy="amount"></span>
@@ -88,7 +88,6 @@
                 toUid:'',//收款账户
                 payPassWord:'',//高级密码
 
-
                 amount:0,//支付个数
                 walletOrderType:1, //1交易币内部转账  4 支付币内部转账  8股权币内部转账
                 showPwd:false,
@@ -120,23 +119,14 @@
             ]),
             async coinTransferAction(pwd){
                 this.payPassWord=pwd;
-                if (!this.toUid) {
-                  this.showAlert = true;
-                  this.alertText = '收款账号不能为空';
-                  return;
-                }
-                if (!this.amount) {
-                  this.showAlert = true;
-                  this.alertText = '转币数量不能为空';
-                  return;
-                }
                 if (!this.payPassWord) {
                   console.log(this.payPassWord);
                   this.showAlert = true;
                   this.alertText = '支付密码不能为空';
                   return;
                 }
-                console.log(this.amount);
+                //隐藏密码框
+                this.showPwd=false;
                 let res = await coinTransfer(this.toUid, parseFloat(this.amount) ,this.walletOrderType,this.payPassWord);
                 if (res.code==200) {
                   this.showAlert = true;
@@ -148,13 +138,15 @@
                      localStorage.clear();
                   }
                 }
+                //不管成功失败，重新输入
+                this.toUid = '';
+                this.amount = 0;
             },
             toggleTabs (index,tabText) {
                  this.active = index;
              },
              selCard (index) {
                   this.selCardType = index;
-                  console.log("indexdddddddddddd "+index);
                   if (index==0) {
                     this.walletOrderType=4;
                   }else  if (index==1) {
@@ -170,7 +162,17 @@
                 this.showPwd = false;
             },
             showPayPwd(){
-              this.turnType = false;
+              if (!this.toUid) {
+                this.showAlert = true;
+                this.alertText = '收款账号不能为空';
+                return;
+              }
+              if (this.amount <= 0) {
+                this.showAlert = true;
+                this.alertText = '转币数量不能为空';
+                return;
+              }
+              // this.turnType = false;
               this.showPwd=true;
             }
         }
@@ -316,6 +318,8 @@
         input{
             @include sc(0.85rem, #666);
             border:1px solid #dedede;
+            border-radius: 0.3rem;
+            text-align: center;
         }
         p{
             text-align: center;
