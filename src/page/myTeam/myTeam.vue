@@ -176,7 +176,7 @@
             text-align: right;
             position: absolute;
             right: 15%;
-            color: red;
+            color: #7979cc;
          }
          .info-data-center{
            font-size:16px;
@@ -188,7 +188,7 @@
          text-align: right;
          position: absolute;
          right: 15%;
-         color: red;
+         color: #7979cc;
          font-size: 0.85rem;
       }
     }
