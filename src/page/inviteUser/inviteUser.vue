@@ -68,19 +68,19 @@
               </div>
               <div>
                 <span>登录密码：</span>
-                <input type="text" name="password" v-model.lazy="password">
+                <input type="password" name="password" v-model.lazy="password">
               </div>
               <div>
                 <span>确认密码：</span>
-                <input type="text" name="confirmPassword" v-model.lazy="confirmPassword">
+                <input type="password" name="confirmPassword" v-model.lazy="confirmPassword">
               </div>
               <div>
                 <span>支付密码：</span>
-                <input type="text" name="payword" v-model.lazy="payword">
+                <input type="password" name="payword" v-model.lazy="payword">
               </div>
               <div>
                 <span>确认密码：</span>
-                <input type="text" name="confirmPayWord" v-model.lazy="confirmPayWord">
+                <input type="password" name="confirmPayWord" v-model.lazy="confirmPayWord">
               </div>
             </section>
             <div class="active_container" @click="innerCreateUserAction">注册</div>

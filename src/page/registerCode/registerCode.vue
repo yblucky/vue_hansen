@@ -45,7 +45,7 @@
                        <span class="showDate">{{item.createTime|formatDate}}</span>
                        <ul>
                          <li class="page">
-                           <span class="">{{item.sendUserNick}}</span>
+                             <span class="">{{item.sendUserNick}}</span>
                              <span class="">{{item.remarkStr}}</span>
                              <div class="">{{item.transferNoStr}}</div>
                          </li>
