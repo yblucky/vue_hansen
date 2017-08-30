@@ -3,7 +3,7 @@
        <head-top head-title="我的注册码" go-back='true'></head-top>
        <section class="topPanel">
           <div class="activateDiv">注册码剩余</div>
-          <div class="activateCode"><b>10</b>个</div>
+          <div class="activateCode"><b>{{registerCodeNo}}</b>个</div>
        </section>
        <section class="info-data">
            <ul class="clear">
