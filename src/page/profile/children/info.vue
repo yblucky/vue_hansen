@@ -82,10 +82,11 @@
                 </div>
             </section>
         </section>
-        <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip>
+        <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>
+       <loading v-show="showLoading"></loading>
     </div>
 </template>
 
@@ -95,10 +96,12 @@
     import {signout} from 'src/service/getData'
     import alertTip from 'src/components/common/alertTip'
     import {getImgPath} from 'src/components/common/mixin'
-    import {isLogin,getLoginUserInfo} from 'src/config/env'
+    import {isLogin,getLoginUserInfo,updateLocalUser} from 'src/config/env'
     import {removeStore} from 'src/config/mUtils'
     import {updateUserInfo} from '../../../service/getData'
+    import loading from 'src/components/common/loading'
     var test = null;
+    var _this = null;
     export default {
         data(){
             return{
@@ -114,11 +117,14 @@
                 isLeave:false, //是否退出
                 showAlert: false,
                 alertText: null,
+                isUpimg:false,//是否更新头像
+                showLoading: false, //显示加载动画
             }
         },
         created(){
           this.isLogin("/login");
           this.initData();
+          _this = this;
         },
         mounted(){
           this.isLogin("/login");
@@ -131,6 +137,7 @@
         components: {
             headTop,
             alertTip,
+            loading,
         },
         computed:{
             ...mapState([
@@ -176,8 +183,24 @@
                 this.showAlert = true;
                 this.alertText = '请在手机APP中设置';
             },
+            async saveImg(img){
+               let res = await updateUserInfo('','', img,'');
+               //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
+               if (res.code == 200) {
+                   this.showAlert = true;
+                   this.alertText = "保存头像成功";
+                   this.isUpimg=true;
+                   //更改本地存储对象的json
+                   updateLocalUser("headImgUrl",img);
+               }else{
+                 this.showAlert = true;
+                 this.alertText = res.msg;
+               }
+               //隐藏动画
+               this.showLoading=false;
+            },
             //上传头像
-            async uploadAvatar(){
+            uploadAvatar(){
                 //获取input中的头像
                 let input = document.querySelector('.profileinfopanel-upload');
 
@@ -185,45 +208,37 @@
 
                 //创建一个reader
                 let reader = new FileReader();
-
-                var $$router=this.$router;
-                var $$showAlert=this.showAlert;
-                var $$alertText=this.alertText;
                 // 将图片将转成 base64 格式
                 reader.readAsDataURL(input.files[0]);
-                var saveImg = async function(test){
-                   await updateUserInfo('','', test,'');
-                }
                 // 读取成功后的回调
                 reader.onload  = function () {
                     //设置并保存修改
                     document.getElementById("showImage").src = this.result;
                     document.getElementById("imagePath").value = this.result;
 
+                    var $img = this.result;
                     //压缩图片
                     let img = new Image();
 
                     if (this.result.length <= (100 * 1024)) {
-                      test = this.result;
+                      var $img = this.result;
                     }else {
                         img.onload = function () {
-                          let data = input.files[0].compress(img,Orientation);
-                          test = data;
+                          $img = input.files[0].compress(img,Orientation);
                         }
                     }
-
-                    let res =saveImg(test);
-                    //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
-                    if (res.code == 200) {
-                        $$router.push("./profile");
-                    }else{
-                      $$showAlert = true;
-                      $$alertText = res.msg;
-                    }
+                    _this.showLoading=true;
+                    _this.saveImg($img);
                 }
 
                 this.avatar = document.getElementById("imagePath").value;
 
+            },
+            closeTip(){
+                this.showAlert = false;
+                if(this.isUpimg){
+                  this.$router.push("/profile");
+                }
             },
         },
         watch: {

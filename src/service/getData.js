@@ -110,10 +110,6 @@ export const codeTransfer = (toUid, transferNo, codeType,payword) => fetch('/cod
  * 会员升级
  */
 export const memberUpgrade = (upGradeWay, grade, payWord) => fetch('/user/memberUpgrade', {upGradeWay, grade, payWord}, 'POST');
-/**
- * 会员等级详细信息
- */
-export const findUserCardGrade = (grade) => fetch('/user/findUserCardGrade', {grade}, 'GET');
 
 /**
  * 获取开卡等级列表

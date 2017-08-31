@@ -1,7 +1,7 @@
 <template>
     <div class="upGradeContainer">
         <head-top :head-title="'任务奖励红包'" goBack="true"></head-top>
-        <section class="show-data">
+        <section class="show-data" v-load-more="loaderMore">
           <div v-for="item in recordList">
             <div class="showLine">
               <span class="showDate">{{item.signTime | formatDate}}</span>
@@ -9,23 +9,30 @@
             </div>
             <ul>
                <li class="page">
-                   <span class=""><img  src="../../images/add_address.png"/>交易币<b>{{item.tradeAmt}}JYB 约{{item.tradeAmtRmb}}元</b></span>
+                   <span class=""><img  src="../../hsimages/37.png"/>交易币<b>{{item.tradeAmt}}JYB 约{{item.tradeAmtRmb}}元</b></span>
                    <div class="">+{{item.tradeAmtRmb}}</div>
                </li>
               <li class="page">
-                  <span class=""><img  src="../../images/add_address.png"/>购物币<b>{{item.equityAmt}}GWB 约{{item.equityAmtRmb}}元</b></span>
+                  <span class=""><img  src="../../hsimages/36.png"/>购物币<b>{{item.equityAmt}}GWB 约{{item.equityAmtRmb}}元</b></span>
                   <div class="">+{{item.equityAmtRmb}}</div>
               </li>
              <li class="page">
-                 <span class=""><img  src="../../images/add_address.png"/>股权币<b>{{item.payAmt}}GQB 约{{item.payAmtRmb}}元</b></span>
+                 <span class=""><img  src="../../hsimages/38.png"/>股权币<b>{{item.payAmt}}GQB 约{{item.payAmtRmb}}元</b></span>
                  <div class="">+{{item.payAmtRmb}}</div>
              </li>
             </ul>
           </div>
-          <div v-if="recordList == null || recordList == ''">
-              <nullData></nullData>
-          </div>
         </section>
+
+    	  <p v-if="touchend" class="empty_data">没有更多了</p>
+    		<aside class="return_top" @click="backTop" v-if="showBackStatus">
+    			<svg class="back_top_svg">
+    				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
+    			</svg>
+    		</aside>
+    		<transition name="loading">
+    			<loading v-show="showLoading"></loading>
+    		</transition>
     </div>
 </template>
 
@@ -35,7 +42,9 @@
     import {localapi, proapi, imgBaseUrl,formatDate} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
     import {signlist} from 'src/service/getData'
-    import nullData from 'src/components/common/nullData'
+    import {showBack, animate} from 'src/config/mUtils'
+    import {loadMore, getImgPath} from 'src/components/common/mixin'
+    import loading from 'src/components/common/loading'
 
     export default {
         data(){
@@ -43,6 +52,12 @@
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
                 recordList:[],//任务奖励
+                pageNo:1,
+                pageSize:10,
+          		  preventRepeatReuqest: false, //到达底部加载数据，防止重复加载
+          			showBackStatus: false, //显示返回顶部按钮
+          			showLoading: true, //显示加载动画
+          			touchend: false, //没有更多数据
             }
         },
         created(){
@@ -51,7 +66,7 @@
         components: {
             headTop,
             alertTip,
-            nullData,
+            loading,
         },
         computed: {
             //判断手机号码
@@ -63,18 +78,66 @@
             ...mapMutations([
                 'RECORD_USERINFO',
             ]),
+         		//开发环境与编译环境loading隐藏方式不同
+         		hideLoading(){
+         			this.showLoading = false;
+         		},
+         		//返回顶部
+         		backTop(){
+         			animate(document.body, {scrollTop: '0'}, 400,'ease-out');
+         		},
+           	//到达底部加载更多数据
+           	async loaderMore(){
+           		if (this.touchend) {
+           			return
+           		}
+           		//防止重复请求
+           		if (this.preventRepeatReuqest) {
+           			return
+           		}
+           		this.showLoading = true;
+           		this.preventRepeatReuqest = true;
+
+           		//数据的定位加1位
+           		this.pageNo += 1;
+           		let res = await signlist(this.pageNo,this.pageSize);
+               if (res.code==200) {
+                   let rs = res.result.rows;
+               		this.recordList = [...this.recordList, ...rs];
+               }else {
+                 this.showAlert = true;
+                 this.alertText = res.msg;
+                 if (res.code==0 || res.code==-1) {
+                   localStorage.clear();
+                 }
+               }
+           		this.hideLoading();
+           		//当获取数据小于20，说明没有更多数据，不需要再次请求数据
+           		if ( res.result.rows.length < 10) {
+           			this.touchend = true;
+           			return
+           		}
+           		this.preventRepeatReuqest = false;
+           	},
             async getSignlist(){
-              
-                let res = await signlist(1,20);
-                if(res.code == 200){
-                  this.recordList = res.result.rows;
-                }else {
+                  let res = await signlist(this.pageNo,this.pageSize);
+                  if (res.code==200) {
+                      this.recordList = [...res.result.rows];
+                  }else {
                     this.showAlert = true;
                     this.alertText = res.msg;
                     if (res.code==0 || res.code==-1) {
-                       localStorage.clear();
-                   }
-                }
+                      localStorage.clear();
+                    }
+                  }
+               		if (res.result.rows.length < 10) {
+               			this.touchend = true;
+               		}
+               		this.hideLoading();
+               		//开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
+               		showBack(status => {
+               			this.showBackStatus = status;
+               		});
             },
             toggleTabs (index,tabText) {
                  this.active = index;
@@ -99,6 +162,19 @@
 <style lang="scss" scoped>
     @import '../../style/mixin';
 
+    	.empty_data{
+    		@include sc(0.5rem, #666);
+    		text-align: center;
+    		line-height: 2rem;
+    	}
+    	.return_top{
+    		position: fixed;
+    		bottom: 3rem;
+    		right: 1rem;
+    		.back_top_svg{
+    			@include wh(2rem, 2rem);
+    		}
+    	}
     .category_title{
         display: flex;
         justify-content: space-around;
@@ -120,13 +196,14 @@
     .show-data{
        background-color: #eee;
        .showLine{
+         margin: 0.10rem;
          width: 100%;
          .showDate{
            font-family: Helvetica Neue,Tahoma,Arial;
            font-size: 0.65rem;
            font-weight: normal;
            color: darkgrey;
-           padding: 0 0.25rem;
+           padding: 0 0.35rem;
          }
          .showAmount{
            width: 100%;
