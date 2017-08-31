@@ -5,9 +5,8 @@
         <section class="input_container">
           <div>
             <span>反馈类型：</span>
-            <select name="msgType" placeholder="请选择" v-model="type">
-              <option value="1">test1</option>
-              <option value="2">test2</option>
+            <select name="msgType" placeholder="请选择" v-model="type" disabled="disabled">
+              <option value="1">反馈与建议</option>
             </select>
           </div>
           <div>
@@ -15,10 +14,10 @@
             <input type="text" placeholder="" v-model="title">
           </div>
           <div>
-            <textarea rows="10" cols="55"  placeholder="请输入反馈内容" v-model="detail"></textarea>
+            <textarea rows="10" cols="45"  placeholder="请输入反馈内容" v-model="detail"></textarea>
           </div>
           <div>
-            <span>反馈结果邮箱：</span>
+            <span>反馈手机号码：</span>
             <input class="msgMaill" type="text" placeholder=""  v-model="phone">
           </div>
         </section>

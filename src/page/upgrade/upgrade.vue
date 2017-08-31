@@ -6,52 +6,27 @@
             </div>
         </head-top>
         <section class="category_title">
-            <span :class="{choosed: active === 2}" @click="active = 2">原点升级</span>
-            <span :class="{choosed: active === 3}" @click="active = 3">覆盖升级</span>
+            <span :class="{choosed: active === 2}" @click="selUpWay(2)">原点升级</span>
+            <span :class="{choosed: active === 3}" @click="selUpWay(3)">覆盖升级</span>
         </section>
+
         <div class="selCardType">
           <span class="title">选择账户等级</span>
           <section class="info-data">
               <ul class="clear">
-                  <li @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
+                  <li   @click="selCard(item.grade)"   class="info-data-link" v-for="(item,index) in cardGradeList">
                       <span class="info-data-top-right">
-                        <img v-if="selCardType === 2" src="../../images/check.png"/>
+                        <img v-if='selCardType==item.grade' src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
-                      <span class="info-data-middle">铜卡</span>
-                      <div class="info-data-bottom">1万</div>
-                  </li>
-                  <li to="" @click="selCard(3);" v-bind:class="{active:selCardType==3}" class="info-data-link">
-                      <span class="info-data-top-right">
-                        <img v-if="selCardType == 3" src="../../images/check.png"/>
-                        <img v-else src="../../images/uncheck.png"/>
-                      </span>
-                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
-                      <span class="info-data-bottom">银卡</span>
-                      <div class="info-data-bottom">1万</div>
-                  </li>
-                  <li to="" @click="selCard(4);" v-bind:class="{active:selCardType==4}" class="info-data-link">
-                      <span class="info-data-top-right">
-                        <img v-if="selCardType == 4" src="../../images/check.png"/>
-                        <img v-else src="../../images/uncheck.png"/>
-                      </span>
-                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
-                      <span class="info-data-bottom">金卡</span>
-                      <div class="info-data-bottom">1万</div>
-                  </li>
-                  <li to="" @click="selCard(5);" v-bind:class="{active:selCardType==5}" class="info-data-link">
-                      <span class="info-data-top-right">
-                        <img v-if="selCardType == 5" src="../../images/check.png"/>
-                        <img v-else src="../../images/uncheck.png"/>
-                      </span>
-                      <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
-                      <span class="info-data-bottom">钻石卡</span>
-                      <div class="info-data-bottom">1万</div>
+                      <span class="info-data-middle">{{item.remark}}</span>
+                      <div class="info-data-bottom">{{item.insuranceAmt}}</div>
                   </li>
               </ul>
           </section>
         </div>
+
         <section class="input_container">
           <div>
             <span>最大收益：</span>
@@ -70,7 +45,7 @@
             <input type="text" disabled="disabled" placeholder="补充交易币：" v-model.lazy="needChangeNum">
           </div>
         </section>
-        <div class="active_container" @click="showPwd=true">激活注册</div>
+        <div class="active_container" @click="doUpgrade()">激活注册</div>
 
         <payPwd @pwdCompleted="upGradeAction($event)" v-if="showPwd" :showHide="showPwd" @closePwd='closePwd'></payPwd>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
@@ -83,8 +58,8 @@
     import alertTip from 'src/components/common/alertTip'
     import payPwd from 'src/components/common/payPwd'
     import footGuide from 'src/components/footer/footGuide'
-    import {localapi, proapi, imgBaseUrl} from 'src/config/env'
-    import {memberUpgrade,findUserCardGrade} from '../../service/getData'
+    import {localapi, proapi, imgBaseUrl,getUserInfo} from 'src/config/env'
+    import {memberUpgrade,findCardGradeList,findCardGrade} from '../../service/getData'
     import {mapState, mapMutations} from 'vuex'
 
     export default {
@@ -94,18 +69,31 @@
                 alertText: null, //提示的内容
                 upWay: 0, //升级方式
                 active:2, //升级方式
-                selCardType: 2, //升级等级
+                selCardType: 1, //升级等级
                 cardMaxproft: 0, //最大收益
                 needActiveNum:0,//需要补充激活码数量
                 needBuyNum:0,//需要补充购物币数量
                 needChangeNum:0,//需要补充交易数量
-                password:'123456',//密码
+                password:'',//密码
                 isUpgrade:false,
                 showPwd:false,
+                cardGradeList:[],
+                userActiveCodeNo:0,
+                userPayAmt:0,
+                userTradeAmt:0,
+                userMaxProfits:0,
+                cardGrade:0,
             }
         },
+        //初始化数据
         created(){
-          this.selCard(2);
+          this.findCardGradeList();
+          this.selCard(1);
+          this.userActiveCodeNo=getUserInfo("activeCodeNo");
+          this.userPayAmt=getUserInfo("payAmt");
+          this.userTradeAmt=getUserInfo("tradeAmt");
+          this.userMaxProfits=getUserInfo("maxProfits");
+          this.cardGrade=getUserInfo("cardGrade");
         },
         components: {
             headTop,
@@ -126,34 +114,61 @@
             toggleTabs (index,tabText) {
                  this.active = index;
              },
+             async  findCardGradeList(){
+               let res =  await findCardGradeList();
+               if (res.code==200) {
+                 console.log(res);
+                 this.cardGradeList= res.result;
+               }else {
+                 this.showAlert = true;
+                 this.alertText = res.msg;
+               }
+             },
              //获取会员等级信息
              async selCard (index) {
                   this.selCardType = index;
                   //从后台获取等级信息
-                  let res = await findUserCardGrade(index);
-                  this.cardMaxproft=res.result.cardMaxproft; //最大收益
-                  this.needActiveNum=res.result.needActiveNum//需要补充激活码数量
-                  this.needBuyNum=res.result.needBuyNum//需要补充购物币数量
-                  this.needChangeNum=res.result.needChangeNum//需要补充交易数量
+                  let res = await findCardGrade(index);
+                  var $insuranceAmt=res.result.insuranceAmt;//保单金额
+                  var $outMultiple=res.result.outMultiple;//出局倍数
+                  var $profit = this.active == 3 ? this.userMaxProfits :0;
+                  this.cardMaxproft=$insuranceAmt * $outMultiple+$profit; //最大收益
+                  this.needActiveNum=res.result.activeCodeNo//需要补充激活码数量
+                  this.needBuyNum=res.result.payAmt//需要补充购物币数量
+                  this.needChangeNum=res.result.tradeAmt//需要补充交易数量
               },
-            //升级
-            async upGradeAction(pwd){
-                this.closePwd();
-                if(this.needActiveNum>0){
+              //选择升级方式
+              selUpWay(index){
+                this.active = index;
+                this.selCard(1);
+              },
+              //是否弹出密码框
+              doUpgrade(){
+                if(this.needActiveNum>this.userActiveCodeNo){
                   this.showAlert = true;
                   this.alertText = "您的激活码不足，请先充值激活码";
                   return;
                 }
-                if(this.needBuyNum>0){
+                if(this.needBuyNum>this.userPayAmt){
                   this.showAlert = true;
                   this.alertText = "您的购物币不足，请先充值购物币";
                   return;
                 }
-                if(this.needBuyNum>0){
+                if(this.needBuyNum>this.userTradeAmt){
                   this.showAlert = true;
                   this.alertText = "您的交易币不足，请先充值交易币";
                   return;
                 }
+                if(this.cardGrade >= this.selCardType && this.active == 2){
+                    this.showAlert = true;
+                    this.alertText = "原点升级的卡片等级不能小于已有等级";
+                    return;
+                }
+                this.showPwd=true;
+              },
+            //升级
+            async upGradeAction(pwd){
+                this.closePwd();
                 //触发会员升级方法
                 let rs = await memberUpgrade(this.active,this.selCardType,pwd);
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
@@ -213,19 +228,19 @@
     .selCardType{
       background-color:#fff;
       .title{
-        font-size:0.85rem;
-        font-weight:500;
+        font-size:0.70rem;
+        font-family: "黑体", Verdana, Arial, Helvetica, sans-serif;
         padding:15px 20px;
       }
     }
     .info-data{
-         width:100%;
+         width:98%;
+         margin-top: 3%;
          box-sizing: border-box;
-         border-bottom:1px solid #b3abab;
          ul{
              .info-data-link{
                  float:left;
-                 width:24.9%;
+                 width:19.9%;
                  display:inline-block;
                  border-right:1px solid #fcfcfc;
                  span{

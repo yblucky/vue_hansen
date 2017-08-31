@@ -5,7 +5,7 @@
              <router-link to="/setMessage" >反馈</router-link>
            </div>
        </head-top>
-       <ul>
+       <ul  v-load-more="loaderMore">
           <li class="page" v-for="item in msgList">
               <div class="page-record">
                   <div class="imgdiv">
@@ -23,6 +23,16 @@
               </div>
           </li>
        </ul>
+
+    	  <p v-if="touchend" class="empty_data">没有更多了</p>
+    		<aside class="return_top" @click="backTop" v-if="showBackStatus">
+    			<svg class="back_top_svg">
+    				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
+    			</svg>
+    		</aside>
+    		<transition name="loading">
+    			<loading v-show="showLoading"></loading>
+    		</transition>
        <!-- <foot-guide></foot-guide> -->
    </div>
 </template>
@@ -33,11 +43,20 @@
   //  import footGuide from 'src/components/footer/footGuide'
    import {formatDate, proapi, imgBaseUrl,token,setToken} from 'src/config/env'
    import {feedbacklist} from '../../service/getData'
+   import {showBack, animate} from 'src/config/mUtils'
+   import {loadMore, getImgPath} from 'src/components/common/mixin'
+   import loading from 'src/components/common/loading'
 
    export default {
      data(){
            return{
-             msgList:[],
+              msgList:[],
+              pageNo:1,
+              pageSize:10,
+        		  preventRepeatReuqest: false, //到达底部加载数据，防止重复加载
+        			showBackStatus: false, //显示返回顶部按钮
+        			showLoading: true, //显示加载动画
+        			touchend: false, //没有更多数据
            }
        },
        created(){
@@ -47,13 +66,55 @@
            headTop,
           //  footGuide,
        },
+       mixins: [loadMore, getImgPath],
        methods: {
+    		//开发环境与编译环境loading隐藏方式不同
+    		hideLoading(){
+    			this.showLoading = false;
+    		},
+    		//返回顶部
+    		backTop(){
+    			animate(document.body, {scrollTop: '0'}, 400,'ease-out');
+    		},
+      	//到达底部加载更多数据
+      	async loaderMore(){
+      		if (this.touchend) {
+      			return
+      		}
+      		//防止重复请求
+      		if (this.preventRepeatReuqest) {
+      			return
+      		}
+      		this.showLoading = true;
+      		this.preventRepeatReuqest = true;
+
+      		//数据的定位加1位
+      		this.pageNo += 1;
+      		let res = await feedbacklist(this.pageNo,this.pageSize);
+          if (res.code==200) {
+              let rs = res.result.rows;
+          		this.msgList = [...this.msgList, ...rs];
+          }else {
+            this.showAlert = true;
+            this.alertText = res.msg;
+            if (res.code==0 || res.code==-1) {
+              localStorage.clear();
+            }
+          }
+      		this.hideLoading();
+      		//当获取数据小于20，说明没有更多数据，不需要再次请求数据
+      		if ( res.result.rows.length < 10) {
+      			this.touchend = true;
+      			return
+      		}
+      		this.preventRepeatReuqest = false;
+      	},
         //获取会员升级记录
         async getfeedbacklist () {
              //从后台获取记录
-             let res = await feedbacklist(1,100);
-               if (res.code==200) {
-                 this.msgList = res.result.rows;
+             let res = await feedbacklist(this.pageNo,this.pageSize);
+             if (res.code==200) {
+                 this.msgList = [...res.result.rows];
              }else {
                this.showAlert = true;
                this.alertText = res.msg;
@@ -61,6 +122,14 @@
                  localStorage.clear();
                }
              }
+        		if (res.result.rows.length < 10) {
+        			this.touchend = true;
+        		}
+        		this.hideLoading();
+        		//开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
+        		showBack(status => {
+        			this.showBackStatus = status;
+        		});
 
          },
        },
@@ -75,12 +144,21 @@
 
 <style lang="scss" scoped>
    @import 'src/style/mixin';
+
+	.empty_data{
+		@include sc(0.5rem, #666);
+		text-align: center;
+		line-height: 2rem;
+	}
+	.return_top{
+		position: fixed;
+		bottom: 3rem;
+		right: 1rem;
+		.back_top_svg{
+			@include wh(2rem, 2rem);
+		}
+	}
    .upGradeRecordContainer{
-       position: fixed;
-       top: 0;
-       left: 0;
-       right: 0;
-       bottom: 0;
        padding-top: 1.95rem;
        z-index: 203;
        background-color: #fff;
@@ -124,6 +202,8 @@
             width: 100%;
             .spanRight{
               padding: 0 0 0 4rem;
+              position: absolute;
+              right: 0.35rem;
             }
           }
           .bottom{
