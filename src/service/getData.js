@@ -176,3 +176,10 @@ export const updateUserInfoOutAddress = (outPayAddress, outEquityAddress, outTra
  * 获取任务列表
  */
 export const getTaskInfo = (pageNo,pageSize) => fetch('/task/getTaskInfo', {pageNo,pageSize}, 'GET');
+
+
+/**
+ * 登录弹窗获取激活信息
+ */
+export const activeInfo = () => fetch('/user/activeInfo', {}, 'GET');
+
