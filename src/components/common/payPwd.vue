@@ -29,10 +29,11 @@
           </section>
 
           <section class="cover-content_key" v-if="key_show">
-              <div class="head" @click="openkey()">
-                  <img src="../../hsimages/44.png" class="privateImg" />
-              </div>
+
                 <div class="key-box">
+                  <div class="head" @click="openkey()">
+                      <img src="../../hsimages/44.png" class="privateImg" />
+                  </div>
                   <ul class="key-board" @click="getKey($event)">
                       <li>
                           <div>1</div>
@@ -276,7 +277,7 @@
 
     .key-box{
         background: white;
-        position: relative;;
+        position:fixed;
         left: 0;
         right: 0;
         bottom: 0;

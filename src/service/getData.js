@@ -167,3 +167,15 @@ export const updateUserInfo = (phone, nickName, headImgUrl,email) => fetch('/use
  * 修改用户提币地址
  */
 export const updateUserInfoOutAddress = (outPayAddress, outEquityAddress, outTradeAddress) => fetch('/user/updateUserInfo', {outPayAddress, outEquityAddress, outTradeAddress}, 'POST');
+
+/**
+ * 获取任务列表
+ */
+export const getTaskInfo = (pageNo,pageSize) => fetch('/task/getTaskInfo', {pageNo,pageSize}, 'GET');
+
+
+/**
+ * 登录弹窗获取激活信息
+ */
+export const activeInfo = () => fetch('/user/activeInfo', {}, 'GET');
+

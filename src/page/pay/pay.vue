@@ -14,7 +14,8 @@
             <ul class="clear">
               <li class="info-data-link">
                 <span class="info-data-left"><img src="../../hsimages/5.png" /></span>
-                <span class="info-data-center">充值购物币</span>
+                <span class="info-data-center">充值购物币地址</span>
+                <div class="info-data-center">{{inPayAddress}}</div>
               </li>
               <li @click="turnType1=!turnType1" class="info-data-link">
                 <span class="info-data-left"><img src="../../hsimages/3.png" /></span>
@@ -38,6 +39,7 @@
 <script>
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
+    import {isLogin,getLoginUserInfo} from 'src/config/env'
 
     export default {
       data(){
@@ -46,10 +48,13 @@
                 alertText: null,
                 turnType1:false,
                 turnType2:false,
+                inPayAddress:""
             }
         },
+        mixins: [isLogin,getLoginUserInfo],
         mounted(){
-
+          this.isLogin("/login");
+          this.inPayAddress=this.getLoginUserInfo("inPayAddress");
         },
         components: {
             headTop,

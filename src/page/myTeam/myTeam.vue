@@ -4,6 +4,12 @@
         <transition name="router-fade">
             <section v-if="chooseType === 1">
               <section class="info-data">
+                  <ul class="clear">
+                      <li  class="info-data-link">
+                        <span class="info-data-team">团队成员</span>
+                        <span class="info-data-performance">团队业绩</span>
+                      </li>
+                  </ul>
                   <ul class="clear" v-for="(item,index) in teamList">
                       <li @click="getIndex(index,item.userId)" class="info-data-link">
                         <span class="info-data-center">{{item.nickName}}[{{item.uid}}]</span>
@@ -22,8 +28,12 @@
               </section>
             </section>
         </transition>
+        <div v-if="teamList == null || teamList == ''">
+           <nullData></nullData>
+        </div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
+
 </template>
 
 <script>
@@ -32,6 +42,7 @@
     import alertTip from 'src/components/common/alertTip'
     import {getUserInfo} from 'src/config/env'
     import {mobileCode, checkExsis, sendMobile, getcaptchas, myteam} from 'src/service/getData'
+    import nullData from 'src/components/common/nullData'
 
     export default {
         data(){
@@ -53,6 +64,7 @@
         components: {
             headTop,
             alertTip,
+            nullData,
             // payPwd,
         },
         watch:{
@@ -166,11 +178,18 @@
                width: 1rem;
            }
          }
+         .info-data-team{
+           font-size: 0.7em;
+         }
+         .info-data-performance {
+           margin-left: 35%;
+           font-size: 0.7em;
+         }
          .spaPer{
             text-align: right;
             position: absolute;
-            right: 15%;
-            color: red;
+            right: 26%;
+            color: #7979cc;
          }
          .info-data-center{
            font-size:16px;
@@ -182,7 +201,7 @@
          text-align: right;
          position: absolute;
          right: 15%;
-         color: red;
+         color: #7979cc;
          font-size: 0.85rem;
       }
     }

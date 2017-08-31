@@ -3,7 +3,7 @@
        <head-top head-title="我的注册码" go-back='true'></head-top>
        <section class="topPanel">
           <div class="activateDiv">注册码剩余</div>
-          <div class="activateCode"><b>10</b>个</div>
+          <div class="activateCode"><b>{{registerCodeNo}}</b>个</div>
        </section>
        <section class="info-data">
            <ul class="clear">
@@ -42,10 +42,10 @@
                <transition name="router-fade">
                    <section v-if="turnRecord == true" class="show-data">
                      <div v-for="item in registerCodeList">
-                       <span class="showDate">{{item.createTime|formatDate}}</span>
+                       <span v-if="item.isShowNextPage" class="showDate">{{item.createTime|formatDate}}</span>
                        <ul>
                          <li class="page">
-                           <span class="">{{item.sendUserNick}}</span>
+                             <span class="">{{item.sendUserNick}}</span>
                              <span class="">{{item.remarkStr}}</span>
                              <div class="">{{item.transferNoStr}}</div>
                          </li>
@@ -86,6 +86,7 @@
              id:"",
              nickName:"",
              showPwd:false,
+             isShowNextPage:true
            }
        },
        mixins: [isLogin,getLoginUserInfo],
@@ -105,6 +106,10 @@
          }
        },
        methods :{
+         formatDateTime(createTime){
+           let date = new Date(createTime);
+           return formatDate(date,'yyyy-MM-dd');
+         },
          async codeTransferAction(pwd){
             this.payword=pwd;
              if (!this.toUid) {
@@ -149,10 +154,19 @@
             let res =  await codeTransferList(this.pageNo,this.pageSize,this.codeType);
             if (res.code==200) {
               this.registerCodeList=res.result.rows;
+              let flag=true;
+              let time="";
               if (this.registerCodeList) {
                 for (var i = 0; i < this.registerCodeList.length; i++) {
+                  let nextTime=this.formatDateTime(this.registerCodeList[i].createTime,"yyyy-MM-dd");
+                  if (nextTime==time) {
+                    flag=false;
+                  }else {
+                    time=nextTime;
+                  }
+                  this.registerCodeList[i].isShowNextPage=flag;
                   if (this.registerCodeList[i].sendUserId==this.id) {
-                    this.registerCodeList[i].transferNoStr="-"+this.registerCodeList[i].transferNo;
+                    this.registerCodeList[i].transferNoStr=""+this.registerCodeList[i].transferNo;
                     this.registerCodeList[i].remarkStr="会员"+this.nickName+"使用注册码";
                   }else {
                     this.registerCodeList[i].transferNoStr="+"+this.registerCodeList[i].transferNo;
@@ -291,7 +305,7 @@
    }
 
    .show-data{
-      background-color: #eee;
+      background-color: #eee; 
       .showDate{
         font-family: Helvetica Neue,Tahoma,Arial;
         font-size: 0.65rem;
@@ -305,7 +319,7 @@
      .page{
         border-bottom: 0.1rem solid #eee;
         font-family: Helvetica Neue,Tahoma,Arial;
-        font-size: 0.75rem;
+        font-size: 0.45rem;
         font-weight: normal;;
         width: 100%;
         height: 2rem;
