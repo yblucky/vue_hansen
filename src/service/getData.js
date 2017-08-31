@@ -174,6 +174,11 @@ export const updateUserInfoOutAddress = (outPayAddress, outEquityAddress, outTra
 export const getTaskInfo = (pageNo,pageSize) => fetch('/task/getTaskInfo', {pageNo,pageSize}, 'GET');
 
 /**
+ * 点击任务做任务
+ */
+export const doTask = (userTaskId,taskId) => fetch('/task/dotask', {userTaskId,taskId}, 'POST');
+
+/**
  * 首页获取激活信息
  */
 export const activeInfo = () => fetch('/user/activeInfo', {}, 'GET');

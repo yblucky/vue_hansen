@@ -273,15 +273,19 @@ export default {
         }
     },
     created(){
-        this.showRedBao();
-        // this.showMessageCount();
+        this.isLogin("/login");
+        //初始化信息
+        this.initData();
         //获取激活信息
         this.activeInfo();
+        this.showRedBao();
+        // this.showMessageCount();
+
     },
     mounted(){
-      this.isLogin("/login");
+
       //初始化信息
-      this.initData();
+      // this.initData();
     },
     mixins: [getImgPath,setToken,isLogin,getLoginUserInfo],
     components:{
@@ -312,27 +316,25 @@ export default {
             'SAVE_AVANDER'
         ]),
         async showRedBao(){
-
-            if(this.activeStatus == 3){
-                //调用领取红包接口
-                let res = await rewardsign();
-                if(res.code == 200){
-                    //判断红包是否可以打开
-                    if(res.result.isCanSign){
-                      //如果是true，就弹出红包，并将金额覆盖
-                      this.show = true;
-                      this.showMoney = res.result.amt;
-                    }
-                    // this.showAlert = true;
-                    // this.alertText = res.result.amt;
-                }else {
-                  this.showAlert = true;
-                  this.alertText = res.msg;
-                  if (res.code==0 || res.code==-1) {
-                     localStorage.clear();
-                 }
+            //调用领取红包接口
+            let res = await rewardsign();
+            if(res.code == 200){
+                //判断红包是否可以打开
+                if(res.result.isCanSign){
+                  //如果是true，就弹出红包，并将金额覆盖
+                  this.show = true;
+                  this.showMoney = res.result.amt;
+                }
+                // this.showAlert = true;
+                // this.alertText = res.result.amt;
+            }else {
+                this.showAlert = true;
+                this.alertText = res.msg;
+                if (res.code==0 || res.code==-1) {
+                   localStorage.clear();
                 }
             }
+
         },
         async initData(){
           let res = await getUser();
@@ -416,7 +418,9 @@ export default {
           }else {
             this.showAlert = true;
             this.alertText = res.msg;
-            localStorage.clear();
+            if(res.code==0 || res.code==-1){
+              localStorage.clear();
+            }
           }
         },
         exitlogin(){
@@ -493,9 +497,9 @@ export default {
         },
     },
     watch: {
-        userInfo: function (value){
-            this.initData()
-        }
+        // userInfo: function (value){
+        //     this.initData()
+        // }
     }
 }
 
@@ -662,7 +666,7 @@ export default {
                     padding: .353333rem 0 .453333rem;
                     b{
                         display:inline-block;
-                        @include sc(0.8rem,#f90);
+                        @include sc(0.65rem,#f90);
                         font-weight:700;
                         line-height:0.5rem;
                         font-family: Helvetica Neue,Tahoma;

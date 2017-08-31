@@ -28,7 +28,7 @@
                 <section class="headportrait headportraitwo">
                     <h2>昵称</h2>
                     <div class="headportrait-div">
-                        <p>{{username}}</p>
+                        <p>{{nickName}}</p>
                         <span class="headportrait-div-bottom">
                             <svg fill="#d8d8d8">
                                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
@@ -93,7 +93,7 @@
 <script>
     import {mapMutations, mapState} from 'vuex'
     import headTop from 'src/components/header/head'
-    import {signout} from 'src/service/getData'
+    import {signout,getUser} from 'src/service/getData'
     import alertTip from 'src/components/common/alertTip'
     import {getImgPath} from 'src/components/common/mixin'
     import {isLogin,getLoginUserInfo,updateLocalUser} from 'src/config/env'
@@ -106,7 +106,7 @@
         data(){
             return{
                 uid:'', //账号
-                username:'',    //昵称
+                nickName:'',    //昵称
                 phone:'', //用户手机
                 mail:'',     //用户邮箱
                 avatar:'',      //用户头像
@@ -148,12 +148,21 @@
             ...mapMutations([
                 'OUT_LOGIN', 'SAVE_AVANDER'
             ]),
-            initData(){
-                this.uid=this.getLoginUserInfo("uid");
-                this.username=this.getLoginUserInfo("nickName");
-                this.phone=this.getLoginUserInfo("phone");
-                this.mail=this.getLoginUserInfo("email");
-                this.avatar=this.getLoginUserInfo("headImgUrl");
+            async initData(){
+                let res = await getUser();
+                if(res.code == 200){
+                    this.uid=res.result.uid;
+                    this.nickName=res.result.nickName;
+                    this.phone=res.result.phone;
+                    this.mail=res.result.email;
+                    this.avatar=res.result.headImgUrl;
+                }else {
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                  if(res.code==0 || res.code==-1){
+                    localStorage.clear();
+                  }
+                }
             },
             exitlogin(){
                 // this.show=true;

@@ -17,11 +17,11 @@
                       <section v-if="turnCode == true" class="transfer">
                           <div class="div1">
                             <span>会员账户：</span>
-                            <input type="text" name="toUid" v-model.lazy="toUid">
+                            <input type="text" name="toUid" placeholder="请输入用户uid" v-model.lazy="toUid">
                           </div>
                           <div>
                             <span>转让数量：</span>
-                            <input type="text" name="transferNo" v-model.lazy="transferNo">
+                            <input type="text" name="transferNo" placeholder="转让数量只能是整数哦" v-model.lazy="transferNo">
                           </div>
                           <div class="pay_display">
                             <span>交易密码：</span>
@@ -78,7 +78,7 @@
              turnCode:false,
              turnRecord:false,
              toUid:"",
-             transferNo:0,
+             transferNo:'',
              payword:"",
              registerCodeList:[],//转让记录
              codeType:2,//注册码
@@ -111,27 +111,17 @@
            return formatDate(date,'yyyy-MM-dd');
          },
          async codeTransferAction(pwd){
+
             this.payword=pwd;
-             if (!this.toUid) {
-               this.showAlert = true;
-               this.alertText = '收款账号不能为空';
-               return;
-             }
-             if (!this.transferNo) {
-               this.showAlert = true;
-               this.alertText = '注册码数量不能为空';
-               return;
-             }
-             if (!this.payword) {
-               console.log(this.payword);
+            if (!this.payword) {
                this.showAlert = true;
                this.alertText = '支付密码不能为空';
                return;
              }
 
+             //隐藏密码框
+             this.showPwd=false;
              let res = await codeTransfer(this.toUid, parseInt(this.transferNo) ,this.codeType,this.payword);
-
-             console.log(res);
              if (res.code==200) {
                this.showAlert = true;
                this.alertText = res.msg;
@@ -142,6 +132,9 @@
                   localStorage.clear();
                }
              }
+             //不管成功失败，重新输入
+             this.toUid = '';
+             this.transferNo = '';
          },
          closeTip(){
              this.showAlert = false;
@@ -186,7 +179,17 @@
              this.showPwd = false;
          },
          showPayPwd(){
-           this.turnType = false;
+           if (!this.toUid) {
+             this.showAlert = true;
+             this.alertText = '会员账户不能为空';
+             return;
+           }
+           if (!this.transferNo) {
+             this.showAlert = true;
+             this.alertText = '注册码数量不能为空';
+             return;
+           }
+          //  this.turnType = false;
            this.showPwd=true;
          }
        }
@@ -291,13 +294,15 @@
        padding-bottom:1%;
      }
      input{
-         @include sc(0.85rem, #666);
+         @include sc(1rem, #666);
          border:1px solid #dedede;
          width:9rem;
          height:1.45rem;
-         font-size: 16px;
          text-align: center;
-         margin-bottom:5px;
+         border-radius: 0.5rem;
+         margin-top: 2%;
+         margin-bottom:3%;
+         font-family:cursive;
      }
      .pay_display{
           display: none;
@@ -305,7 +310,7 @@
    }
 
    .show-data{
-      background-color: #eee; 
+      background-color: #eee;
       .showDate{
         font-family: Helvetica Neue,Tahoma,Arial;
         font-size: 0.65rem;
@@ -340,5 +345,25 @@
      }
    }
 
+   input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    /* WebKit browsers */
+       color: #666;
+       font-size:15px;
+   }
+   input:-moz-placeholder, textarea:-moz-placeholder {
+   /* Mozilla Firefox 4 to 18 */
+       color: #666;
+       font-size:15px;
+   }
+   input::-moz-placeholder, textarea::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+       color: #666;
+       font-size:15px;
+   }
+   input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+       color: #666;
+       font-size:15px;
+   }
 
 </style>

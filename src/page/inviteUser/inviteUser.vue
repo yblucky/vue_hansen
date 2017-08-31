@@ -52,11 +52,11 @@
             <section class="input_container">
               <div>
                 <span>手机号：</span>
-                <input type="text" name="phone" v-model.lazy="phone">
+                <input type="text" name="phone" placeholder="手机号" v-model.lazy="phone">
               </div>
               <div>
                 <span>邮箱：</span>
-                <input type="text" name="email" v-model.lazy="email">
+                <input type="text" name="email" placeholder="邮箱" v-model.lazy="email">
               </div>
               <div>
                 <span>邀请人：</span>
@@ -68,19 +68,19 @@
               </div>
               <div>
                 <span>登录密码：</span>
-                <input type="password" name="password" v-model.lazy="password">
+                <input type="password" name="password" placeholder="登录密码" v-model.lazy="password">
               </div>
               <div>
                 <span>确认密码：</span>
-                <input type="password" name="confirmPassword" v-model.lazy="confirmPassword">
+                <input type="password" name="confirmPassword" placeholder="确认登录密码" v-model.lazy="confirmPassword">
               </div>
               <div>
                 <span>支付密码：</span>
-                <input type="password" name="payword" v-model.lazy="payword">
+                <input type="password" name="payword" placeholder="支付密码" v-model.lazy="payword">
               </div>
               <div>
                 <span>确认密码：</span>
-                <input type="password" name="confirmPayWord" v-model.lazy="confirmPayWord">
+                <input type="password" name="confirmPayWord" placeholder="确认支付密码" v-model.lazy="confirmPayWord">
               </div>
             </section>
             <div class="active_container" @click="innerCreateUserAction">注册</div>
@@ -187,7 +187,7 @@
                 }
                 if (this.confirmPassword!=this.password) {
                   this.showAlert = true;
-                  this.alertText = '两次登录密码不能为空';
+                  this.alertText = '两次登录密码不一致';
                   return;
                 }
                 if (!this.payword) {
@@ -202,7 +202,7 @@
                 }
                 if (this.confirmPayWord!=this.payword) {
                   this.showAlert = true;
-                  this.alertText = '两次支付密码不能为空';
+                  this.alertText = '两次支付密码不一致';
                   return;
                 }
                 let res = await innerCreateUser(this.phone,this.phone,this.email,this.cardGrade,this.password,this.confirmPassword,this.payword,this.confirmPayWord,parseInt(this.firstReferrer),this.contactUserId);
@@ -225,15 +225,15 @@
                this.headImgUrl=this.getLoginUserInfo("headImgUrl");
                this.firstReferrer=this.uid;
                this.contactUserId=this.uid;
-               console.log(this.cardGrade);
+              //  console.log(this.cardGrade);
                this.findCardGrade();
                this.findCardGradeList();
-               console.log(this.cardGrade);
+              //  console.log(this.cardGrade);
             },
             async  findCardGradeList(){
               let res =  await findCardGradeList();
               if (res.code==200) {
-                console.log(res);
+                // console.log(res);
                 this.cardGradeList= res.result;
               }else {
                 this.showAlert = true;
@@ -243,7 +243,7 @@
             async  findCardGrade(){
               let res =  await findCardGrade(this.cardGrade);
               if (res.code==200) {
-                console.log(res);
+                // console.log(res);
                 this.registerCodeNo= res.result.registerCodeNo; //注册码
                 this.activeCodeNo= res.result.activeCodeNo; //激活码
                 this.tradeAmt=res.result.tradeAmt;//交易币
@@ -263,6 +263,13 @@
 <style lang="scss" scoped>
     @import '../../style/mixin';
 
+    .upGradeContainer{
+        background-color:white;
+        padding-top: 1.95rem;
+        p, span, input{
+            font-family: Helvetica Neue,Tahoma,Arial;
+        }
+    }
     .selCardType{
       background-color:#fff;
       .title{
@@ -319,18 +326,13 @@
              }
          }
     }
-    .upGradeContainer{
-        padding-top: 1.95rem;
-        p, span, input{
-            font-family: Helvetica Neue,Tahoma,Arial;
-        }
-    }
     .active_container{
         margin: 0.5rem 0.5rem;
         @include sc(.7rem, #fff);
         background-color: #3b95e9;
         padding: .5rem 0.5rem;
         border: 1px;
+        margin-bottom: 2%;
         border-radius: 0.95rem;
         text-align: center;
 
@@ -391,19 +393,41 @@
               text-align:right;
             }
             input{
-                @include sc(0.85rem, #666);
+                @include sc(1rem, #666);
                 border:1px solid #dedede;
                 width:9rem;
                 height:1.45rem;
-                font-size: 16px;
                 text-align: center;
+                border-radius: 0.5rem;
+                margin-top: 2%;
+                margin-bottom:3%;
+                font-family:cursive;
             }
             span{
               font-size:16px;
             }
         }
-
     }
 
+    input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+     /* WebKit browsers */
+        color: #666;
+        font-size:15px;
+    }
+    input:-moz-placeholder, textarea:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+        color: #666;
+        font-size:15px;
+    }
+    input::-moz-placeholder, textarea::-moz-placeholder {
+     /* Mozilla Firefox 19+ */
+        color: #666;
+        font-size:15px;
+    }
+    input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+     /* Internet Explorer 10+ */
+        color: #666;
+        font-size:15px;
+    }
 
 </style>

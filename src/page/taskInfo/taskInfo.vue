@@ -22,12 +22,12 @@
                     </p>
                 </div>
                 <div class="right_div">
-                    <div v-if="item.status == 1" class="login_container">做任务领取奖励</div>
+                    <div v-if="item.status == 1" class="login_container" @click="doTask(item.id,item.taskId)">做任务领取奖励</div>
                     <div v-if="item.status == 2" class="complent_container">已完成</div>
                 </div>
           </li>
        </ul>
-       
+       <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
        <div v-if="staticRecordList == null || staticRecordList == ''">
           <nullData></nullData>
        </div>
@@ -39,8 +39,9 @@
    import headTop from 'src/components/header/head'
    import {mapState, mapMutations} from 'vuex'
    import {localapi, proapi, imgBaseUrl,formatDate} from 'src/config/env'
-   import {getTaskInfo} from '../../service/getData'
+   import {getTaskInfo,doTask} from '../../service/getData'
    import nullData from 'src/components/common/nullData'
+   import alertTip from 'src/components/common/alertTip'
   //  import footGuide from 'src/components/footer/footGuide'
 
    export default {
@@ -48,6 +49,9 @@
            return{
               staticRecordList:[],    //任务列表
               // show:0,
+              taskId:'',
+              showAlert: false, //显示提示组件
+              alertText: null, //提示的内容
            }
        },
        created(){
@@ -56,6 +60,7 @@
        components: {
            headTop,
            nullData,
+           alertTip,
           //  footGuide,
        },
        methods: {
@@ -73,6 +78,26 @@
                }
              }
          },
+         async doTask (userTaskId,taskId) {
+              // this.showAlert = true;
+              // this.alertText = userTaskId,taskId;
+              // return;
+              //从后台获取记录
+              let res = await doTask(userTaskId,taskId);
+              if(res.code==200){
+                  this.showAlert = true;
+                  this.alertText = "任务成功,请前往首页领取奖励";
+              }else {
+                this.showAlert = true;
+                this.alertText = res.msg;
+                if (res.code==0 || res.code==-1) {
+                   localStorage.clear();
+                }
+              }
+          },
+          closeTip(){
+              this.showAlert = false;
+          },
        },
        filters:{
          formatDate(createTime){

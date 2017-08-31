@@ -15,8 +15,8 @@
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/10.png" class="vip" /></span>
-                      <span class="info-data-middle">支付币</span>
-                      <span class="info-data-bottom"><b>{{parseFloat(payAmt).toFixed(6)}}</b></span>
+                      <span class="info-data-middle" style="padding-top:3%;padding-left:10%;">支付币</span>
+                      <span class="info-data-bottom" style="padding-top:3%;padding-left:10%;"><b>{{parseFloat(payAmt).toFixed(2)}}</b></span>
                   </li>
                   <li to="" @click="selCard(1);" v-bind:class="{active:selCardType==1}" class="info-data-link">
                       <span class="info-data-top-right">
@@ -24,8 +24,8 @@
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/11.png" class="vip" /></span>
-                      <span class="info-data-bottom">交易币</span>
-                      <span class="info-data-bottom"><b>{{parseFloat(tradeAmt).toFixed(6)}}</b></span>
+                      <span class="info-data-bottom" style="padding-top:3%;padding-left:13%;">交易币</span>
+                      <span class="info-data-bottom" style="padding-top:3%;padding-left:13%;"><b>{{parseFloat(tradeAmt).toFixed(2)}}</b></span>
                   </li>
                   <li to="" @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
                       <span class="info-data-top-right">
@@ -33,18 +33,18 @@
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/12.png" class="vip" /></span>
-                      <span class="info-data-bottom">翰森股权</span>
-                      <span class="info-data-bottom"><b>{{parseFloat(equityAmt).toFixed(6)}}</b></span>
+                      <span class="info-data-bottom" style="padding-top:3%;padding-left:18%;">翰森股权</span>
+                      <span class="info-data-bottom" style="padding-top:3%;padding-left:18%;"><b>{{parseFloat(equityAmt).toFixed(2)}}</b></span>
                   </li>
               </ul>
           </section>
         </div>
         <section class="input_container">
           <p>
-            <span>收款用户：<input type="text" size="16" name="toUid" v-model.lazy="toUid"></span>
+            <span>收款用户：<input type="text" size="16" name="toUid" placeholder="请输入用户uid" v-model.lazy="toUid"></span>
           </p>
           <p>
-            <span>转币数量：<input type="text" size="16" name="amount" v-model.lazy="amount"></span>
+            <span>转币数量：<input type="text" size="16" name="amount" placeholder="0.00" v-model.lazy="amount"></span>
           </p>
           <p class="pay_display">
             <span>高级密码：<input type="password" size="16" name="payPassWord"  v-model.lazy="payPassWord"></span>
@@ -65,11 +65,11 @@
 <script>
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
-    import footGuide from 'src/components/footer/footGuide'
+    // import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo} from 'src/config/env'
     import payPwd from 'src/components/common/payPwd'
     import {mapState, mapMutations} from 'vuex'
-    import {coinTransfer} from '../../service/getData'
+    import {coinTransfer,getUser} from '../../service/getData'
 
 
 
@@ -88,7 +88,7 @@
                 toUid:'',//收款账户
                 payPassWord:'',//高级密码
 
-                amount:0,//支付个数
+                amount:'',//支付个数
                 walletOrderType:1, //1交易币内部转账  4 支付币内部转账  8股权币内部转账
                 showPwd:false,
 
@@ -100,11 +100,12 @@
         },
         mixins: [isLogin,getLoginUserInfo],
         created(){
+            this.initData();
         },
         components: {
             headTop,
             alertTip,
-            footGuide,
+            // footGuide,
             payPwd
         },
         computed: {
@@ -117,10 +118,24 @@
             ...mapMutations([
                 'RECORD_USERINFO',
             ]),
+            async initData(){
+              let res = await getUser();
+
+              if(res.code == 200){
+                this.equityAmt=res.result.equityAmt;
+                this.payAmt=res.result.payAmt;
+                this.tradeAmt=res.result.tradeAmt;
+              }else {
+                this.showAlert = true;
+                this.alertText = res.msg;
+                if(res.code==0 || res.code==-1){
+                  localStorage.clear();
+                }
+              }
+            },
             async coinTransferAction(pwd){
                 this.payPassWord=pwd;
                 if (!this.payPassWord) {
-                  console.log(this.payPassWord);
                   this.showAlert = true;
                   this.alertText = '支付密码不能为空';
                   return;
@@ -140,7 +155,7 @@
                 }
                 //不管成功失败，重新输入
                 this.toUid = '';
-                this.amount = 0;
+                this.amount = '';
             },
             toggleTabs (index,tabText) {
                  this.active = index;
@@ -257,6 +272,13 @@
                          padding:0 10;
                          text-align:left;
                      }
+                     b{
+                         display:inline-block;
+                         @include sc(0.6rem,#f90);
+                         font-weight:700;
+                         line-height:0.5rem;
+                         font-family: Helvetica Neue,Tahoma;
+                     }
                  }
              }
              .info-data-link:nth-of-type(4){
@@ -316,10 +338,11 @@
         text-align:center;
         display:block;
         input{
-            @include sc(0.85rem, #666);
+            @include sc(1rem, #666);
             border:1px solid #dedede;
             border-radius: 0.3rem;
             text-align: center;
+            font-family:cursive;
         }
         p{
             text-align: center;
@@ -336,5 +359,26 @@
     .router-slid-enter, .router-slid-leave-active {
         transform: translate3d(2rem, 0, 0);
         opacity: 0;
+    }
+
+    input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+     /* WebKit browsers */
+        color: #666;
+        font-size:15px;
+    }
+    input:-moz-placeholder, textarea:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+        color: #666;
+        font-size:15px;
+    }
+    input::-moz-placeholder, textarea::-moz-placeholder {
+     /* Mozilla Firefox 19+ */
+        color: #666;
+        font-size:15px;
+    }
+    input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+     /* Internet Explorer 10+ */
+        color: #666;
+        font-size:15px;
     }
 </style>
