@@ -20,12 +20,13 @@
             }
         },
         mounted(){
-      
+
         },
         props: ['alertText'],
         methods: {
             closeTip(){
-                this.$emit('closeTip')
+                this.$emit('closeTip');
+                // location.reload();
             }
         }
     }
@@ -104,5 +105,5 @@
             border-bottom-right-radius: 0.25rem;
         }
     }
-    
+
 </style>

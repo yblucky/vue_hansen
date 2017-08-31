@@ -176,3 +176,13 @@ export const updateUserInfoOutAddress = (outPayAddress, outEquityAddress, outTra
  * 获取任务列表
  */
 export const getTaskInfo = (pageNo,pageSize) => fetch('/task/getTaskInfo', {pageNo,pageSize}, 'GET');
+
+/**
+ * 首页获取激活信息
+ */
+export const activeInfo = () => fetch('/user/activeInfo', {}, 'GET');
+
+/**
+ * 首页激活用户
+ */
+export const activeUser = () => fetch('/user/firstActicveUser', {}, 'GET');

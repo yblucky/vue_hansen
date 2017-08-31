@@ -37,7 +37,8 @@
                     </div>
 
                     <div class="rightdiv">
-                      <b>{{cardName}}</b>
+                      <b v-if="status == 2">{{cardName}}</b>
+                      <b v-else>{{cardName}}</b>
                       <span class="icon-mobile-number1">
                            <router-link to="/upgrade" class="info-data-link">
                                 <!-- <img v-if="this.status != 3" src="../../hsimages/23.png" class="vip22" algin="middle" /> -->
@@ -61,18 +62,18 @@
                 <ul class="clear">
                     <router-link to="/pay" tag="li" class="info-data-link">
                         <img src="../../hsimages/36.png" class="vip22" />
-                        <span class="info-data-middle"><b>{{parseInt(payAmt).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">购物币</span>
+                        <span class="info-data-middle"><b>{{parseInt(payAmt).toFixed(2)}}</b></span>
                     </router-link>
                     <router-link to="/trade" tag="li" class="info-data-link">
                         <img src="../../hsimages/37.png" class="vip22" />
-                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">交易币</span>
+                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(2)}}</b></span>
                     </router-link>
                     <router-link to="" tag="li" class="info-data-link">
                         <img src="../../hsimages/38.png" class="vip22" />
-                        <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(2)}}</b></span>
                         <span class="info-data-bottom">翰森股权</span>
+                        <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(2)}}</b></span>
                     </router-link>
                 </ul>
             </section>
@@ -143,12 +144,40 @@
             </section>
         </section>
 
+        <!-- 显示红包 -->
         <section class="coverpart" v-if="show">
             <section class="cover-background"></section>
             <section class="cover-content">
                 <span class="redbao_text">{{parseFloat(showMoney).toFixed(2)}}</span>
                 <img src="../../hsimages/46.png" class="redbao" />
                 <img src="../../hsimages/47.png" class="redbao_button" @click="closeRedBao" />
+            </section>
+        </section>
+
+        <!-- 显示激活页面 -->
+        <section class="coverpart_active" v-if="show_active">
+            <section class="cover-background"></section>
+            <section class="cover-content">
+              <div class="head">
+                  <span class="close" @click="closeActive">×</span>
+                  <h4>注册成功请立即激活</h4>
+              </div>
+              <div class="middle">
+                  <p style="padding-left:7%;"><span style="font-size:10px;">购物币地址：{{inPayAddress}}</span></p>
+                  <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">交易币地址：{{inTradeAddress}}</span></p>
+                  <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值购物币数量：<b>{{parseFloat(needBuyPayAmt).toFixed(2)}}</b><b style="padding-left:5%;">1GWC</b><b style="padding-left:5%;">约{{parseFloat(payConverRmbScale).toFixed(2)}}元</b></span></p>
+                  <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">购物币余额：{{parseFloat(payAmt).toFixed(2)}}</b></p>
+                  <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值交易币数量：<b>{{parseFloat(needBuyTradeAmt).toFixed(2)}}</b><b style="padding-left:5%;">1JYC</b><b style="padding-left:5%;">约{{parseFloat(tradeConverRmbScale).toFixed(2)}}元</b></span></p>
+                  <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">交易币余额：{{parseFloat(tradeAmt).toFixed(2)}}</b></p>
+              </div>
+              <div class="active_container" @click="active">激活</div>
+            </section>
+        </section>
+
+        <section class="coverpart" v-if="showLoading">
+            <section class="cover-background"></section>
+            <section class="cover-content">
+                <loading></loading>
             </section>
         </section>
 
@@ -166,10 +195,11 @@ import headTop from 'src/components/header/head'
 import alertTip from '../../components/common/alertTip'
 // import footGuide from 'src/components/footer/footGuide'
 import progress from 'src/components/progressBar/progress'
+import loading from 'src/components/common/loading'
 import {mapState, mapMutations} from 'vuex'
 import {imgBaseUrl,token,setToken,isLogin,getLoginUserInfo} from 'src/config/env'
 import {getImgPath} from 'src/components/common/mixin'
-import {rewardsign} from '../../service/getData'
+import {rewardsign,activeInfo,activeUser,getUser} from '../../service/getData'
 
 export default {
     data(){
@@ -191,7 +221,10 @@ export default {
             alertText: null, //提示的内容
             cardName:null,            //卡的名称
             gradeName:null,         //用户等级
+            show_active:false,
+            showLoading:false,
 
+            //用户信息
             id:"A085DEB2E34941B046CDA5107DB24BFD",
             uid:100000,
             loginName:"test01",
@@ -226,20 +259,35 @@ export default {
             outEquityAddress:'',
             outTradeAddress:'',
             status:0,
+
+            //激活信息
+            tradeConverRmbScale:0,    //交易币兑换人民币汇率
+            payConverRmbScale:0,      //支付币兑换人民币汇率
+            payAmount:0,              //需要支付币的总金额
+            tradeAmount:0,            //需要交易币的总金额
+            needActiveNum:0,          //需要补充激活码数量
+            needBuyTradeAmt:0,        //需要补充交易币数量
+            needBuyPayAmt:0,          //需要补充购物币数量
+            cardMaxproft:0,           //最大收益
+            activeStatus:'',          //激活状态
         }
     },
     created(){
         this.showRedBao();
-        this.showMessageCount();
+        // this.showMessageCount();
+        //获取激活信息
+        this.activeInfo();
     },
     mounted(){
       this.isLogin("/login");
+      //初始化信息
       this.initData();
     },
     mixins: [getImgPath,setToken,isLogin,getLoginUserInfo],
     components:{
         headTop,
         alertTip,
+        loading,
         // footGuide,
     },
 
@@ -264,131 +312,112 @@ export default {
             'SAVE_AVANDER'
         ]),
         async showRedBao(){
-            //调用领取红包接口
-            let res = await rewardsign();
-            if(res.code == 200){
-                //判断红包是否可以打开
-                if(res.result.isCanSign){
-                  //如果是true，就弹出红包，并将金额覆盖
-                  this.show = true;
-                  this.showMoney = res.result.amt;
+
+            if(this.activeStatus == 3){
+                //调用领取红包接口
+                let res = await rewardsign();
+                if(res.code == 200){
+                    //判断红包是否可以打开
+                    if(res.result.isCanSign){
+                      //如果是true，就弹出红包，并将金额覆盖
+                      this.show = true;
+                      this.showMoney = res.result.amt;
+                    }
+                    // this.showAlert = true;
+                    // this.alertText = res.result.amt;
+                }else {
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                  if (res.code==0 || res.code==-1) {
+                     localStorage.clear();
+                 }
                 }
-                // this.showAlert = true;
-                // this.alertText = res.result.amt;
-            }else {
-              this.showAlert = true;
-              this.alertText = res.msg;
-              if (res.code==0 || res.code==-1) {
-                 localStorage.clear();
-             }
             }
         },
-        async showMessageCount(){
-            //调用领取红包接口
-            let res = await rewardsign();
-            if(res.code == 200){
-                //判断红包是否可以打开
-                if(res.result.isCanSign){
-                  //如果是true，就弹出红包，并将金额覆盖
-                  this.show = true;
-                  this.showMoney = res.result.amt;
-                }
-                // this.showAlert = true;
-                // this.alertText = res.result.amt;
-            }else {
-              this.showAlert = true;
-              this.alertText = res.msg;
-              if (res.code==0 || res.code==-1) {
-                 localStorage.clear();
-             }
-            }
-        },
-        initData(){
-          //  console.log(this.getLoginUserInfo("token"));
-          //  console.log(this.getLoginUserInfo("id"));
-          //  console.log(this.getLoginUserInfo("nickName"));
+        async initData(){
+          let res = await getUser();
 
-           this.id=this.getLoginUserInfo("id");
-           this.phone=this.getLoginUserInfo("phone");
-           this.uid=this.getLoginUserInfo("uid");
-           this.loginName=this.getLoginUserInfo("loginName");
-           this.userName=this.getLoginUserInfo("userName");
-           this.nickName=this.getLoginUserInfo("nickName");
-           this.sex=this.getLoginUserInfo("sex");
-           this.headImgUrl=this.getLoginUserInfo("headImgUrl");
-           this.createTime=this.getLoginUserInfo("createTime");
-           this.remark=this.getLoginUserInfo("remark");
-           this.grade=this.getLoginUserInfo("grade");
-           this.cardGrade=this.getLoginUserInfo("cardGrade");
-           this.releaseTime=this.getLoginUserInfo("releaseTime");
-           this.equityAmt=this.getLoginUserInfo("equityAmt");
-           this.payAmt=this.getLoginUserInfo("payAmt");
-           this.tradeAmt=this.getLoginUserInfo("tradeAmt");
-           this.insuranceAmt=this.getLoginUserInfo("insuranceAmt");
-           this.maxProfits=this.getLoginUserInfo("maxProfits");
-           this.sumProfits=this.getLoginUserInfo("sumProfits");
-           this.cashOutProfits=this.getLoginUserInfo("cashOutProfits");
-           this.contactUserId=this.getLoginUserInfo("contactUserId");
-           this.activeCodeNo=this.getLoginUserInfo("activeCodeNo");
-           this.registerCodeNo=this.getLoginUserInfo("registerCodeNo");
-           this.remainTaskNo=this.getLoginUserInfo("remainTaskNo");
-           this.forzenPayAmt=this.getLoginUserInfo("forzenPayAmt");
-           this.forzenTradeAmt=this.getLoginUserInfo("forzenTradeAmt");
-           this.forzenEquityAmt=this.getLoginUserInfo("forzenEquityAmt");
-           this.inPayAddress=this.getLoginUserInfo("inPayAddress");
-           this.inTradeAddress=this.getLoginUserInfo("inTradeAddress");
-           this.inEquityAddress=this.getLoginUserInfo("inEquityAddress");
-           this.outPayAddress=this.getLoginUserInfo("outPayAddress");
-           this.outEquityAddress=this.getLoginUserInfo("outEquityAddress");
-           this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
-           this.status=this.getLoginUserInfo("status");
+          if(res.code == 200){
 
+            this.id=res.result.id;
+            this.phone=res.result.phone;
+            this.uid=res.result.uid;
+            this.loginName=res.result.loginName;
+            this.userName=res.result.userName;
+            this.nickName=res.result.nickName;
+            this.sex=res.result.sex;
+            this.headImgUrl=res.result.headImgUrl;
+            this.createTime=res.result.createTime;
+            this.remark=res.result.remark;
+            this.grade=res.result.grade;
+            this.cardGrade=res.result.cardGrade;
+            this.releaseTime=res.result.releaseTime;
+            this.equityAmt=res.result.equityAmt;
+            this.payAmt=res.result.payAmt;
+            this.tradeAmt=res.result.tradeAmt;
+            this.insuranceAmt=res.result.insuranceAmt;
+            this.maxProfits=res.result.maxProfits;
+            this.sumProfits=res.result.sumProfits;
+            this.cashOutProfits=res.result.cashOutProfits;
+            this.contactUserId=res.result.contactUserId;
+            this.activeCodeNo=res.result.activeCodeNo;
+            this.registerCodeNo=res.result.registerCodeNo;
+            this.remainTaskNo=res.result.remainTaskNo;
+            this.forzenPayAmt=res.result.forzenPayAmt;
+            this.forzenTradeAmt=res.result.forzenTradeAmt;
+            this.forzenEquityAmt=res.result.forzenEquityAmt;
+            this.status=res.result.status;
+            this.inPayAddress=res.result.inPayAddress;
+            this.inTradeAddress=res.result.inTradeAddress;
+            this.inEquityAddress=res.result.inEquityAddress;
+            this.outPayAddress=res.result.outPayAddress;
+            this.outEquityAddress=res.result.outEquityAddress;
+            this.outTradeAddress=res.result.outTradeAddress;
 
             //用户卡等级
-            if(this.cardGrade == 0){
-              this.cardName = "普卡用户";
-            }else if(this.cardGrade == 1){
-                this.cardName = "铜卡用户";
-            }else if (this.cardGrade == 2 ) {
-              this.cardName = "银卡用户";
-            }else if (this.cardGrade == 3 ) {
-              this.cardName = "金卡用户";
-            }else if (this.cardGrade == 4 ) {
-              this.cardName = "钻石用户";
+            if(this.status == 3){
+                if(this.cardGrade == 0){
+                  this.cardName = "普卡用户";
+                }else if(this.cardGrade == 1){
+                    this.cardName = "铜卡用户";
+                }else if (this.cardGrade == 2 ) {
+                  this.cardName = "银卡用户";
+                }else if (this.cardGrade == 3 ) {
+                  this.cardName = "金卡用户";
+                }else if (this.cardGrade == 4 ) {
+                  this.cardName = "钻石用户";
+                }
+            }else if(this.status == 4){
+                this.cardName = "保单处理中"
+            }else {
+              this.cardName = "未激活";
             }
 
-            //用户等级
-           if(this.grade == 0){
-             this.gradeName = "普通用户";
-           }else if (this.grade == 1) {
-              this.gradeName = "专员";
-           }else if (this.grade == 2) {
-              this.gradeName = "主任";
-           }else if (this.grade == 3) {
-              this.gradeName = "经理";
-           }else if (this.grade == 4) {
-              this.gradeName = "区代";
-           }else if (this.grade == 5) {
-              this.gradeName = "县代";
-           }else if (this.grade == 6) {
-              this.gradeName = "市代";
-           }else if (this.grade == 7) {
-              this.gradeName = "省代";
-           }else if (this.grade == 8) {
-              this.gradeName = "董事";
-           }
-
-            // if (this.userInfo && this.userInfo.user_id) {
-            //     this.tradeAmt = this.userInfo.avatar;
-            //     this.username = '理财大神';
-            //     this.mobile = this.userInfo.mobile || 'HS10000';
-            //     this.balance = this.userInfo.balance;
-            //     this.count = this.userInfo.gift_amount;
-            //     this.pointNumber = this.userInfo.point;
-            // }else{
-            //     this.username = '登录/注册';
-            //     this.mobile = '13680334542';
-            // }
+              //用户等级
+             if(this.grade == 0){
+               this.gradeName = "普通用户";
+             }else if (this.grade == 1) {
+                this.gradeName = "专员";
+             }else if (this.grade == 2) {
+                this.gradeName = "主任";
+             }else if (this.grade == 3) {
+                this.gradeName = "经理";
+             }else if (this.grade == 4) {
+                this.gradeName = "区代";
+             }else if (this.grade == 5) {
+                this.gradeName = "县代";
+             }else if (this.grade == 6) {
+                this.gradeName = "市代";
+             }else if (this.grade == 7) {
+                this.gradeName = "省代";
+             }else if (this.grade == 8) {
+                this.gradeName = "董事";
+             }
+          }else {
+            this.showAlert = true;
+            this.alertText = res.msg;
+            localStorage.clear();
+          }
         },
         exitlogin(){
           localStorage.removeItem("token");
@@ -401,7 +430,67 @@ export default {
         },
         closeTip(){
             this.showAlert = false;
-        }
+        },
+        closeActive(){
+          this.show_active = false;
+        },
+        //调用获取激活信息的接口
+        async activeInfo(){
+          //调用获取用户接口
+          let res = await activeInfo();
+          if(res.code == 200){
+              //判断激活是否可以打开
+              if(res.result.status == 2){
+                //如果是true，就弹出激活信息框，并让用户进行激活
+                this.show_active = true;
+                this.tradeConverRmbScale=res.result.tradeConverRmbScale;
+                this.payConverRmbScale=res.result.payConverRmbScale;
+                this.payAmount=res.result.payAmount;
+                this.tradeAmount=res.result.tradeAmount;
+                this.needActiveNum=res.result.needActiveNum;
+                this.needBuyTradeAmt=res.result.needBuyTradeAmt;
+                this.needBuyPayAmt=res.result.needBuyPayAmt;
+                this.cardMaxproft=res.result.cardMaxproft;
+                this.inPayAddress=res.result.inPayAddress;
+                this.inTradeAddress=res.result.inTradeAddress;
+              }
+              this.activeStatus=res.result.status;
+          }else {
+              if (res.code==0 || res.code==-1) {
+                  this.showAlert = true;
+                  this.alertText = res.msg;
+                  localStorage.clear();
+             }
+           }
+        },
+        //激活接口
+        async active(){
+          //调用接口前，加载数据
+          this.showLoading = true;
+
+          if(this.showLoading){
+            //调用获取用户接口
+            let res = await activeUser();
+            if(res.code == 200){
+              //成功后关闭
+              this.showLoading = false;
+              //关闭
+              this.show_active = false;
+              this.showAlert = true;
+              this.alertText = "用户激活成功,等待保单结算";
+              //刷新页面
+              // location.reload();
+            }else {
+                this.showLoading = false;
+                this.show_active = false;
+                this.showAlert = true;
+                this.alertText = res.msg;
+                if (res.code==0 || res.code==-1) {
+                   localStorage.clear();
+               }
+             }
+          }
+        },
     },
     watch: {
         userInfo: function (value){
@@ -570,7 +659,7 @@ export default {
                 }
                 .info-data-middle{
                     @include sc(.55rem,#333);
-                    padding: .553333rem 0 .453333rem;
+                    padding: .353333rem 0 .453333rem;
                     b{
                         display:inline-block;
                         @include sc(0.8rem,#f90);
@@ -581,8 +670,8 @@ export default {
                 }
                 .info-data-bottom{
                     @include sc(.57333rem,#666);
+                    padding-top: .153333rem;
                     font-weight:700;
-                    padding-bottom:.453333rem;
 
                 }
 
@@ -731,6 +820,76 @@ export default {
         animation:bounceIn .6s;
     }
     body .coverpart .cover-animate-leave{
+        animation:zoomOut .4s;
+    }
+
+    .coverpart_active{
+        top:0%; /**遮罩全屏top,left都为0,width,height为100%**/
+        left:0%;
+        height: auto;
+        @include wh(100%,100%);
+        @include allcover;
+        .cover-background{
+            height: auto;
+            @include wh(100%,100%);
+            @include allcover;
+            background:#000;
+            z-index:100;
+            opacity:.2;
+        }
+        .cover-content{
+            width:94%;
+            background:$fc;
+            padding-top:3%;
+            padding-bottom:5%;
+            position:absolute;
+            top:20%;
+            left:3%;
+            z-index:1000;
+            @include borderRadius(5px);
+            .head{
+                width: 100%;
+                border-bottom: 1px solid #87CEFA;
+                margin-bottom:4%;
+                h4{
+                    text-align:center;
+                    @include sc(20px,#575757);
+                    font-weight:700;
+                    margin-bottom:4%;
+                }
+                .close{
+                  position: absolute;
+                  top: 0;
+                  left: 10px;
+                  font-size: 30px;
+                  width: 16px;
+                  height: 100%;
+                  line-height: 30px;
+                  color: #ccc;
+                }
+            }
+
+            .active_container{
+                margin-top: 7%;
+                margin-left: 29%;
+                margin-bottom: 3%;
+                width:40%;
+                @include sc(.7rem, #fff);
+                background-color: #3b95e9;
+                padding: .5rem 0;
+                border: 1px;
+                border-radius: 0.3rem;
+                text-align: center;
+            }
+
+        }
+    }
+
+    body .coverpart_active .cover-animate{
+        transition:all 1s;
+        animation:bounceIn .6s;
+    }
+    body .coverpart_active .cover-animate-leave{
         animation:zoomOut .4s;
     }
 

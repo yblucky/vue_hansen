@@ -64,8 +64,17 @@
                 'RECORD_USERINFO',
             ]),
             async getSignlist(){
-                  let res = await signlist(1,20);
+              
+                let res = await signlist(1,20);
+                if(res.code == 200){
                   this.recordList = res.result.rows;
+                }else {
+                    this.showAlert = true;
+                    this.alertText = res.msg;
+                    if (res.code==0 || res.code==-1) {
+                       localStorage.clear();
+                   }
+                }
             },
             toggleTabs (index,tabText) {
                  this.active = index;
