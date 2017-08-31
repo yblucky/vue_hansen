@@ -64,6 +64,7 @@
        },
        components: {
            headTop,
+           loading,
           //  footGuide,
        },
        mixins: [loadMore, getImgPath],

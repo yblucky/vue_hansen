@@ -66,6 +66,7 @@
         components: {
             headTop,
             alertTip,
+            loading,
         },
         computed: {
             //判断手机号码

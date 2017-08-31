@@ -59,6 +59,7 @@
        components: {
            headTop,
            footGuide,
+           loading,
        },
        methods: {
     		//开发环境与编译环境loading隐藏方式不同
