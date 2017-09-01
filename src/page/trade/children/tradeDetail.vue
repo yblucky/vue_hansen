@@ -2,70 +2,33 @@
    <div class="upGradeRecordContainer">
        <head-top head-title="交易币明细" go-back='true'></head-top>
        <ul>
-          <!-- <li class="page">
-              <div class="page-record">
-                  <div class="coindiv">
-                      充币
-                  </div>
-                  <div class="pdiv">
-                      <p>
-                          <span>
-                              NO.4832798274
-                          </span>
-                      </p>
-                      <p>
-                          <span>
-                              已完成
-                          </span>
-                      </p>
-                  </div>
+          <li class="page" v-for="item in coinList">
+                <div class="left_div">
+                    <img src="../../../hsimages/39.png"  class="vip"/>
+                </div>
+                <!-- <div class="middle_div">
+                    <p class="p1">
+                        <h4 style="font-weight:bold">提币</h4>
+                    </p>
 
-                  <div class="rightdiv">
-                      <p>
-                          <span>
-                              2017-08-08
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number1">
-                            +550.0 | -500
-                          </span>
-                      </p>
-                  </div>
-              </div>
-          </li> -->
+                </div> -->
+                <div class="middle_div">
+                    <p class="p1">
+                        <h4 style="font-weight:bold">{{item.amount}}</h4>
+                    </p>
+                </div>
+                <div class="middle_div1">
+                    <p class="p3">
+                        <h5>{{item.message}}</h5>
+                    </p>
+                </div>
+                <div class="middle_div2">
+                  <p class="p1">
+                      <h5>{{item.createTime|formatDate}}</h5>
+                  </p>
+                </div>
 
-          <li class="page" v-for="item in  coinList">
-              <div class="page-record">
-                  <div class="coindiv">
-                      提币
-                  </div>
-                  <div class="pdiv">
-                      <p>
-                          <span>
-                            NO.4832798274
-                          </span>
-                      </p>
-                      <p>
-                          <span>
-                              已完成
-                          </span>
-                      </p>
-                  </div>
 
-                  <div class="rightdiv">
-                      <p>
-                          <span>
-                              2017-08-08
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number1">
-                            +550.0 | -500
-                          </span>
-                      </p>
-                  </div>
-              </div>
           </li>
        </ul>
    </div>
@@ -75,7 +38,7 @@
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
-   import {isLogin,getLoginUserInfo} from 'src/config/env'
+   import {isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
    import {coinOuterTransferList} from '../../../service/getData'
 
    export default {
@@ -83,7 +46,7 @@
            return{
                 showAlert: false,
                 alertText: null,
-                nickName:"test01",
+                nickName:"",
                 headImgUrl:"",
                 uid:0,
                 coinType:0,
@@ -109,6 +72,12 @@
        computed: {
 
        },
+       filters:{
+         formatDate(createTime){
+           let date = new Date(createTime);
+           return formatDate(date,'yyyy-MM-dd');
+         }
+       },
        methods: {
          async coinOuterTransferListAction(){
              let res = await coinOuterTransferList(this.pageNo, this.pageSize,this.orderType);
@@ -117,8 +86,12 @@
                this.coinList=res.result.rows;
                 console.log(" 交易币交易记录   "+JSON.stringify(this.coinList));
                this.showAlert = true;
-               this.alertText = res.msg;
-               this.coinList=res.result;
+               this.alertText = res.msg; 
+               if (this.coinList.length==0) {
+                  this.coinList[0].message="";
+                  this.coinList[0].amount=0;
+                  this.coinList[0].createTime=1504201462000;
+               }
              }else {
                this.showAlert = true;
                this.alertText = res.msg;
@@ -158,33 +131,48 @@
 
    .page{
       border-bottom: 0.1rem solid #eee;
-      font-family: Helvetica Neue,Tahoma,Arial;
       font-size: 0.75rem;
-      font-weight: normal;;
       width: 100%;
-      height: 3rem;
-      div,span,li{
-        color: darkgrey;
-      }
-      .page-record{
-        padding: 0.5rem 0.5rem;
-      }
-      .coindiv{
+      height: 2.3rem;
+      .left_div{
         float: left;
-        margin-left:1%;
+        margin-left:3%;
+        margin-right:5%;
         margin-top: 3%;
+        text-align: center;
+        @include wh(10%,10%);
+        .vip{
+           width:1.5rem;
+           algin:center;
+        }
       }
-      .pdiv{
+      .middle_div{
         float: left;
-        margin-left:2%;
+        @include wh(10%,10%);
+        text-align: center;
+        .p1{
+            margin-top: 40%;
+            margin-left:10%;
+        }
       }
-      .rightdiv{
-        float: right;
-        margin-right:3%;
+      .middle_div1{
+        float: left;
+        margin-left: 20%;
+        @include wh(15%,10%);
+        .p3{
+            margin-top: 35%;
+        }
       }
 
-      img{
-        width: 2rem;
+      .middle_div2{
+        float: left;
+        margin-top:1%;
+        margin-left: 75%;
+        @include wh(25%,25%);
+        .p1{
+            /*margin-top: 35%;*/
+        }
       }
+
    }
 </style>

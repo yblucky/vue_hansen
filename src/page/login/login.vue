@@ -43,8 +43,8 @@
     export default {
         data(){
             return {
-                loginName: "test01", //用户名
-                password: "123456", //密码
+                loginName: "", //用户名
+                password: "", //密码
                 captchaCodeImg: null, //验证码地址
                 picCode: null, //传回验证验证码picCode
                 showPassword:false,
