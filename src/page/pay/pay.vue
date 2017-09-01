@@ -14,8 +14,8 @@
             <ul class="clear">
               <li class="info-data-link">
                 <span class="info-data-left"><img src="../../hsimages/5.png" /></span>
-                <span class="info-data-center">充值购物币地址</span>
-                <div class="info-data-center">{{inPayAddress}}</div>
+                <span class="info-data-center">充值购物币地址</span><div class="login_container" @click="fuzhi()">复制</div>
+                <div class="info-data-center"><input id="fuzhi" size="32" type="text" name="inPayAddress" v-model.lazy="inPayAddress"></div>
               </li>
               <li @click="turnType1=!turnType1" class="info-data-link">
                 <span class="info-data-left"><img src="../../hsimages/3.png" /></span>
@@ -64,7 +64,26 @@
 
         },
         methods: {
-
+          fuzhi(){
+            var url = document.getElementById('fuzhi');
+            url.select(); // 选取input元素的内容
+            var succeeded;
+            try {
+                // 将选区内容复制到剪贴板
+                succeeded = document.execCommand("copy");
+              } catch (e) {
+                succeeded = false;
+              }
+              if (succeeded) {
+                // 复制成功
+                this.showAlert = true;
+                this.alertText = "复制成功";
+              } else {
+                // 复制失败
+                this.showAlert = true;
+                this.alertText = "复制失败";
+              }
+          }
         }
     }
 </script>
@@ -153,6 +172,20 @@
            font-size:16px;
            font-family:"微软雅黑",Courier New, Courier, monospace;
          }
+         .login_container{
+             margin-top: 5%;
+             margin-left: 10%;
+             margin-bottom: 2%;
+             width:20%;
+             @include sc(.3rem, #fff);
+             background-color: #3b95e9;
+             padding: .5rem 0;
+             border: 1px;
+             border-radius: 1rem;
+             text-align: center;
+         }
       }
     }
+
+
 </style>
