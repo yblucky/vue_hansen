@@ -6,7 +6,7 @@
             </div>
         </head-top>
         <section class="category_title">
-            <span :class="{choosed: active === 2}" @click="selUpWay(2)">原点升级</span>
+            <span :class="{choosed: active === 2}" @click="selUpWay(2)">补差升级</span>
             <span :class="{choosed: active === 3}" @click="selUpWay(3)">覆盖升级</span>
         </section>
 
