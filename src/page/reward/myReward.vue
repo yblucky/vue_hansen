@@ -51,7 +51,7 @@
             return {
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
-                recordList:[],//任务奖励
+                recordList:null,//任务奖励
                 pageNo:1,
                 pageSize:10,
           		  preventRepeatReuqest: false, //到达底部加载数据，防止重复加载
@@ -103,7 +103,9 @@
            		let res = await signlist(this.pageNo,this.pageSize);
                if (res.code==200) {
                    let rs = res.result.rows;
-               		this.recordList = [...this.recordList, ...rs];
+                   if(rs.length > 0){
+                      this.recordList = [...this.recordList, ...rs];
+                   }
                }else {
                  this.showAlert = true;
                  this.alertText = res.msg;
@@ -122,7 +124,20 @@
             async getSignlist(){
                   let res = await signlist(this.pageNo,this.pageSize);
                   if (res.code==200) {
-                      this.recordList = [...res.result.rows];
+                      if(res.result.rows.length > 0){
+                        this.recordList = [...res.result.rows];
+
+                        //返回数据集合个数大于0的时候做
+                        if (res.result.rows.length < 10) {
+                     			this.touchend = true;
+                     		}
+                     		this.hideLoading();
+                     		//开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
+                     		showBack(status => {
+                     			this.showBackStatus = status;
+                     		});
+                      }
+                      
                   }else {
                     this.showAlert = true;
                     this.alertText = res.msg;
@@ -130,14 +145,7 @@
                       localStorage.clear();
                     }
                   }
-               		if (res.result.rows.length < 10) {
-               			this.touchend = true;
-               		}
-               		this.hideLoading();
-               		//开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
-               		showBack(status => {
-               			this.showBackStatus = status;
-               		});
+
             },
             toggleTabs (index,tabText) {
                  this.active = index;

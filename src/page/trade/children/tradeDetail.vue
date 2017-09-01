@@ -14,7 +14,8 @@
                 </div> -->
                 <div class="middle_div">
                     <p class="p1">
-                        <h4 style="font-weight:bold">{{item.amount}}</h4>
+                        <h4 v-if="item.amount>0" style="font-weight:400;color:red;">{{item.amount}}</h4>
+                        <h4 v-else style="font-weight:400;color:green;">{{item.amount}}</h4>
                     </p>
                 </div>
                 <div class="middle_div1">
@@ -50,7 +51,7 @@
                 headImgUrl:"",
                 uid:0,
                 coinType:0,
-                coinList:[],
+                coinList:null,
                 pageNo:1,
                 pageSize:30,
                 orderType:[2,3]
@@ -81,16 +82,9 @@
        methods: {
          async coinOuterTransferListAction(){
              let res = await coinOuterTransferList(this.pageNo, this.pageSize,this.orderType);
-
              if (res.code==200) {
-               this.coinList=res.result.rows;
-                console.log(" 交易币交易记录   "+JSON.stringify(this.coinList));
-               this.showAlert = true;
-               this.alertText = res.msg; 
-               if (this.coinList.length==0) {
-                  this.coinList[0].message="";
-                  this.coinList[0].amount=0;
-                  this.coinList[0].createTime=1504201462000;
+               if (res.result.rows.length>0) {
+                  this.coinList=res.result.rows;
                }
              }else {
                this.showAlert = true;
@@ -150,9 +144,10 @@
         float: left;
         @include wh(10%,10%);
         text-align: center;
+        margin-left:4%;
         .p1{
             margin-top: 40%;
-            margin-left:10%;
+            /*margin-left:10%;*/
         }
       }
       .middle_div1{

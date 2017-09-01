@@ -13,12 +13,12 @@
        <section class="info-data">
            <ul class="clear">
              <li class="info-data-link">
-               <span class="info-data-left"><img src="../../hsimages/5.png" /></span>
-               <span class="info-data-center">充值交易币地址</span>
-               <div class="info-data-center">{{inTradeAddress}}</div>
+               <span class="info-data-left"><img src="../../hsimages/5.png" class="privateImage" /></span>
+               <span class="info-data-center">充值交易币地址</span><div class="login_container" @click="fuzhi()">复制</div>
+               <div class="info-data-center" style="margin-left:14%;padding-top:1%;"><input id="fuzhi" size="64" type="text" name="inTradeAddress" v-model.lazy="inTradeAddress"></div>
              </li>
              <li @click="turnType=!turnType,isShowOutTradeAddress=false" class="info-data-link">
-               <span class="info-data-left"><img src="../../hsimages/3.png" /></span>
+               <span class="info-data-left"><img src="../../hsimages/3.png" class="privateImage" /></span>
                <span class="info-data-center">交易币提取</span>
                <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnType, 'closeImg' : !turnType  }"/></span>
              </li>
@@ -60,9 +60,9 @@
        <div class="transfer_div">
          <section class="info-data">
                <li @click="" class="info-data-link">
-                 <span class="info-data-left"><img src="../../hsimages/7.png" /></span>
+                 <span class="info-data-left"><img src="../../hsimages/7.png" class="privateImage" /></span>
                  <span class="info-data-center">我的提币地址</span>
-                 <span class="info-data-right" @click="addOutAddressAction"><b>添加</b></span>
+                 <span class="info-data-right" @click="addOutAddressAction" style="margin-top:2%;"><b>添加</b></span>
                </li>
              </ul>
          </section>
@@ -291,15 +291,21 @@
      .info-data-link{
         border-bottom: 0.1rem solid #eee;
         width: 100%;
-        padding: 0.75rem;
+        padding: 0.35rem;
         background-color: white;
-        .info-data-left img{
-          width: 1rem;
-        }
+        .info-data-left{
+           padding-left: 3%;
+            .privateImage{
+              display:inline-block;
+              width: 1.5rem;
+              vertical-align:middle;
+            }
+         }
         .info-data-right{
           text-align: right;
           position: absolute;
           right:5%;
+          margin-top: 2%;
           display: inline-block;
           img{
               width: 1rem;
@@ -310,8 +316,25 @@
           }
         }
         .info-data-center{
-          font-size:18px;
+          font-size:16px;
+          font-weight: 500;
           font-family:"微软雅黑",Courier New, Courier, monospace;
+        }
+
+        .login_container{
+           position: absolute;
+           top: 33%;
+           left: 75%;
+            /*margin-top: 5%;
+            margin-left: 10%;
+            margin-bottom: 2%;*/
+            width:20%;
+            @include sc(.3rem, #fff);
+            background-color: #3b95e9;
+            padding: .3rem 0;
+            border: 1px;
+            border-radius: 1rem;
+            text-align: center;
         }
      }
    }

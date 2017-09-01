@@ -14,7 +14,8 @@
             </div> -->
             <div class="middle_div">
                 <p class="p1">
-                    <h4 style="font-weight:bold">{{item.amount}}</h4>
+                    <h4 v-if="item.amount>0" style="font-weight:400;color:red;">{{item.amount}}</h4>
+                    <h4 v-else style="font-weight:400;color:green;">{{item.amount}}</h4>
                 </p>
             </div>
             <div class="middle_div1">
@@ -29,7 +30,6 @@
             </div>
           </li>
        </ul>
-       <foot-guide></foot-guide>
    </div>
 </template>
 
@@ -37,7 +37,6 @@
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
-   import footGuide from 'src/components/footer/footGuide'
    import {isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
    import {coinOuterTransferList} from '../../../service/getData'
 
@@ -50,7 +49,7 @@
                 headImgUrl:"",
                 uid:0,
                 coinType:0,
-                coinList:[],
+                coinList:null,
                 pageNo:1,
                 pageSize:30,
                 orderType:[5,6]
@@ -83,10 +82,10 @@
              let res = await coinOuterTransferList(this.pageNo, this.pageSize,this.orderType);
 
              if (res.code==200) {
-               this.coinList=res.result.rows;
-                console.log(" 交易币交易记录   "+JSON.stringify(this.coinList));
-               this.showAlert = true;
-               this.alertText = res.msg; 
+               
+               if (res.result.rows.length>0) {
+                  this.coinList=res.result.rows;
+               }
              }else {
                this.showAlert = true;
                this.alertText = res.msg;
@@ -124,34 +123,36 @@
         }
    }
 
-   .page{border-bottom: 0.1rem solid #eee;
-   font-size: 0.75rem;
-   width: 100%;
-   height: 2.3rem;
-   .left_div{
-     float: left;
-     margin-left:3%;
-     margin-right:5%;
-     margin-top: 3%;
-     text-align: center;
-     @include wh(10%,10%);
-     .vip{
-        width:1.5rem;
-        algin:center;
-     }
+   .page{
+     border-bottom: 0.1rem solid #eee;
+     font-size: 0.75rem;
+     width: 100%;
+     height: 2.3rem;
+     .left_div{
+       float: left;
+       margin-left:3%;
+       margin-right:5%;
+       margin-top: 3%;
+       text-align: center;
+       @include wh(10%,10%);
+       .vip{
+          width:1.5rem;
+          algin:center;
+       }
    }
    .middle_div{
      float: left;
      @include wh(10%,10%);
      text-align: center;
+     margin-left:4%;
      .p1{
          margin-top: 40%;
-         margin-left:10%;
+         /*margin-left:10%;*/
      }
    }
    .middle_div1{
      float: left;
-     margin-left: 20%;
+     margin-left: 15%;
      @include wh(15%,10%);
      .p3{
          margin-top: 35%;

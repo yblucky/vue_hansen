@@ -13,17 +13,17 @@
         <section class="info-data">
             <ul class="clear">
               <li class="info-data-link">
-                <span class="info-data-left"><img src="../../hsimages/5.png" /></span>
+                <span class="info-data-left"><img src="../../hsimages/5.png" class="privateImage" /></span>
                 <span class="info-data-center">充值购物币地址</span><div class="login_container" @click="fuzhi()">复制</div>
-                <div class="info-data-center"><input id="fuzhi" size="32" type="text" name="inPayAddress" v-model.lazy="inPayAddress"></div>
+                <div class="info-data-center" style="margin-left:14%;padding-top:1%;"><input id="fuzhi" size="64" type="text" name="inPayAddress" v-model.lazy="inPayAddress"></div>
               </li>
               <li @click="turnType1=!turnType1" class="info-data-link">
-                <span class="info-data-left"><img src="../../hsimages/3.png" /></span>
+                <span class="info-data-left"><img src="../../hsimages/3.png" class="privateImage" /></span>
                 <span class="info-data-center">购物币转账</span>
                 <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnType1, 'closeImg' : !turnType1  }"/></span>
               </li>
               <li @click="turnType2=!turnType2" class="info-data-link">
-                <span class="info-data-left"><img src="../../hsimages/4.png" /></span>
+                <span class="info-data-left"><img src="../../hsimages/4.png" class="privateImage" /></span>
                 <span class="info-data-center">商城购物</span>
                 <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnType2, 'closeImg' : !turnType2  }"/></span>
               </li>
@@ -155,10 +155,15 @@
       .info-data-link{
          border-bottom: 0.1rem solid #eee;
          width: 100%;
-         padding: 0.75rem;
-         .info-data-left img{
-           width: 1rem;
-         }
+         padding: 0.35rem;
+         .info-data-left{
+            padding-left: 3%;
+             .privateImage{
+               display:inline-block;
+               width: 1.5rem;
+               vertical-align:middle;
+             }
+          }
          .info-data-right{
            text-align: right;
            position: absolute;
@@ -170,16 +175,20 @@
          }
          .info-data-center{
            font-size:16px;
+           font-weight: 500;
            font-family:"微软雅黑",Courier New, Courier, monospace;
          }
          .login_container{
-             margin-top: 5%;
+            position: absolute;
+            top: 33%;
+            left: 75%;
+             /*margin-top: 5%;
              margin-left: 10%;
-             margin-bottom: 2%;
+             margin-bottom: 2%;*/
              width:20%;
              @include sc(.3rem, #fff);
              background-color: #3b95e9;
-             padding: .5rem 0;
+             padding: .3rem 0;
              border: 1px;
              border-radius: 1rem;
              text-align: center;

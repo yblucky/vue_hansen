@@ -207,7 +207,7 @@ export default {
             profiletitle: '翰森国际理财计划',
             username: '',           //用户名
             resetname: '',
-            mobile: 'HS10000',             //电话号码
+            mobile: '',             //电话号码
             balance: 0,            //我的余额
             count : 0,             //优惠券个数
             pointNumber : 0,       //积分数
@@ -225,15 +225,15 @@ export default {
             showLoading:false,
 
             //用户信息
-            id:"A085DEB2E34941B046CDA5107DB24BFD",
-            uid:100000,
-            loginName:"test01",
+            id:"",
+            uid:'',
+            loginName:"",
             phone:"",
             userName:null,
-            nickName:"test01",
+            nickName:"",
             sex:1,
             headImgUrl:"",
-            createTime:1503493225000,
+            createTime:null,
             remark:null,
             grade:0,
             cardGrade:0,
