@@ -7,8 +7,8 @@
         </head-top>
         <section class="topPanel">
           <div class="activateDiv">购物币余额</div>
-          <div class="activateCode"><b>1000.00</b></div>
-          <div class="explain">1购物币约2000元</div>
+          <div class="activateCode"><b>{{payAmt}}</b></div>
+          <div class="explain">1购物币约10元</div>
         </section>
         <section class="info-data">
             <ul class="clear">
@@ -40,6 +40,7 @@
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
     import {isLogin,getLoginUserInfo} from 'src/config/env'
+    import {getUser} from '../../service/getData'
 
     export default {
       data(){
@@ -48,13 +49,17 @@
                 alertText: null,
                 turnType1:false,
                 turnType2:false,
-                inPayAddress:""
+                inPayAddress:"",
+                payAmt:0,
             }
+        },
+        created(){
+            this.isLogin("/login");
+            //初始化信息
+            this.initData();
         },
         mixins: [isLogin,getLoginUserInfo],
         mounted(){
-          this.isLogin("/login");
-          this.inPayAddress=this.getLoginUserInfo("inPayAddress");
         },
         components: {
             headTop,
@@ -83,7 +88,20 @@
                 this.showAlert = true;
                 this.alertText = "复制失败";
               }
-          }
+          },
+          async initData(){
+            let res = await getUser();
+            if(res.code == 200){
+                this.payAmt=res.result.payAmt;
+                this.inPayAddress=res.result.inPayAddress;
+            }else {
+              this.showAlert = true;
+              this.alertText = res.msg;
+              if(res.code==0 || res.code==-1){
+                localStorage.clear();
+              }
+            }
+          },
         }
     }
 </script>
@@ -180,7 +198,7 @@
          }
          .login_container{
             position: absolute;
-            top: 33%;
+            top: 37%;
             left: 75%;
              /*margin-top: 5%;
              margin-left: 10%;

@@ -30,6 +30,11 @@
     				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
     			</svg>
     		</aside>
+
+        <div v-if="recordList == null || recordList == ''">
+           <nullData></nullData>
+        </div>
+
     		<transition name="loading">
     			<loading v-show="showLoading"></loading>
     		</transition>
@@ -45,6 +50,7 @@
     import {showBack, animate} from 'src/config/mUtils'
     import {loadMore, getImgPath} from 'src/components/common/mixin'
     import loading from 'src/components/common/loading'
+    import nullData from 'src/components/common/nullData'
 
     export default {
         data(){
@@ -67,6 +73,7 @@
             headTop,
             alertTip,
             loading,
+            nullData,
         },
         computed: {
             //判断手机号码
@@ -107,6 +114,7 @@
                       this.recordList = [...this.recordList, ...rs];
                    }
                }else {
+                 this.showLoading = false;
                  this.showAlert = true;
                  this.alertText = res.msg;
                  if (res.code==0 || res.code==-1) {
@@ -136,9 +144,13 @@
                      		showBack(status => {
                      			this.showBackStatus = status;
                      		});
+                      }else {
+                        this.showLoading = false;
+                        return;
                       }
-                      
+
                   }else {
+                    this.showLoading = false;
                     this.showAlert = true;
                     this.alertText = res.msg;
                     if (res.code==0 || res.code==-1) {

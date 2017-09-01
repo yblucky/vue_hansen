@@ -24,6 +24,10 @@
           </li>
        </ul>
 
+       <div v-if="msgList == null || msgList == ''">
+          <nullData></nullData>
+       </div>
+
     	  <p v-if="touchend" class="empty_data">没有更多了</p>
     		<aside class="return_top" @click="backTop" v-if="showBackStatus">
     			<svg class="back_top_svg">
@@ -46,6 +50,7 @@
    import {showBack, animate} from 'src/config/mUtils'
    import {loadMore, getImgPath} from 'src/components/common/mixin'
    import loading from 'src/components/common/loading'
+   import nullData from 'src/components/common/nullData'
 
    export default {
      data(){
@@ -65,6 +70,7 @@
        components: {
            headTop,
            loading,
+           nullData,
           //  footGuide,
        },
        mixins: [loadMore, getImgPath],
@@ -96,6 +102,7 @@
               let rs = res.result.rows;
           		this.msgList = [...this.msgList, ...rs];
           }else {
+            this.showLoading = false;
             this.showAlert = true;
             this.alertText = res.msg;
             if (res.code==0 || res.code==-1) {
@@ -115,8 +122,13 @@
              //从后台获取记录
              let res = await feedbacklist(this.pageNo,this.pageSize);
              if (res.code==200) {
+                 if(res.result.rows == null){
+                    this.showLoading = false;
+                    return
+                 }
                  this.msgList = [...res.result.rows];
              }else {
+               this.showLoading = false;
                this.showAlert = true;
                this.alertText = res.msg;
                if (res.code==0 || res.code==-1) {

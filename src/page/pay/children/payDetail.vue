@@ -14,7 +14,7 @@
             </div> -->
             <div class="middle_div">
                 <p class="p1">
-                    <h4 v-if="item.amount>0" style="font-weight:400;color:red;">{{item.amount}}</h4>
+                    <h4 v-if="item.amount>0" style="font-weight:400;color:red;">+{{item.amount}}</h4>
                     <h4 v-else style="font-weight:400;color:green;">{{item.amount}}</h4>
                 </p>
             </div>
@@ -82,7 +82,7 @@
              let res = await coinOuterTransferList(this.pageNo, this.pageSize,this.orderType);
 
              if (res.code==200) {
-               
+
                if (res.result.rows.length>0) {
                   this.coinList=res.result.rows;
                }
@@ -146,7 +146,7 @@
      text-align: center;
      margin-left:4%;
      .p1{
-         margin-top: 40%;
+         margin-top: 42%;
          /*margin-left:10%;*/
      }
    }

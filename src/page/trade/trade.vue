@@ -8,7 +8,7 @@
        <section class="topPanel">
          <div class="activateDiv">交易币余额</div>
          <div class="activateCode"><b>{{tradeAmt}}</b></div>
-         <div class="explain">1交易币约2000元</div>
+         <div class="explain">1交易币约20元</div>
        </section>
        <section class="info-data">
            <ul class="clear">
@@ -87,7 +87,7 @@
    import alertTip from 'src/components/common/alertTip'
    import {isLogin,getLoginUserInfo} from 'src/config/env'
    import payPwd from 'src/components/common/payPwd'
-   import {cointOut,updateUserInfoOutAddress} from '../../service/getData'
+   import {cointOut,updateUserInfoOutAddress,getUser} from '../../service/getData'
 
    export default {
      data(){
@@ -117,6 +117,11 @@
                showPwd:false,
            }
        },
+       created(){
+           this.isLogin("/login");
+           //初始化信息
+           this.initData();
+       },
        mounted(){
          this.isLogin("/login");
          this.initData();
@@ -135,7 +140,7 @@
             this.isShowOutTradeAddress=!this.isShowOutTradeAddress;
             this.turnType=false;
          },
-      async   updateUserInfoAction(){
+      async updateUserInfoAction(){
             this.isShowOutTradeAddress=true;
             if (!this.addOutTradeAddress) {
               this.showAlert = true;
@@ -197,21 +202,19 @@
                }
              }
          },
-         initData(){
-            this.phone=this.getLoginUserInfo("phone");
-            this.uid=this.getLoginUserInfo("uid");
-            this.loginName=this.getLoginUserInfo("loginName");
-            this.userName=this.getLoginUserInfo("userName");
-            this.nickName=this.getLoginUserInfo("nickName");
-            this.sex=this.getLoginUserInfo("sex");
-            this.headImgUrl=this.getLoginUserInfo("headImgUrl");
-            this.grade=this.getLoginUserInfo("grade");
-            this.cardGrade=this.getLoginUserInfo("cardGrade");
-            this.outTradeAddress=this.getLoginUserInfo("outTradeAddress");
-            this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
-            this.tradeAmt=this.getLoginUserInfo("tradeAmt");
-            this.inTradeAddress=this.getLoginUserInfo("inTradeAddress");
-
+         async initData(){
+           let res = await getUser();
+           if(res.code == 200){
+               this.tradeAmt=res.result.tradeAmt;
+               this.inTradeAddress=res.result.inTradeAddress;
+               this.outTradeAddress=res.result.outTradeAddress;
+           }else {
+             this.showAlert = true;
+             this.alertText = res.msg;
+             if(res.code==0 || res.code==-1){
+               localStorage.clear();
+             }
+           }
          },
          closePwd(){
              this.showPwd = false;
@@ -323,7 +326,7 @@
 
         .login_container{
            position: absolute;
-           top: 33%;
+           top: 37%;
            left: 75%;
             /*margin-top: 5%;
             margin-left: 10%;

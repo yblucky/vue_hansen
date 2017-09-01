@@ -65,7 +65,7 @@
    import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
    import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
-   import {codeTransfer,codeTransferList} from '../../service/getData'
+   import {codeTransfer,codeTransferList,getUser} from '../../service/getData'
    import payPwd from 'src/components/common/payPwd'
 
    export default {
@@ -140,10 +140,20 @@
              this.showAlert = false;
          },
         async initData(){
-            this.activeCodeNo=this.getLoginUserInfo("activeCodeNo");
-            this.registerCodeNo=this.getLoginUserInfo("registerCodeNo");
-            this.id=this.getLoginUserInfo("id");
-            this.nickName=this.getLoginUserInfo("nickName");
+            let reUser = await getUser();
+            if(reUser.code == 200){
+                this.id=reUser.result.id;
+                this.nickName=reUser.result.nickName;
+                this.registerCodeNo=reUser.result.registerCodeNo;
+            }else {
+              this.showAlert = true;
+              this.alertText = reUser.msg;
+              if(reUser.code==0 || reUser.code==-1){
+                localStorage.clear();
+              }
+              return;
+            }
+
             let res =  await codeTransferList(this.pageNo,this.pageSize,this.codeType);
             if (res.code==200) {
               this.registerCodeList=res.result.rows;
