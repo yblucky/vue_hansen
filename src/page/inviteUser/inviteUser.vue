@@ -376,7 +376,7 @@
     .fillInformation{
         margin-top:3%;
         .title{
-          margin-left: 36%;
+          margin-left: 30%;
           font-size:0.80rem;
           font-family: "黑体", Verdana, Arial, Helvetica, sans-serif;
           padding:15px 20px;
@@ -385,7 +385,7 @@
             margin-top: 20px;
             font-size: 0.75rem;
             font-weight:500;
-            width:89.5%;
+            width:93.5%;
             display:block;
             div{
               padding: .15rem .15rem;
@@ -403,7 +403,7 @@
                 font-family:cursive;
             }
             span{
-              font-size:16px;
+              font-size:14px;
             }
         }
     }

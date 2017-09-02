@@ -14,14 +14,8 @@
         <section>
             <section class="profile-number">
                 <ul class="profile-link">
-                    <!--<img :src="imgBaseUrl + userInfo.avatar" class="privateImage" v-if="userInfo&&userInfo.user_id">-->
                   <span v-if="headImgUrl == null"><img src="../../hsimages/1.png" class="privateImage" /></span>
                   <span v-else><img :src="headImgUrl" class="privateImage" /></span>
-                  <!--  <span class="privateImage" v-else>
-                        <svg class="privateImage-svg">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#avatar-default"></use>
-                        </svg>
-                    </span>-->
                     <div class="user-info">
                         <p class="nickName">
                             <b>{{uid}} </b><span style="font-size:14px;font-weight:700;">(uid)</span>
@@ -197,7 +191,6 @@ import alertTip from '../../components/common/alertTip'
 import progress from 'src/components/progressBar/progress'
 import loading from 'src/components/common/loading'
 import {mapState, mapMutations} from 'vuex'
-import {imgBaseUrl,token,setToken,isLogin,getLoginUserInfo} from 'src/config/env'
 import {getImgPath} from 'src/components/common/mixin'
 import {rewardsign,activeInfo,activeUser,getUser} from '../../service/getData'
 
@@ -212,9 +205,7 @@ export default {
             count : 0,             //优惠券个数
             pointNumber : 0,       //积分数
             avatar: '',             //头像地址
-            imgBaseUrl,
             messageCount:10,           //消息个数
-            token,
             show:false,             //是否显示红包
             showMoney:0.00,         //显示红包金额
             showAlert: false, //显示提示组件
@@ -273,21 +264,22 @@ export default {
         }
     },
     created(){
-        this.isLogin("/login");
-        //初始化信息
-        this.initData();
         //获取激活信息
-        this.activeInfo();
-        this.showRedBao();
+        this.initData();
+        // this.activeInfo();
+        // this.showRedBao();
         // this.showMessageCount();
 
     },
     mounted(){
 
+      // this.isLogin("/login");
       //初始化信息
       // this.initData();
+      //初始化信息
+      //this.initData();
     },
-    mixins: [getImgPath,setToken,isLogin,getLoginUserInfo],
+    mixins: [],
     components:{
         headTop,
         alertTip,
@@ -296,20 +288,17 @@ export default {
     },
 
     computed:{
-        ...mapState([
-            'userInfo',
-        ]),
         //后台会返回两种头像地址格式，分别处理
-        imgpath:function () {
-            let path;
-            if(this.avatar.indexOf('/') !==-1){
-                path = imgBaseUrl +　this.avatar;
-            }else{
-                path = this.getImgPath(this.avatar)
-            }
-            this.SAVE_AVANDER(path);
-            return path;
-        }
+        // imgpath:function () {
+        //     let path;
+        //     if(this.avatar.indexOf('/') !==-1){
+        //         path = imgBaseUrl +　this.avatar;
+        //     }else{
+        //         path = this.getImgPath(this.avatar)
+        //     }
+        //     this.SAVE_AVANDER(path);
+        //     return path;
+        // }
     },
     methods:{
         ...mapMutations([
@@ -337,10 +326,9 @@ export default {
 
         },
         async initData(){
+          //获取用户信息接口
           let res = await getUser();
-
           if(res.code == 200){
-
             this.id=res.result.id;
             this.phone=res.result.phone;
             this.uid=res.result.uid;
@@ -390,7 +378,7 @@ export default {
                   this.cardName = "钻石用户";
                 }
             }else if(this.status == 4){
-                this.cardName = "保单处理中"
+                this.cardName = "处理中"
             }else {
               this.cardName = "未激活";
             }

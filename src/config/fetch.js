@@ -45,7 +45,6 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 		// 	mode: "cors",
 		// 	cache: "force-cache"
 		// }
-
 		if (type == 'POST') {
 			// data.token=token;
 			Object.defineProperty(requestConfig, 'body', {
@@ -76,6 +75,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 
 			requestObj.open(type, url, true);
 			requestObj.setRequestHeader("Content-type", "application/json;charset=utf-8");
+			requestObj.setRequestHeader("token", token);
 			requestObj.send(sendData);
 
 			requestObj.onreadystatechange = () => {

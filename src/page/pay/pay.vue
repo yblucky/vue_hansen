@@ -199,12 +199,9 @@
            font-family:"微软雅黑",Courier New, Courier, monospace;
          }
          .login_container{
-            position: absolute;
-            top: 37%;
-            left: 75%;
-             /*margin-top: 5%;
-             margin-left: 10%;
-             margin-bottom: 2%;*/
+             display:inline-block;
+             vertical-align:middle;
+             margin-left: 22%;
              width:20%;
              @include sc(.3rem, #fff);
              background-color: #3b95e9;

@@ -2,8 +2,8 @@
    <div class="staticContainer">
        <head-top head-title="任务列表" go-back='true'></head-top>
        <div class="count_shuju">
-          <span>累计次数：<b class="b1">100</b> 次</span>
-          <span>奖励：<b class="b2">100.00</b></span>
+          <span>累计次数：<b class="b1">{{parseInt(compelteTaskCount).toFixed(2)}}</b> 次</span>
+          <span>奖励：<b class="b2">{{parseInt(signCount).toFixed(2)}}</b></span>
        </div>
        <ul>
           <li class="page" v-for="item in staticRecordList">
@@ -52,6 +52,8 @@
               taskId:'',
               showAlert: false, //显示提示组件
               alertText: null, //提示的内容
+              compelteTaskCount:0,  //完成任务数量
+              signCount:0,        //领取任务奖励
            }
        },
        created(){
@@ -70,6 +72,8 @@
              let res = await getTaskInfo(1,100);
              if(res.code==200){
                this.staticRecordList = res.result.rows;
+               this.compelteTaskCount = res.result.extend.compelteTaskCount;
+               this.signCount = res.result.extend.signCount;
              }else {
                if (res.code==0 || res.code==-1) {
                   this.showAlert = true;
@@ -131,14 +135,14 @@
         padding-left: 8%;
         .b1{
             display:inline-block;
-            @include sc(1rem,red);
+            @include sc(0.6rem,red);
             font-weight:700;
             line-height:0.5rem;
             font-family: Helvetica Neue,Tahoma;
         }
         .b2{
             display:inline-block;
-            @include sc(1rem,#f90);
+            @include sc(0.6rem,#f90);
             font-weight:700;
             line-height:0.5rem;
             font-family: Helvetica Neue,Tahoma;

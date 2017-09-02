@@ -8,7 +8,7 @@
        <section class="info-data">
            <ul class="clear">
                <li @click="turnCode=!turnCode,turnRecord=false" class="info-data-link">
-                 <span class="info-data-left"><img src="../../hsimages/31.png" /></span>
+                 <span class="info-data-left"><img src="../../hsimages/31.png" class="privateImage" /></span>
                  <span class="info-data-center">转让激活码</span>
                  <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnCode, 'closeImg' : !turnCode  }"/></span>
                </li>
@@ -37,7 +37,7 @@
                </transition>
 
                <li @click="turnRecord=!turnRecord,turnCode=false" class="info-data-link">
-                 <span class="info-data-left"><img src="../../hsimages/32.png" /></span>
+                 <span class="info-data-left"><img src="../../hsimages/32.png" class="privateImage" /></span>
                  <span class="info-data-center">转让/使用记录</span>
                  <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnRecord, 'closeImg' : !turnRecord }"/></span>
                </li>
@@ -245,10 +245,15 @@
      .info-data-link{
         border-bottom: 0.1rem solid #eee;
         width: 100%;
-        padding: 1rem;
-        .info-data-left img{
-          width: 1rem;
-        }
+        padding: 0.35rem;
+        .info-data-left{
+           padding-left:3%;
+            .privateImage{
+              display:inline-block;
+              width: 1.5rem;
+              vertical-align:middle;
+            }
+         }
         .info-data-right{
           text-align: right;
           position: absolute;

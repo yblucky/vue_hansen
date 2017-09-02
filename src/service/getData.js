@@ -45,17 +45,6 @@ export const forgetPwd = (phoneNumber, newPassWord, confirmPassWord,phoneCode) =
 
 export const getUser = () => fetch('/login/userinfo', {},'GET');
 
-
-/**
- * 手机号登录
- */
-
-var sendLogin = (code, mobile, validate_token) => fetch('/v1/login/app_mobile', {
-	code,
-	mobile,
-	validate_token
-}, 'POST');
-
 /**
  * 账号密码登录
  */
@@ -66,13 +55,6 @@ export const loginIn = (loginName, password,picCode, key) => fetch('/login/login
  * 退出登录
  */
 export const signout = () => fetch('/v2/signout');
-
-
-/**
- * 改密码
- */
-export const changePassword = (username, oldpassWord, newpassword, confirmpassword, captcha_code) => fetch('/v2/changepassword', {username, oldpassWord, newpassword, confirmpassword, captcha_code}, 'POST');
-
 
 /**
  * 用户提币

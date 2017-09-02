@@ -136,7 +136,7 @@
        computed: {
 
        },
-       methods: { 
+       methods: {
            fuzhi(){
              var url = document.getElementById('fuzhi');
              url.select(); // 选取input元素的内容
@@ -347,12 +347,9 @@
         }
 
         .login_container{
-           position: absolute;
-           top: 37%;
-           left: 75%;
-            /*margin-top: 5%;
-            margin-left: 10%;
-            margin-bottom: 2%;*/
+            display:inline-block;
+            vertical-align:middle;
+            margin-left: 22%;
             width:20%;
             @include sc(.3rem, #fff);
             background-color: #3b95e9;

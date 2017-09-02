@@ -52,7 +52,7 @@
                 coinList:null,
                 pageNo:1,
                 pageSize:30,
-                orderType:[5,6]
+                orderType:[5,6,11]
            }
        },
        components: {
