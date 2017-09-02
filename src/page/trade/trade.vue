@@ -8,7 +8,7 @@
        <section class="topPanel">
          <div class="activateDiv">交易币余额</div>
          <div class="activateCode"><b>{{tradeAmt}}</b></div>
-         <div class="explain">1交易币约20元</div>
+         <div class="explain">1TQT 约{{tradeConverRmbScale}}元</div>
        </section>
        <section class="info-data">
            <ul class="clear">
@@ -115,6 +115,7 @@
                addOutTradeAddress:"",
                isShowOutTradeAddress:false,
                showPwd:false,
+               tradeConverRmbScale:0,
            }
        },
        created(){
@@ -135,7 +136,27 @@
        computed: {
 
        },
-       methods: {
+       methods: { 
+           fuzhi(){
+             var url = document.getElementById('fuzhi');
+             url.select(); // 选取input元素的内容
+             var succeeded;
+             try {
+                 // 将选区内容复制到剪贴板
+                 succeeded = document.execCommand("copy");
+               } catch (e) {
+                 succeeded = false;
+               }
+               if (succeeded) {
+                 // 复制成功
+                 this.showAlert = true;
+                 this.alertText = "复制成功";
+               } else {
+                 // 复制失败
+                 this.showAlert = true;
+                 this.alertText = "复制失败";
+               }
+           },
          addOutAddressAction(){
             this.isShowOutTradeAddress=!this.isShowOutTradeAddress;
             this.turnType=false;
@@ -208,6 +229,7 @@
                this.tradeAmt=res.result.tradeAmt;
                this.inTradeAddress=res.result.inTradeAddress;
                this.outTradeAddress=res.result.outTradeAddress;
+               this.tradeConverRmbScale=res.result.tradeConverRmbScale;
            }else {
              this.showAlert = true;
              this.alertText = res.msg;

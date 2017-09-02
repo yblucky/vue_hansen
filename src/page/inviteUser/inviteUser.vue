@@ -220,7 +220,6 @@
             async initData(){
                this.cardGrade=1;
                this.id=this.getLoginUserInfo("id");
-               this.phone=this.getLoginUserInfo("phone");
                this.uid=this.getLoginUserInfo("uid");
                this.headImgUrl=this.getLoginUserInfo("headImgUrl");
                this.firstReferrer=this.uid;

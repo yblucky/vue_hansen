@@ -8,7 +8,7 @@
         <section class="topPanel">
           <div class="activateDiv">购物币余额</div>
           <div class="activateCode"><b>{{payAmt}}</b></div>
-          <div class="explain">1购物币约10元</div>
+          <div class="explain">1HQC 约{{payConverRmbScale}}元</div>
         </section>
         <section class="info-data">
             <ul class="clear">
@@ -51,6 +51,7 @@
                 turnType2:false,
                 inPayAddress:"",
                 payAmt:0,
+                payConverRmbScale:0,
             }
         },
         created(){
@@ -94,6 +95,7 @@
             if(res.code == 200){
                 this.payAmt=res.result.payAmt;
                 this.inPayAddress=res.result.inPayAddress;
+                this.payConverRmbScale=res.result.payConverRmbScale;
             }else {
               this.showAlert = true;
               this.alertText = res.msg;
