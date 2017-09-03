@@ -7,7 +7,7 @@
                 <h2>头像</h2>
                 <div class="headportrait-div">
                     <input type="hidden" id="imagePath">
-                    <img v-if="avatar !='' " :src="avatar" id="showImage" class="headportrait-div-top">
+                    <img v-if="avatar!=null && avatar!=''" :src="avatar" id="showImage" class="headportrait-div-top">
                     <span class="headportrait-div-top" v-else>
                         <img :src="defaultAvatar" id="showImage" class="headportrait-div-top">
                     </span>

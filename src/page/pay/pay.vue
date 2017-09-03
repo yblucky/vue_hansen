@@ -15,7 +15,7 @@
               <li class="info-data-link">
                 <span class="info-data-left"><img src="../../hsimages/5.png" class="privateImage" /></span>
                 <span class="info-data-center">充值购物币地址</span><div class="login_container" @click="fuzhi()">复制</div>
-                <div class="info-data-center" style="margin-left:14%;padding-top:1%;"><input id="fuzhi" size="64" type="text" name="inPayAddress" v-model.lazy="inPayAddress"></div>
+                <div class="info-data-center" style="margin-left:14%;padding-top:1%;"><input id="fuzhi" size="64" type="text" readonly="true" name="inPayAddress" v-model.lazy="inPayAddress"></div>
               </li>
               <li @click="turnType1=!turnType1" class="info-data-link">
                 <span class="info-data-left"><img src="../../hsimages/3.png" class="privateImage" /></span>

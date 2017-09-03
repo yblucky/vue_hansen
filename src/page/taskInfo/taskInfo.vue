@@ -18,7 +18,7 @@
                         <h4 style="font-weight:bold">{{item.title}}</h4>
                     </p>
                     <p class="p2">
-                        <h6>{{item.createTime | formatDate}}</h6>
+                        <h6>{{item.assignTaskTime | formatDate}}</h6>
                     </p>
                 </div>
                 <div class="right_div">
@@ -38,7 +38,7 @@
 <script>
    import headTop from 'src/components/header/head'
    import {mapState, mapMutations} from 'vuex'
-   import {localapi, proapi, imgBaseUrl,formatDate} from 'src/config/env'
+   import {isLogin,formatDate} from 'src/config/env'
    import {getTaskInfo,doTask} from '../../service/getData'
    import nullData from 'src/components/common/nullData'
    import alertTip from 'src/components/common/alertTip'
@@ -59,6 +59,7 @@
        created(){
          this.getTaskInfo();
        },
+       mixins: [isLogin],
        components: {
            headTop,
            nullData,
@@ -90,7 +91,7 @@
               let res = await doTask(userTaskId,taskId);
               if(res.code==200){
                   this.showAlert = true;
-                  this.alertText = "任务成功,请前往首页领取奖励";
+                  this.alertText = "领取成功";
               }else {
                 this.showAlert = true;
                 this.alertText = res.msg;
@@ -101,6 +102,12 @@
           },
           closeTip(){
               this.showAlert = false;
+              if(localStorage.getItem("token") == null){
+                this.isLogin("/login");
+              }else {
+                //刷新页面
+                location.reload();
+              }
           },
        },
        filters:{

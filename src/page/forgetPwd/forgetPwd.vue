@@ -28,6 +28,7 @@
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
     import {mobileCode,  sendMobile, getcaptchas,forgetPwd} from 'src/service/getData'
+    import {isLogin} from 'src/config/env'
 
     export default {
         data(){
@@ -46,6 +47,7 @@
                 successCode:0,
             }
         },
+        mixins: [isLogin],
         components: {
             headTop,
             alertTip,
@@ -119,14 +121,14 @@
                 if (res.code != 200) {
                     this.showAlert = true;
                     this.alertText = res.msg;
+                    if (res.code==0 || res.code==-1) {
+                      localStorage.clear();
+                    }
                     return
                 }else{
                     this.showAlert = true;
                     this.alertText = '找回密码成功';
                     this.successCode = 1;
-                    if (res.code==0 || res.code==-1) {
-                      localStorage.clear();
-                    }
                 }
                 //不再计时
                 clearInterval(this.timer)
@@ -138,6 +140,13 @@
                   //找回密码成功，调回登录页面
                   this.$router.push("/login");
                 }
+                //刷新页面
+                // if(localStorage.getItem("token") == null){
+                //   this.isLogin("/login");
+                // }else {
+                //   //刷新页面
+                //   location.reload();
+                // }
             }
         }
     }

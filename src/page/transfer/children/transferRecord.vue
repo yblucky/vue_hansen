@@ -3,38 +3,27 @@
        <head-top head-title="转账记录" go-back='true'></head-top>
        <ul>
           <li class="page"  v-for="item in coinList">
-              <div class="page-record">
-                  <div class="imgdiv">
-                    <img v-if="item.orderType == 1" src="../../../hsimages/39.png"  class="privateImage"/>
-                    <img v-if="item.orderType  == 4" src="../../../hsimages/40.png"  class="privateImage"/>
-                    <img v-if="item.orderType  == 8" src="../../../hsimages/41.png"  class="privateImage"/>
-                  </div>
-                  <div class="pdiv">
-                      <p>
-                          <span class="icon-mobile-number">
-                              {{uid}}
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number" v-if="item.orderType == 1"> 交易币 </span>
-                          <span class="icon-mobile-number" v-if="item.orderType == 4"> 支付币 </span>
-                          <span class="icon-mobile-number" v-if="item.orderType == 8"> 股权币 </span>
-                      </p>
-                  </div>
-
-                  <div class="rightdiv">
-                      <p>
-                          <span class="icon-mobile-number">
-                               {{item.createTime | formatDate}}
-                          </span>
-                      </p>
-                      <p>
-                          <span class="icon-mobile-number1">
-                             {{item.amountStr  }}
-                          </span>
-                      </p>
-                  </div>
-              </div>
+            <div class="left_div">
+                <img v-if="item.orderType == 1 || item.orderType == 10 " src="../../../hsimages/39.png"  class="vip"/>
+                <img v-if="item.orderType  == 4 || item.orderType == 11" src="../../../hsimages/40.png"  class="vip"/>
+                <img v-if="item.orderType  == 8 || item.orderType == 12" src="../../../hsimages/41.png"  class="vip"/>
+            </div>
+            <div class="middle_div">
+                <p class="p1">
+                    <h4 v-if="item.amount>0" style="font-weight:400;color:red;">+{{item.amount}}</h4>
+                    <h4 v-else style="font-weight:400;color:green;">{{item.amount}}</h4>
+                </p>
+            </div>
+            <!-- <div class="middle_div1">
+                <p class="p3">
+                    <h5>转账</h5>
+                </p>
+            </div> -->
+            <div class="middle_div2">
+              <p class="p1">
+                  <h5>{{item.createTime|formatDate}}</h5>
+              </p>
+            </div>
           </li>
        </ul>
        <div v-if="coinList == null || coinList == ''">
@@ -61,7 +50,7 @@
                 coinList:[],
                 pageNo:1,
                 pageSize:30,
-                orderType:[1,4,8]
+                orderType:[1,4,8,10,11,12]
            }
        },
        components: {
@@ -71,14 +60,14 @@
        },
        mounted(){
          this.isLogin("/login");
-         this.coinInnerTransferListAction();
          this.initData();
+         this.coinInnerTransferListAction();
        },
        mixins: [isLogin,getLoginUserInfo],
        filters:{
          formatDate(createTime){
            let date = new Date(createTime);
-           return formatDate(date,'yyyy-MM-dd');
+           return formatDate(date,'yyyy-MM-dd hh:mm:ss');
          }
        },
        methods: {
@@ -86,14 +75,14 @@
              let res = await coinInnerTransferList(this.pageNo, this.pageSize,this.orderType);
              if (res.code==200) {
                 this.coinList=res.result.rows;
-                console.log(" 交易币交易记录   "+JSON.stringify(this.coinList));
-                for (var i = 0; i < this.coinList.length; i++) {
-                  if (this.coinList[i].sendUserId==this.id) {
-                      this.coinList[i].amountStr="+"+this.coinList[i].amount;
-                  }else if (this.coinList[i].receviceUserId==this.id) {
-                      this.coinList[i].amountStr="-"+this.coinList[i].amount;
-                  }
-                }
+                // console.log(" 交易币交易记录   "+JSON.stringify(this.coinList));
+                // for (var i = 0; i < this.coinList.length; i++) {
+                //   if (this.coinList[i].sendUserId==this.id) {
+                //       // this.coinList[i].amountStr="+"+this.coinList[i].amount;
+                //   }else if (this.coinList[i].receviceUserId==this.id) {
+                //       // this.coinList[i].amountStr="-"+this.coinList[i].amount;
+                //   }
+                // }
                this.showAlert = true;
                this.alertText = res.msg;
              }else {
@@ -117,7 +106,7 @@
 <style lang="scss" scoped>
    @import 'src/style/mixin';
    .upGradeRecordContainer{
-       position: fixed;
+       position: absolute;
        top: 0;
        left: 0;
        right: 0;
@@ -131,34 +120,48 @@
    }
    .page{
       border-bottom: 0.1rem solid #eee;
-      font-family: Helvetica Neue,Tahoma,Arial;
       font-size: 0.75rem;
-      font-weight: normal;;
       width: 100%;
-      height: 3rem;
-      div,span,li{
-        color: darkgrey;
-      }
-      .page-record{
-        padding: 0.5rem 0.5rem;
-      }
-      .imgdiv{
+      height: 2.3rem;
+      .left_div{
         float: left;
+        margin-left:5%;
+        margin-right:5%;
+        margin-top: 3%;
+        text-align: center;
+        @include wh(10%,10%);
+        .vip{
+           width:1.5rem;
+           algin:center;
+        }
       }
-      .pdiv{
+      .middle_div{
         float: left;
-        margin-left:4%;
+        @include wh(10%,10%);
+        text-align: center;
+        margin-left:5%;
+        .p1{
+            margin-top: 42%;
+            /*margin-left:10%;*/
+        }
       }
-      .rightdiv{
-        float: right;
-        margin-right:2%;
-        .icon-mobile-number1{
-          margin-left:60%;
+      .middle_div1{
+        float: left;
+        margin-left: 35%;
+        @include wh(25%,10%);
+        .p3{
+            margin-top: 35%;
         }
       }
 
-      img{
-        width: 2rem;
+      .middle_div2{
+        float: left;
+        margin-top:1%;
+        margin-left: 55%;
+        @include wh(55%,25%);
+        .p1{
+            /*margin-top: 35%;*/
+        }
       }
    }
 </style>

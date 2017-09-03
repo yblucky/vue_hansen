@@ -45,9 +45,10 @@
                        <span v-if="item.isShowNextPage" class="showDate">{{item.createTime|formatDate}}</span>
                        <ul>
                          <li class="page">
-                             <span class="">{{item.sendUserNick}}</span>
-                             <span class="">{{item.remarkStr}}</span>
-                             <div class="">{{item.transferNoStr}}</div>
+                             <!-- <span class="">{{item.sendUserNick}}</span> -->
+                             <span class="">{{item.remark}}</span>
+                             <div v-if="item.transferNo>0" style="font-weight:400;color:red;" class="">+{{item.transferNo}}</div>
+                             <div v-else style="font-weight:400;color:green;" class="">{{item.transferNo}}</div>
                          </li>
                        </ul>
                      </div>
@@ -138,6 +139,12 @@
          },
          closeTip(){
              this.showAlert = false;
+             if(localStorage.getItem("token") == null){
+               this.isLogin("/login");
+             }else {
+               //刷新页面
+               location.reload();
+             }
          },
         async initData(){
             let reUser = await getUser();

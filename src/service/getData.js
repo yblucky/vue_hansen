@@ -38,6 +38,16 @@ export const forgetPwd = (phoneNumber, newPassWord, confirmPassWord,phoneCode) =
 }, 'POST');
 
 
+/**
+	修改密码
+*/
+export const changePassword = (oldPassWord,newPassWord,confirmPassWord,pwdType) => fetch('/user/updatePwd', {
+		oldPassWord: oldPassWord,
+		newPassWord: newPassWord,
+		confirmPassWord: confirmPassWord,
+		pwdType:pwdType
+}, 'POST');
+
 
 /**
  * 获取用户信息
@@ -105,6 +115,11 @@ export const findCardGrade = (cardGrade) => fetch('/cardgrade/info', {cardGrade}
 
 
 /**
+ * 补差价升级，获取开卡等级，后台接口计算各种数值
+ */
+export const findDifferInfoCardGrade = (cardGrade) => fetch('/cardgrade/differInfo', {cardGrade}, 'GET');
+
+/**
  * 会员升级记录
  */
 export const upGradeRecord = (pageNo,pageSize) => fetch('/user/upGradeRecord', {pageNo,pageSize}, 'GET');
@@ -169,3 +184,8 @@ export const activeInfo = () => fetch('/user/activeInfo', {}, 'GET');
  * 首页激活用户
  */
 export const activeUser = () => fetch('/user/firstActicveUser', {}, 'GET');
+
+/**
+ * 重新激活用户
+ */
+export const intervalActice = () => fetch('/code/intervalActice', {}, 'GET');

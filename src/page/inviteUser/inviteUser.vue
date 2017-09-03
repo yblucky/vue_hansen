@@ -86,6 +86,13 @@
             <div class="active_container" @click="innerCreateUserAction">注册</div>
         </div>
 
+        <section class="coverpart" v-if="showLoading">
+            <section class="cover-background"></section>
+            <section class="cover-content">
+                <loading></loading>
+            </section>
+        </section>
+
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <!-- <foot-guide></foot-guide> -->
     </div>
@@ -94,10 +101,10 @@
 <script>
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
-    import {localapi, proapi, imgBaseUrl} from 'src/config/env'
     import {mapState, mapMutations} from 'vuex'
     import {isLogin,getLoginUserInfo} from 'src/config/env'
     import {findCardGrade,findCardGradeList,innerCreateUser} from '../../service/getData'
+    import loading from 'src/components/common/loading'
 
     export default {
         data(){
@@ -123,6 +130,7 @@
                 cardGradeList:[],
                 uid:"",
                 id:"",
+                showLoading:false,
             }
         },
         mounted(){
@@ -135,6 +143,7 @@
         components: {
             headTop,
             alertTip,
+            loading,
             // footGuide,
         },
         computed: {
@@ -151,7 +160,7 @@
                  this.active = index;
              },
              selCard (index) {
-               console.log(index);
+              //  console.log(index);
                   this.selCardType =  index;
                   this.cardGrade=index;
                   this.findCardGrade();
@@ -205,15 +214,29 @@
                   this.alertText = '两次支付密码不一致';
                   return;
                 }
-                let res = await innerCreateUser(this.phone,this.phone,this.email,this.cardGrade,this.password,this.confirmPassword,this.payword,this.confirmPayWord,parseInt(this.firstReferrer),this.contactUserId);
-                if (res.code==200) {
-                  this.showAlert = true;
-                  this.alertText = res.msg;
-                }else {
-                  this.showAlert = true;
-                  this.alertText = res.msg;
-                  if (res.code==0 || res.code==-1) {
-                    localStorage.clear();
+                this.showLoading = true;
+                if(this.showLoading){
+                  let res = await innerCreateUser(this.phone,this.phone,this.email,this.cardGrade,this.password,this.confirmPassword,this.payword,this.confirmPayWord,parseInt(this.firstReferrer),this.contactUserId);
+                  if (res.code==200) {
+                    this.showLoading = false;
+                    this.showAlert = true;
+                    this.alertText = res.msg;
+                    //刷新页面
+                    location.reload();
+                  }else {
+                    this.showLoading = false;
+                    this.showAlert = true;
+                    this.alertText = res.msg;
+                    if (res.code==0 || res.code==-1) {
+                      localStorage.clear();
+                    }
+                    
+                    if(localStorage.getItem("token") == null){
+                      this.isLogin("/login");
+                    }else {
+                      //刷新页面
+                      location.reload();
+                    }
                   }
                 }
             },
@@ -237,6 +260,9 @@
               }else {
                 this.showAlert = true;
                 this.alertText = res.msg;
+                if (res.code==0 || res.code==-1) {
+                  localStorage.clear();
+                }
               }
             },
             async  findCardGrade(){
@@ -252,6 +278,9 @@
               }else {
                 this.showAlert = true;
                 this.alertText = res.msg;
+                if (res.code==0 || res.code==-1) {
+                  localStorage.clear();
+                }
               }
             }
         }
@@ -404,6 +433,53 @@
             }
             span{
               font-size:14px;
+            }
+        }
+    }
+
+    .coverpart{
+        @include wh(100%,100%);
+        @include allcover;
+        .cover-background{
+            @include wh(100%,132%);
+            @include allcover;
+            background:#000;
+            z-index:100;
+            opacity:.2;
+        }
+        .cover-content{
+            width:94%;
+            z-index:1000;
+            .redbao{
+              position: absolute;
+              top: 15%;
+              left: 4%;
+              vertical-align:middle;
+              display:inline-block;
+              width:15rem;
+              z-index:1010;
+            }
+            .redbao_button{
+              position: absolute;
+              top: 71%;
+              left: 19%;
+              vertical-align:middle;
+              display:inline-block;
+              width:10rem;
+              z-index:1010;
+            }
+            .redbao_text{
+              position: absolute;
+              top: 0;
+              left: 0;
+              z-index:1020;
+              font-size: 30px;
+              text-align: center;
+              width: 60%;
+              height: 50px;
+              line-height: 50px;
+              color: #DA4E3F;
+              margin: 40% 20% 0 20%;
             }
         }
     }

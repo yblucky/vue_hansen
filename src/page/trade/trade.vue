@@ -15,7 +15,7 @@
              <li class="info-data-link">
                <span class="info-data-left"><img src="../../hsimages/5.png" class="privateImage" /></span>
                <span class="info-data-center">充值交易币地址</span><div class="login_container" @click="fuzhi()">复制</div>
-               <div class="info-data-center" style="margin-left:14%;padding-top:1%;"><input id="fuzhi" size="64" type="text" name="inTradeAddress" v-model.lazy="inTradeAddress"></div>
+               <div class="info-data-center" style="margin-left:14%;padding-top:1%;"><input id="fuzhi" size="64" type="text" readonly="true" name="inTradeAddress" v-model.lazy="inTradeAddress"></div>
              </li>
              <li @click="turnType=!turnType,isShowOutTradeAddress=false" class="info-data-link">
                <span class="info-data-left"><img src="../../hsimages/3.png" class="privateImage" /></span>
@@ -180,6 +180,8 @@
                this.isShowOutTradeAddress=!this.isShowOutTradeAddress;
                this.outTradeAddress=this.addOutTradeAddress;
                this.turnType=false;
+               //刷新页面
+               location.reload();
              }else {
                this.showAlert = true;
                this.alertText = res.msg;
@@ -215,6 +217,8 @@
              if (res.code==200) {
                this.showAlert = true;
                this.alertText = res.msg;
+               //刷新页面
+               location.reload();
              }else {
                this.showAlert = true;
                this.alertText = res.msg;

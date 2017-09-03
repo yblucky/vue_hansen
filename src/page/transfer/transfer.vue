@@ -15,7 +15,7 @@
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/10.png" class="vip" /></span>
-                      <span class="info-data-middle" style="padding-top:3%;padding-left:10%;">支付币</span>
+                      <span class="info-data-middle" style="padding-top:3%;padding-left:10%;">购物币</span>
                       <span class="info-data-bottom" style="padding-top:3%;padding-left:10%;"><b>{{parseFloat(payAmt).toFixed(2)}}</b></span>
                   </li>
                   <li to="" @click="selCard(1);" v-bind:class="{active:selCardType==1}" class="info-data-link">
@@ -27,7 +27,9 @@
                       <span class="info-data-bottom" style="padding-top:3%;padding-left:13%;">交易币</span>
                       <span class="info-data-bottom" style="padding-top:3%;padding-left:13%;"><b>{{parseFloat(tradeAmt).toFixed(2)}}</b></span>
                   </li>
-                  <li to="" @click="selCard(2);" v-bind:class="{active:selCardType==2}" class="info-data-link">
+                  <!-- 没有用到，暂时不显示 -->
+                  <!-- @click="selCard(2);" -->
+                  <li to="" @click="selCard2" v-bind:class="{active:selCardType==2}" class="info-data-link">
                       <span class="info-data-top-right">
                         <img v-if="selCardType === 2" src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
@@ -53,6 +55,14 @@
         <div class="btn">
             <div class="login_container" @click="showPayPwd()">确认</div>
         </div>
+
+        <section class="coverpart" v-if="showLoading">
+            <section class="cover-background"></section>
+            <section class="cover-content">
+                <loading></loading>
+            </section>
+        </section>
+
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <payPwd @pwdCompleted="coinTransferAction($event)" v-if="showPwd" :showHide="showPwd" @closePwd='closePwd'></payPwd>
         <!-- <foot-guide></foot-guide> -->
@@ -70,6 +80,7 @@
     import payPwd from 'src/components/common/payPwd'
     import {mapState, mapMutations} from 'vuex'
     import {coinTransfer,getUser} from '../../service/getData'
+    import loading from 'src/components/common/loading'
 
 
 
@@ -91,7 +102,7 @@
                 amount:'',//支付个数
                 walletOrderType:1, //1交易币内部转账  4 支付币内部转账  8股权币内部转账
                 showPwd:false,
-
+                showLoading:false,
 
             }
         },
@@ -106,7 +117,8 @@
             headTop,
             alertTip,
             // footGuide,
-            payPwd
+            payPwd,
+            loading,
         },
         computed: {
             //判断手机号码
@@ -142,16 +154,30 @@
                 }
                 //隐藏密码框
                 this.showPwd=false;
-                let res = await coinTransfer(this.toUid, parseFloat(this.amount) ,this.walletOrderType,this.payPassWord);
-                if (res.code==200) {
-                  this.showAlert = true;
-                  this.alertText = res.msg;
-                }else {
-                  this.showAlert = true;
-                  this.alertText = res.msg;
-                  if (res.code==0 || res.code==-1) {
-                     localStorage.clear();
-                  }
+                //弹出加载页
+                this.showLoading=true;
+                if(this.showLoading){
+                    let res = await coinTransfer(this.toUid, parseFloat(this.amount) ,this.walletOrderType,this.payPassWord);
+                    if (res.code==200) {
+                      this.showLoading=false;
+                      this.showAlert = true;
+                      this.alertText = res.msg;
+                      //刷新页面
+                      location.reload();
+                    }else {
+                      this.showLoading=false;
+                      this.showAlert = true;
+                      this.alertText = res.msg;
+                      if (res.code==0 || res.code==-1) {
+                         localStorage.clear();
+                      }
+                      if(localStorage.getItem("token") == null){
+                        this.isLogin("/login");
+                      }else {
+                        //刷新页面
+                        location.reload();
+                      }
+                    }
                 }
                 //不管成功失败，重新输入
                 this.toUid = '';
@@ -170,6 +196,10 @@
                     this.walletOrderType=8;
                   }
               },
+            selCard2(){
+              this.showAlert = true;
+              this.alertText = '翰森股权暂不支持转账';
+            },
             closeTip(){
                 this.showAlert = false;
             },
@@ -359,6 +389,53 @@
     .router-slid-enter, .router-slid-leave-active {
         transform: translate3d(2rem, 0, 0);
         opacity: 0;
+    }
+
+    .coverpart{
+        @include wh(100%,100%);
+        @include allcover;
+        .cover-background{
+            @include wh(100%,105%);
+            @include allcover;
+            background:#000;
+            z-index:100;
+            opacity:.2;
+        }
+        .cover-content{
+            width:94%;
+            z-index:1000;
+            .redbao{
+              position: absolute;
+              top: 15%;
+              left: 4%;
+              vertical-align:middle;
+              display:inline-block;
+              width:15rem;
+              z-index:1010;
+            }
+            .redbao_button{
+              position: absolute;
+              top: 71%;
+              left: 19%;
+              vertical-align:middle;
+              display:inline-block;
+              width:10rem;
+              z-index:1010;
+            }
+            .redbao_text{
+              position: absolute;
+              top: 0;
+              left: 0;
+              z-index:1020;
+              font-size: 30px;
+              text-align: center;
+              width: 60%;
+              height: 50px;
+              line-height: 50px;
+              color: #DA4E3F;
+              margin: 40% 20% 0 20%;
+            }
+        }
     }
 
     input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {

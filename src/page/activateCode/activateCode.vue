@@ -47,9 +47,10 @@
                        <span  v-if="item.isShowNextPage" class="showDate">{{item.createTime|formatDate}}</span>
                        <ul>
                          <li  class="page">
-                           <span class="">{{item.sendUserNick}}</span>
-                             <span class="">{{item.remarkStr}}</span>
-                             <div class="">{{item.transferNoStr}}</div>
+                            <!-- <span class="">{{item.sendUserNick}}</span> -->
+                             <span class="">{{item.remark}}</span>
+                             <div v-if="item.transferNo>0" style="font-weight:400;color:red;"  class="">+{{item.transferNo}}</div>
+                              <div v-else style="font-weight:400;color:green;"  class="">{{item.transferNo}}</div>
                          </li>
                        </ul>
                      </div>
@@ -64,7 +65,7 @@
    import headTop from 'src/components/header/head'
    import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
-   import {localapi, proapi, imgBaseUrl,isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
+   import {isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
    import {codeTransfer,codeTransferList,getUser} from '../../service/getData'
    import payPwd from 'src/components/common/payPwd'
 
@@ -90,7 +91,6 @@
            }
        },
        created(){
-           this.isLogin("/login");
            //初始化信息
            this.initData();
        },
@@ -102,7 +102,6 @@
 
        },
        mounted(){
-         this.isLogin("/login");
          this.initData();
        },
        filters:{
@@ -143,6 +142,12 @@
          },
          closeTip(){
              this.showAlert = false;
+             if(localStorage.getItem("token") == null){
+               this.isLogin("/login");
+             }else {
+               //刷新页面
+               location.reload();
+             }
          },
         async initData(){
             let reUser = await getUser();
@@ -174,12 +179,11 @@
                   }
                   this.activeCodeList[i].isShowNextPage=flag;
                   if (this.activeCodeList[i].sendUserId==this.id) {
-                    this.activeCodeList[i].transferNoStr=""+this.activeCodeList[i].transferNo;
-                    this.activeCodeList[i].remarkStr="会员"+this.nickName+"使用激活码";
-
+                      this.activeCodeList[i].transferNoStr=""+this.activeCodeList[i].transferNo;
+                      this.activeCodeList[i].remarkStr="会员"+this.nickName+"使用激活码";
                   }else {
-                    this.activeCodeList[i].transferNoStr="+"+this.activeCodeList[i].transferNo;
-                    this.activeCodeList[i].remarkStr="会员"+this.nickName+"获赠激活码";
+                      this.activeCodeList[i].transferNoStr="+"+this.activeCodeList[i].transferNo;
+                      this.activeCodeList[i].remarkStr="会员"+this.nickName+"获赠激活码";
                   }
                 }
               }

@@ -32,12 +32,14 @@
 
                     <div class="rightdiv">
                       <b v-if="status == 2">{{cardName}}</b>
+                      <b v-if="status == 5"></b>
                       <b v-else>{{cardName}}</b>
                       <span class="icon-mobile-number1">
                            <router-link to="/upgrade" class="info-data-link">
                                 <!-- <img v-if="this.status != 3" src="../../hsimages/23.png" class="vip22" algin="middle" /> -->
-                                <img v-if="status == 3" src="../../hsimages/23.png" class="vip22" algin="middle" />
+                                <img v-if="status == 3 && cardGrade != 5" src="../../hsimages/23.png" class="vip22" algin="middle" />
                            </router-link>
+                           <img v-if="status == 5" @click="intervalActice" src="../../hsimages/51.png" class="vip23" algin="middle" />
                       </span>
                     </div>
 
@@ -193,11 +195,12 @@ import loading from 'src/components/common/loading'
 import {mapState, mapMutations} from 'vuex'
 import {getImgPath} from 'src/components/common/mixin'
 import {rewardsign,activeInfo,activeUser,getUser} from '../../service/getData'
+import {isLogin} from 'src/config/env'
 
 export default {
     data(){
         return{
-            profiletitle: '翰森国际理财计划',
+            profiletitle: '翰森国际社区',
             username: '',           //用户名
             resetname: '',
             mobile: '',             //电话号码
@@ -266,10 +269,9 @@ export default {
     created(){
         //获取激活信息
         this.initData();
-        // this.activeInfo();
-        // this.showRedBao();
+        this.activeInfo();
+        this.showRedBao();
         // this.showMessageCount();
-
     },
     mounted(){
 
@@ -279,7 +281,7 @@ export default {
       //初始化信息
       //this.initData();
     },
-    mixins: [],
+    mixins: [isLogin],
     components:{
         headTop,
         alertTip,
@@ -366,15 +368,15 @@ export default {
 
             //用户卡等级
             if(this.status == 3){
-                if(this.cardGrade == 0){
+                if(this.cardGrade == 1){
                   this.cardName = "普卡用户";
-                }else if(this.cardGrade == 1){
+                }else if(this.cardGrade == 2){
                     this.cardName = "铜卡用户";
-                }else if (this.cardGrade == 2 ) {
-                  this.cardName = "银卡用户";
                 }else if (this.cardGrade == 3 ) {
-                  this.cardName = "金卡用户";
+                  this.cardName = "银卡用户";
                 }else if (this.cardGrade == 4 ) {
+                  this.cardName = "金卡用户";
+                }else if (this.cardGrade == 5 ) {
                   this.cardName = "钻石用户";
                 }
             }else if(this.status == 4){
@@ -422,6 +424,12 @@ export default {
         },
         closeTip(){
             this.showAlert = false;
+            if(localStorage.getItem("token") == null){
+              this.isLogin("/login");
+            }else {
+              //刷新页面
+              location.reload();
+            }
         },
         closeActive(){
           this.show_active = false;
@@ -459,7 +467,6 @@ export default {
         async active(){
           //调用接口前，加载数据
           this.showLoading = true;
-
           if(this.showLoading){
             //调用获取用户接口
             let res = await activeUser();
@@ -482,7 +489,33 @@ export default {
                }
              }
           }
+        },//激活接口
+        async intervalActice(){
+          //调用接口前，加载数据
+          this.showLoading = true;
+          if(this.showLoading){
+            let res = await intervalActice();
+            if(res.code == 200){
+              //成功后关闭
+              this.showLoading = false;
+              this.showAlert = true;
+              this.alertText = "用户激活成功";
+              //刷新页面
+              // location.reload();
+            }else {
+                this.showLoading = false;
+                this.showAlert = true;
+                this.alertText = res.msg;
+                if (res.code==0 || res.code==-1) {
+                   localStorage.clear();
+               }
+             }
+          }
         },
+        //测试刷新
+        // test(){
+        //   location.reload();
+        // }
     },
     watch: {
         // userInfo: function (value){
@@ -607,9 +640,15 @@ export default {
               .vip22{
                 vertical-align:middle;
                 display:inline-block;
-                width:3rem;
+                width:2.5rem;
+              }
+              .vip23{
+                vertical-align:middle;
+                display:inline-block;
+                width:2.5rem;
               }
               b{
+                font-family: cursive;
                 font-size: 17px;
                 color: #8A8A8A;
               }

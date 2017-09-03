@@ -4,18 +4,22 @@
        <ul v-load-more="loaderMore">
           <li class="page" v-for="item in upgradeRecordList">
               <div class="page-record">
-                <span class="">{{item.createTime | formatDate}}</span>
-                <div  class="page-record-bottom">
-                  <span>{{item.historyGradeName}}</span>
-                  <img src="../../images/rightLogo.png"/>
+                  <!-- <span>{{item.historyGradeName}}</span> -->
+                  <!-- <img src="../../images/rightLogo.png"/> -->
+                  <span>{{item.upGradeTypeName}}</span>
+                  <!-- <span>{{item.currencyGradeName}}</span> -->
+
                   <span>{{item.currencyGradeName}}</span>
-                </div>
+                  <span class="">{{item.createTime | formatDate}}</span>
               </div>
-              <div>{{item.upGradeTypeName}}</div>
           </li>
        </ul>
 
-       <p v-if="touchend" class="empty_data">没有更多了</p>
+       <div v-if="upgradeRecordList == null || upgradeRecordList == ''">
+          <nullData></nullData>
+       </div>
+
+       <p v-if="touchend" class="empty_data"></p>
        <aside class="return_top" @click="backTop" v-if="showBackStatus">
          <svg class="back_top_svg">
            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
@@ -39,6 +43,7 @@
     import {showBack, animate} from 'src/config/mUtils'
     import {loadMore, getImgPath} from 'src/components/common/mixin'
     import loading from 'src/components/common/loading'
+    import nullData from 'src/components/common/nullData'
 
 
    export default {
@@ -60,6 +65,7 @@
            headTop,
            footGuide,
            loading,
+           nullData,
        },
        methods: {
     		//开发环境与编译环境loading隐藏方式不同
@@ -86,8 +92,12 @@
       		this.pageNo += 1;
       		let res = await upGradeRecord(this.pageNo,this.pageSize);
           if (res.code==200) {
-              let rs = res.upgradeRecordList.rows;
-          		this.msgList = [...this.upgradeRecordList, ...rs];
+              if(res.result == null){
+                 this.showLoading = false;
+                 return
+              }
+              let rs = res.result.rows;
+              this.upgradeRecordList = [...this.upgradeRecordList, ...rs];
           }else {
             this.showAlert = true;
             this.alertText = res.msg;
@@ -108,7 +118,11 @@
              //从后台获取记录
              let res = await upGradeRecord(this.pageNo,this.pageSize);
              if(res.code==200){
-               this.upgradeRecordList = [...res.result.rows];
+                 if(res.result == null){
+                    this.showLoading = false;
+                    return
+                 }
+                this.upgradeRecordList = [...res.result.rows];
              }else {
                if (res.code==0 || res.code==-1) {
                   this.showAlert = true;
@@ -164,14 +178,14 @@
       font-size: 0.75rem;
       font-weight: normal;;
       width: 100%;
-      height: 3rem;
+      height: 2rem;
       div,span,li{
         color: darkgrey;
       }
       div{
         float: left;
       }
-      div:nth-of-type(1){
+      /*div:nth-of-type(1){
           width: 75%;
       }
       div:nth-of-type(2){
@@ -179,10 +193,17 @@
           height: 100%;
           text-align: center;
           line-height: 3rem;
-      }
+      }*/
       .page-record{
-        padding: 0.5rem 0.5rem;
+        padding: 0.5rem 1rem;
         width: 100%;
+        span{
+          padding-left: 3%;
+          margin: auto 5%;
+          font-size: 0.66rem;
+          font-family: cursive;
+        }
+
       }
       .page-record-bottom{
         float: none;

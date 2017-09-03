@@ -64,6 +64,7 @@
     import headTop from 'src/components/header/head'
     import alertTip from 'src/components/common/alertTip'
     import {mobileCode, checkExsis, sendMobile, getcaptchas, changePassword} from 'src/service/getData'
+    import {isLogin} from 'src/config/env'
 
     export default {
         data(){
@@ -81,6 +82,7 @@
             headTop,
             alertTip,
         },
+        mixins: [isLogin],
         created(){
             // this.getCaptchaCode()
         },
@@ -116,18 +118,25 @@
                 if (res.code == 200) {
                     this.showAlert = true;
                     this.alertText = '密码修改成功';
-                    return
+                    this.$router.push("/login");
                 }else{
                   this.showAlert = true;
                   this.alertText = res.msg;
                   if (res.code==0 || res.code==-1) {
                     localStorage.clear();
                   }
+                  //刷新页面
+                  if(localStorage.getItem("token") == null){
+                    this.isLogin("/login");
+                  }else {
+                    //刷新页面
+                    location.reload();
+                  }
                 }
             },
             closeTip(){
                 this.showAlert = false;
-            }
+            },
         }
     }
 

@@ -5,8 +5,8 @@
             <section class="setname-top">
                 <input type="text" placeholder="输入昵称" :class="{'setname-input':bordercolor}" @input="inputThing" v-model="inputValue">
                 <div>
-                    <p v-if="earn">用户名只能修改一次（5-24字符之间）</p>
-                    <p class="unlikep" v-else>用户名长度在5到24位之间</p>
+                    <!-- <p v-if="earn">用户名只能修改一次（5-24字符之间）</p> -->
+                    <p class="unlikep" v-if="true">用户名长度在5到24位之间</p>
                 </div>
             </section>
             <section class="reset">
@@ -25,7 +25,7 @@
     export default {
       data(){
             return{
-                earn: true,     //输入框提醒
+                earn: false,     //输入框提醒
                 bordercolor: false,  //输入框边框颜色
                 opacityall: false,   //字体透明度
                 inputValue: '',       //输入框的内容
@@ -55,11 +55,11 @@
             ]),
             inputThing(){
                 if(this.inputValue.length <5 || this.inputValue.length>24){
-                    this.earn=false;
+                    this.earn=true;
                     this.bordercolor=true;
                     this.opacityall=false;
                 }else{
-                    this.earn=true;
+                    this.earn=false;
                     this.bordercolor=false;
                     this.opacityall=true;
                 }
