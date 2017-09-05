@@ -31,9 +31,7 @@
                     </div>
 
                     <div class="rightdiv">
-                      <b v-if="status == 2">{{cardName}}</b>
-                      <b v-if="status == 5"></b>
-                      <b v-else>{{cardName}}</b>
+                      <b>{{cardName}}</b>
                       <span class="icon-mobile-number1">
                            <router-link to="/upgrade" class="info-data-link">
                                 <!-- <img v-if="this.status != 3" src="../../hsimages/23.png" class="vip22" algin="middle" /> -->
@@ -381,8 +379,10 @@ export default {
                 }
             }else if(this.status == 4){
                 this.cardName = "处理中"
-            }else {
+            }else if(this.status == 2){
               this.cardName = "未激活";
+            }else {
+              this.cardName = "";
             }
 
               //用户等级

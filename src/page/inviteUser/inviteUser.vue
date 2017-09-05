@@ -86,6 +86,22 @@
             <div class="active_container" @click="innerCreateUserAction">注册</div>
         </div>
 
+        <!-- 显示邀请成功后显示的页面 -->
+        <section class="coverpart_active" v-if="show_invite">
+            <section class="cover-background"></section>
+            <section class="cover-content">
+              <div class="head">
+                  <span class="close" @click="closeActive">×</span>
+                  <h4>注册成功</h4>
+              </div>
+              <div class="middle_invite">
+                  <p style="text-align:center;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">邀请人uid：{{inviteUid}}</b></p>
+                  <p style="text-align:center;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">邀请人手机号：{{invitePhone}}</b></p>
+              </div>
+              <div class="active_container" @click="closeActive">确定</div>
+            </section>
+        </section>
+
         <section class="coverpart" v-if="showLoading">
             <section class="cover-background"></section>
             <section class="cover-content">
@@ -131,6 +147,9 @@
                 uid:"",
                 id:"",
                 showLoading:false,
+                show_invite:false,
+                invitePhone:"",
+                inviteUid:"",
             }
         },
         mounted(){
@@ -219,10 +238,10 @@
                   let res = await innerCreateUser(this.phone,this.phone,this.email,this.cardGrade,this.password,this.confirmPassword,this.payword,this.confirmPayWord,parseInt(this.firstReferrer),this.contactUserId);
                   if (res.code==200) {
                     this.showLoading = false;
-                    this.showAlert = true;
-                    this.alertText = res.msg;
-                    //刷新页面
-                    location.reload();
+                    //注册成功，弹出页面
+                    this.inviteUid = res.result.uid;
+                    this.invitePhone = res.result.phone;
+                    this.show_invite = true;
                   }else {
                     this.showLoading = false;
                     this.showAlert = true;
@@ -230,7 +249,7 @@
                     if (res.code==0 || res.code==-1) {
                       localStorage.clear();
                     }
-                    
+
                     if(localStorage.getItem("token") == null){
                       this.isLogin("/login");
                     }else {
@@ -282,7 +301,10 @@
                   localStorage.clear();
                 }
               }
-            }
+            },
+            closeActive(){
+              this.show_invite = false;
+            },
         }
     }
 
@@ -414,7 +436,7 @@
             margin-top: 20px;
             font-size: 0.75rem;
             font-weight:500;
-            width:93.5%;
+            width:90.5%;
             display:block;
             div{
               padding: .15rem .15rem;
@@ -482,6 +504,77 @@
               margin: 40% 20% 0 20%;
             }
         }
+    }
+
+    .coverpart_active{
+        top:0%; /**遮罩全屏top,left都为0,width,height为100%**/
+        left:0%;
+        height: auto;
+        @include wh(100%,100%);
+        @include allcover;
+        .cover-background{
+            height: auto;
+            @include wh(100%,100%);
+            @include allcover;
+            position:fixed;
+            background:#000;
+            z-index:100;
+            opacity:.2;
+        }
+        .cover-content{
+            width:94%;
+            background:$fc;
+            padding-top:3%;
+            padding-bottom:5%;
+            position:fixed;
+            top:35%;
+            left:3%;
+            z-index:1000;
+            @include borderRadius(5px);
+            .head{
+                width: 100%;
+                border-bottom: 1px solid #87CEFA;
+                margin-bottom:4%;
+                h4{
+                    text-align:center;
+                    @include sc(20px,#575757);
+                    font-weight:700;
+                    margin-bottom:4%;
+                }
+                .close{
+                  position: absolute;
+                  top: 0;
+                  left: 10px;
+                  font-size: 30px;
+                  width: 16px;
+                  height: 100%;
+                  line-height: 30px;
+                  color: #ccc;
+                }
+            }
+
+            .active_container{
+                margin-top: 7%;
+                margin-left: 29%;
+                margin-bottom: 3%;
+                width:40%;
+                @include sc(.7rem, #fff);
+                background-color: #3b95e9;
+                padding: .5rem 0;
+                border: 1px;
+                border-radius: 0.3rem;
+                text-align: center;
+            }
+
+        }
+    }
+
+    body .coverpart_active .cover-animate{
+        transition:all 1s;
+        animation:bounceIn .6s;
+    }
+    body .coverpart_active .cover-animate-leave{
+        animation:zoomOut .4s;
     }
 
     input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {

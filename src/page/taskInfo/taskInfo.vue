@@ -27,6 +27,27 @@
                 </div>
           </li>
        </ul>
+
+       <!-- 显示激活页面 -->
+       <section class="coverpart_active" v-if="show_task">
+           <section class="cover-background"></section>
+           <section class="cover-content">
+             <div class="close">
+                <img src="../../hsimages/close1.png" @click="closeActive" />
+             </div>
+             <div class="middle">
+                 <!-- <p style="padding-left:7%;"><span style="font-size:10px;">购物币地址：{{inPayAddress}}</span></p>
+                 <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">交易币地址：{{inTradeAddress}}</span></p>
+                 <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值购物币数量：<b>{{parseFloat(needBuyPayAmt).toFixed(2)}}</b><b style="padding-left:5%;">1GWC</b><b style="padding-left:5%;">约{{parseFloat(payConverRmbScale).toFixed(2)}}元</b></span></p>
+                 <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">购物币余额：{{parseFloat(payAmt).toFixed(2)}}</b></p>
+                 <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值交易币数量：<b>{{parseFloat(needBuyTradeAmt).toFixed(2)}}</b><b style="padding-left:5%;">1JYC</b><b style="padding-left:5%;">约{{parseFloat(tradeConverRmbScale).toFixed(2)}}元</b></span></p>
+                 <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">交易币余额：{{parseFloat(tradeAmt).toFixed(2)}}</b></p> -->
+             </div>
+             <div class="active_container" @click="closeActive">前往任务</div>
+           </section>
+           <span class="close" @click="closeActive">×</span>
+       </section>
+
        <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
        <div v-if="staticRecordList == null || staticRecordList == ''">
           <nullData></nullData>
@@ -54,6 +75,8 @@
               alertText: null, //提示的内容
               compelteTaskCount:0,  //完成任务数量
               signCount:0,        //领取任务奖励
+              show_task:true,      //显示任务页面窗
+              title:"",   //任务标题
            }
        },
        created(){
@@ -109,6 +132,10 @@
                 location.reload();
               }
           },
+          //关闭任务弹窗
+          closeActive(){
+            this.show_task = false;
+          },
        },
        filters:{
          formatDate(createTime){
@@ -127,6 +154,7 @@
 <style lang="scss" scoped>
    @import 'src/style/mixin';
    .staticContainer{
+       background-color: white;
        padding-top: 1.95rem;
        p, span, input{
            font-family: Helvetica Neue,Tahoma,Arial;
@@ -209,5 +237,65 @@
             text-align: center;
         }
       }
+   }
+
+   .coverpart_active{
+       top:0%; /**遮罩全屏top,left都为0,width,height为100%**/
+       left:0%;
+       height: auto;
+       @include wh(100%,100%);
+       @include allcover;
+       .cover-background{
+           height: auto;
+           @include wh(100%,100%);
+           @include allcover;
+           position:fixed;
+           background:#000;
+           z-index:100;
+           opacity:.2;
+       }
+       .cover-content{
+           width:94%;
+           background:$fc;
+           padding-top:3%;
+           padding-bottom:5%;
+           position:fixed;
+           top:20%;
+           left:3%;
+           z-index:1000;
+           @include borderRadius(5px);
+
+           .close{
+             position: absolute;
+             top:-2%;
+             left:90%;
+             z-index:1000;
+             img{
+               width: 1.5rem;
+             }
+           }
+
+           .active_container{
+               margin-top: 7%;
+               margin-left: 29%;
+               margin-bottom: 3%;
+               width:40%;
+               @include sc(.7rem, #fff);
+               background-color: #3b95e9;
+               padding: .5rem 0;
+               border: 1px;
+               border-radius: 0.3rem;
+               text-align: center;
+           }
+
+       }
+   }
+
+   body .coverpart_active .cover-animate{
+       transition:all 1s;
+       animation:bounceIn .6s;
+   }
+   body .coverpart_active .cover-animate-leave{
+       animation:zoomOut .4s;
    }
 </style>
