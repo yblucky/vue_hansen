@@ -2,7 +2,7 @@
    <div class="staticContainer">
        <head-top head-title="任务列表" go-back='true'></head-top>
        <div class="count_shuju">
-          <span>累计次数：<b class="b1">{{parseInt(compelteTaskCount).toFixed(2)}}</b> 次</span>
+          <span>累计次数：<b class="b1">{{compelteTaskCount}}</b> 次</span>
           <span>奖励：<b class="b2">{{parseInt(signCount).toFixed(2)}}</b></span>
        </div>
        <ul>

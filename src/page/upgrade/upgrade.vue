@@ -136,10 +136,10 @@
                   //从后台获取等级信息
                   if (this.active==2) {
                      //选择哪个就升级到哪个
-                     res= await findCardGrade(index);
+                    res= await findDifferInfoCardGrade(index); 
                   }else if (this.active==3) {
                     //补足差额
-                    res= await findDifferInfoCardGrade(index);
+					res= await findCardGrade(index);
                   }
                   this.selCardType = index;
 

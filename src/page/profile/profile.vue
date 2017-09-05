@@ -66,7 +66,7 @@
                     </router-link>
                     <router-link to="" tag="li" class="info-data-link">
                         <img src="../../hsimages/38.png" class="vip22" />
-                        <span class="info-data-bottom">翰森股权</span>
+                        <span class="info-data-bottom">瀚森股权</span>
                         <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(2)}}</b></span>
                     </router-link>
                 </ul>
@@ -198,7 +198,7 @@ import {isLogin} from 'src/config/env'
 export default {
     data(){
         return{
-            profiletitle: '翰森国际社区',
+            profiletitle: '瀚森国际社区',
             username: '',           //用户名
             resetname: '',
             mobile: '',             //电话号码
