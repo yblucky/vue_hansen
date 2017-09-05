@@ -35,7 +35,7 @@
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../hsimages/12.png" class="vip" /></span>
-                      <span class="info-data-bottom" style="padding-top:3%;padding-left:18%;">翰森股权</span>
+                      <span class="info-data-bottom" style="padding-top:3%;padding-left:18%;">瀚森股权</span>
                       <span class="info-data-bottom" style="padding-top:3%;padding-left:18%;"><b>{{parseFloat(equityAmt).toFixed(2)}}</b></span>
                   </li>
               </ul>
@@ -95,7 +95,7 @@
 
                 payAmt:0,//购物币
                 tradeAmt:0,//交易币
-                equityAmt:0,//翰森股权
+                equityAmt:0,//瀚森股权
                 toUid:'',//收款账户
                 payPassWord:'',//高级密码
 
@@ -198,7 +198,7 @@
               },
             selCard2(){
               this.showAlert = true;
-              this.alertText = '翰森股权暂不支持转账';
+              this.alertText = '瀚森股权暂不支持转账';
             },
             closeTip(){
                 this.showAlert = false;

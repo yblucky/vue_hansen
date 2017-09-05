@@ -118,7 +118,6 @@
                 if (res.code == 200) {
                     this.showAlert = true;
                     this.alertText = '密码修改成功';
-                    this.$router.push("/login");
                 }else{
                   this.showAlert = true;
                   this.alertText = res.msg;
