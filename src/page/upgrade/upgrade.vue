@@ -97,7 +97,6 @@
         created(){
           this.initData();
           this.findCardGradeList();
-          this.selCard(1);
         },
         components: {
             headTop,
@@ -132,22 +131,25 @@
              //获取会员等级信息
              async selCard (index) {
 
+                  if(this.cardGrade == index){
+                    this.showAlert = true;
+                    this.alertText = "选择账户等级不能小于当前用户等级";
+                    return;
+                  }
+
                   let res;
                   //从后台获取等级信息
                   if (this.active==2) {
                      //选择哪个就升级到哪个
-                    res= await findDifferInfoCardGrade(index); 
+                    res= await findDifferInfoCardGrade(index);
                   }else if (this.active==3) {
                     //补足差额
-					res= await findCardGrade(index);
+					          res= await findCardGrade(index);
                   }
                   this.selCardType = index;
 
                   if(res.code == 200){
-                    var $insuranceAmt=res.result.insuranceAmt;//保单金额
-                    var $outMultiple=res.result.outMultiple;//出局倍数
-                    var $profit = this.active == 3 ? this.userMaxProfits :0;
-                    this.cardMaxproft=$insuranceAmt * $outMultiple+$profit; //最大收益
+                    this.cardMaxproft=res.result.maxProfits; //最大收益
                     this.needActiveNum=res.result.activeCodeNo//需要补充激活码数量
                     this.needBuyNum=res.result.payAmt//需要补充购物币数量
                     this.needChangeNum=res.result.tradeAmt//需要补充交易数量
@@ -162,7 +164,7 @@
               //选择升级方式
               selUpWay(index){
                 this.active = index;
-                this.selCard(1);
+                this.selCard(this.cardGrade+1);
               },
               //是否弹出密码框
               doUpgrade(){
@@ -230,6 +232,7 @@
                   this.userTradeAmt=res.result.tradeAmt;
                   this.userMaxProfits=res.result.maxProfits;
                   this.cardGrade=res.result.cardGrade;
+                  this.selCard(this.cardGrade+1);
               }else {
                 this.showAlert = true;
                 this.alertText = res.msg;

@@ -217,6 +217,7 @@
        background-color: #eee;
        .showLine{
          margin: 0.10rem;
+         height:1.5rem;
          width: 100%;
          .showDate{
            font-family: Helvetica Neue,Tahoma,Arial;
@@ -227,7 +228,9 @@
          }
          .showAmount{
            width: 100%;
-           padding: 0 0 0 8.5rem;
+           padding: 0 0 0 7rem;
+           font-size:16px;
+           font-family: cursive;
          }
        }
        ul{
@@ -239,7 +242,7 @@
          font-size: 0.75rem;
          font-weight: normal;;
          width: 100%;
-         height: 2rem;
+         height: 3rem;
          span{
            padding:0 1rem;
            height: 100%;

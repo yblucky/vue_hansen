@@ -173,7 +173,7 @@ export const getTaskInfo = (pageNo,pageSize) => fetch('/task/getTaskInfo', {page
 /**
  * 点击任务做任务
  */
-export const doTask = (userTaskId,taskId) => fetch('/task/dotask', {userTaskId,taskId}, 'POST');
+export const doTask = (userTaskId) => fetch('/task/dotask', {userTaskId}, 'POST');
 
 /**
  * 首页获取激活信息
@@ -189,3 +189,8 @@ export const activeUser = () => fetch('/user/firstActicveUser', {}, 'GET');
  * 重新激活用户
  */
 export const intervalActice = () => fetch('/code/intervalActice', {}, 'GET');
+
+/**
+ * 获取奖金列表信息
+ */
+export const rewardInfo = (tradeOrderType) => fetch('/reward/list', {tradeOrderType}, 'GET');

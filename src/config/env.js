@@ -13,12 +13,13 @@ let routerMode = 'history';
 let imgBaseUrl="http://oum0lyvjq.bkt.clouddn.com/logo.png";
 
 if (process.env.NODE_ENV == 'development') {
-		baseUrl="http://hs.6pyun.com/api";
-		// baseUrl="http://127.0.0.1:8090/api";
-		// baseUrl="http://192.168.2.105:8090/api";
+		// baseUrl="http://hs.6pyun.com/api";
+		baseUrl="http://www.hansenshare.com/api";
+		// baseUrl="http://192.168.2.114:8090/api";
 }else if(process.env.NODE_ENV == 'production'){
 	// baseUrl = 'http://cangdu.org:8001';
-		baseUrl="http://hs.6pyun.com/api";
+		// baseUrl="http://hs.6pyun.com/api";
+		baseUrl="http://www.hansenshare.com/api";
 }
 
 export {

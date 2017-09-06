@@ -92,7 +92,7 @@
       		this.pageNo += 1;
       		let res = await upGradeRecord(this.pageNo,this.pageSize);
           if (res.code==200) {
-              if(res.result == null){
+              if(res.result.rows == null){
                  this.showLoading = false;
                  return
               }
@@ -118,7 +118,7 @@
              //从后台获取记录
              let res = await upGradeRecord(this.pageNo,this.pageSize);
              if(res.code==200){
-                 if(res.result == null){
+                 if(res.result.rows == null){
                     this.showLoading = false;
                     return
                  }

@@ -80,11 +80,11 @@
                         </span>
                         <span class="info-data-bottom">转账汇款</span>
                     </router-link>
-                    <router-link to="/myReward" tag="li" class="info-data-link">
+                    <router-link to="/dynamicProfit" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../hsimages/14.png" class="vip" />
                       </span>
-                        <span class="info-data-bottom">任务奖励</span>
+                        <span class="info-data-bottom">奖金列表</span>
                     </router-link>
                     <router-link to="/taskInfo" tag="li" class="info-data-link">
                       <span class="info-data-top">
