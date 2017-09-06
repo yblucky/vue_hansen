@@ -76,7 +76,7 @@
               </div>
               <div>
                 <span>支付密码：</span>
-                <input type="password" name="payword" placeholder="支付密码" v-model.lazy="payword">
+                <input type="password" name="payword" placeholder="请输入6位数字" v-model.lazy="payword">
               </div>
               <div>
                 <span>确认密码：</span>
@@ -95,8 +95,8 @@
                   <h4>注册成功</h4>
               </div>
               <div class="middle_invite">
-                  <p style="text-align:center;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">邀请人uid：{{inviteUid}}</b></p>
-                  <p style="text-align:center;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">邀请人手机号：{{invitePhone}}</b></p>
+                  <p style="text-align:center;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">uid：{{inviteUid}}</b></p>
+                  <p style="text-align:center;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">手机号：{{invitePhone}}</b></p>
               </div>
               <div class="active_container" @click="closeActive">确定</div>
             </section>

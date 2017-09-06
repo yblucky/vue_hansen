@@ -4,14 +4,16 @@
        <ul>
           <li class="page"  v-for="item in coinList">
             <div class="left_div">
-                <img v-if="item.orderType == 1 || item.orderType == 10 " src="../../../hsimages/39.png"  class="vip"/>
+                <!-- <img v-if="item.orderType == 1 || item.orderType == 10 " src="../../../hsimages/39.png"  class="vip"/>
                 <img v-if="item.orderType  == 4 || item.orderType == 11" src="../../../hsimages/40.png"  class="vip"/>
-                <img v-if="item.orderType  == 8 || item.orderType == 12" src="../../../hsimages/41.png"  class="vip"/>
+                <img v-if="item.orderType  == 8 || item.orderType == 12" src="../../../hsimages/41.png"  class="vip"/> -->
+                <span v-if="item.sendUserId == id">转出</span>
+                <span v-if="item.receviceUserId == id">转入</span>
             </div>
             <div class="middle_div">
                 <p class="p1">
-                    <h4 v-if="item.amount>0" style="font-weight:400;color:red;">+{{item.amount}}</h4>
-                    <h4 v-else style="font-weight:400;color:green;">{{item.amount}}</h4>
+                    <h4 v-if="item.sendUserId == id" style="font-weight:400;color:green;">{{item.amount}}</h4>
+                    <h4 v-if="item.receviceUserId == id" style="font-weight:400;color:red;">{{-item.amount}}</h4>
                 </p>
             </div>
             <!-- <div class="middle_div1">
@@ -26,39 +28,54 @@
             </div>
           </li>
        </ul>
+
+       <section class="coverpart" v-if="showLoading">
+           <section class="cover-background"></section>
+           <section class="cover-content">
+               <loading></loading>
+           </section>
+       </section>
+
        <div v-if="coinList == null || coinList == ''">
            <nullData></nullData>
        </div>
+
+       <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
        <!-- <foot-guide></foot-guide> -->
    </div>
 </template>
 
 <script>
    import headTop from 'src/components/header/head'
+   import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
-   import footGuide from 'src/components/footer/footGuide'
    import {isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
    import {coinInnerTransferList} from '../../../service/getData'
    import nullData from 'src/components/common/nullData'
+   import loading from 'src/components/common/loading'
 
    export default {
      data(){
            return{
+               showAlert: false,
+               alertText: null,
+               showLoading:false,
                 coinType:0,
                 id:"",
                 uid:0,
-                coinList:[],
+                coinList:null,
                 pageNo:1,
                 pageSize:30,
-                orderType:[1,4,8,10,11,12]
+                orderType:[1,4,8,10,11,12],
            }
        },
        components: {
            headTop,
            nullData,
-           footGuide,
+           loading,
+           alertTip,
        },
-       mounted(){
+       created(){
          this.isLogin("/login");
          this.initData();
          this.coinInnerTransferListAction();
@@ -72,20 +89,18 @@
        },
        methods: {
          async coinInnerTransferListAction(){
+             //请求接口前调用刷新
+             this.showLoading = true;
              let res = await coinInnerTransferList(this.pageNo, this.pageSize,this.orderType);
              if (res.code==200) {
-                this.coinList=res.result.rows;
-                // console.log(" 交易币交易记录   "+JSON.stringify(this.coinList));
-                // for (var i = 0; i < this.coinList.length; i++) {
-                //   if (this.coinList[i].sendUserId==this.id) {
-                //       // this.coinList[i].amountStr="+"+this.coinList[i].amount;
-                //   }else if (this.coinList[i].receviceUserId==this.id) {
-                //       // this.coinList[i].amountStr="-"+this.coinList[i].amount;
-                //   }
-                // }
-               this.showAlert = true;
-               this.alertText = res.msg;
+               //不管成功失败，都关闭刷新
+               this.showLoading = false;
+                if(res.result.rows != null || res.result.rows != ''){
+                  this.coinList=res.result.rows;
+                }
              }else {
+               //不管成功失败，都关闭刷新
+               this.showLoading = false;
                this.showAlert = true;
                this.alertText = res.msg;
                if (res.code==0 || res.code==-1) {
@@ -98,7 +113,13 @@
             this.uid=this.getLoginUserInfo("uid");
             this.nickName=this.getLoginUserInfo("nickName");
             this.headImgUrl=this.getLoginUserInfo("headImgUrl");
-         }
+         },
+         closeTip(){
+           this.showAlert = false;
+           if(localStorage.getItem("token") == null){
+             this.isLogin("/login");
+           }
+         },
        }
    }
 </script>
@@ -113,7 +134,7 @@
        bottom: 0;
        padding-top: 1.95rem;
        z-index: 203;
-       background-color: #fff;
+       background-color: white;
        p, span{
            font-family: Helvetica Neue,Tahoma,Arial;
        }
@@ -127,8 +148,9 @@
         float: left;
         margin-left:5%;
         margin-right:5%;
-        margin-top: 3%;
+        margin-top: 4%;
         text-align: center;
+        font-family: cursive;
         @include wh(10%,10%);
         .vip{
            width:1.5rem;
@@ -156,12 +178,59 @@
 
       .middle_div2{
         float: left;
-        margin-top:1%;
+        /*margin-top:1%;*/
         margin-left: 55%;
         @include wh(55%,25%);
         .p1{
             /*margin-top: 35%;*/
         }
       }
+   }
+
+   .coverpart{
+       @include wh(100%,100%);
+       @include allcover;
+       .cover-background{
+           @include wh(100%,105%);
+           @include allcover;
+           background:#000;
+           z-index:100;
+           opacity:.2;
+       }
+       .cover-content{
+           width:94%;
+           z-index:1000;
+           .redbao{
+             position: absolute;
+             top: 15%;
+             left: 4%;
+             vertical-align:middle;
+             display:inline-block;
+             width:15rem;
+             z-index:1010;
+           }
+           .redbao_button{
+             position: absolute;
+             top: 71%;
+             left: 19%;
+             vertical-align:middle;
+             display:inline-block;
+             width:10rem;
+             z-index:1010;
+           }
+           .redbao_text{
+             position: absolute;
+             top: 0;
+             left: 0;
+             z-index:1020;
+             font-size: 30px;
+             text-align: center;
+             width: 60%;
+             height: 50px;
+             line-height: 50px;
+             color: #DA4E3F;
+             margin: 40% 20% 0 20%;
+           }
+       }
    }
 </style>

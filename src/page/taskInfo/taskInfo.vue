@@ -2,7 +2,7 @@
    <div class="staticContainer">
        <head-top head-title="任务列表" go-back='true'>
            <div slot="changeLogin" class="change_login">
-             <router-link to="/myReward" >明细</router-link>
+             <router-link to="/myReward" >释放明细</router-link>
            </div>
        </head-top>
        <div class="count_shuju">
@@ -12,7 +12,7 @@
        <ul>
           <li class="page" v-for="item in staticRecordList">
                 <div class="left_div">
-                    <img src="../../hsimages/32.png" class="vip" />
+                    <img src="../../hsimages/53.png" class="vip" />
                 </div>
                 <!-- <div v-if="item.linkImgPath == null" class="left_div">
                     <img src="../../hsimages/32.png" class="vip" />
@@ -22,7 +22,8 @@
                 </div> -->
                 <div class="middle_div">
                     <p class="p1">
-                        <h4 style="font-weight:bold">{{item.title}}</h4>
+                        <h5 v-if="item.title.length > 8" style="font-weight:bold">{{item.title | subStr}}...</h5>
+                        <h5 v-else style="font-weight:bold">{{item.title}}</h5>
                     </p>
                     <p class="p2">
                         <h6>{{item.assignTaskTime | formatDate}}</h6>
@@ -30,7 +31,7 @@
                 </div>
                 <div class="right_div">
                     <!-- <div v-if="item.status == 1" class="login_container" @click="doTask(item.id,item.taskId)">做任务领取奖励</div> -->
-                    <div v-if="item.status == 1" class="login_container" @click="showTask(item.title,item.linkImgPath,item.link,item.discription,item.remark,item.userTaskId)">做任务领取奖励</div>
+                    <div v-if="item.status == 1" class="login_container" @click="showTask(item.title,item.linkImgPath,item.link,item.discription,item.remark,item.id)">做任务领取奖励</div>
                     <div v-if="item.status == 2" class="complent_container">已完成</div>
                 </div>
           </li>
@@ -64,7 +65,14 @@
                  </div>
 
              </div>
-             <div class="active_container" @click="skipTask(link)">前往任务</div>
+             <div class="active_container" @click="skipTask(link,userTaskId)">前往任务</div>
+           </section>
+       </section>
+
+       <section class="coverpart" v-if="showLoading">
+           <section class="cover-background"></section>
+           <section class="cover-content">
+               <loading></loading>
            </section>
        </section>
 
@@ -79,10 +87,11 @@
 <script>
    import headTop from 'src/components/header/head'
    import {mapState, mapMutations} from 'vuex'
-   import {isLogin,formatDate} from 'src/config/env'
+   import {isLogin,formatDate,subStr} from 'src/config/env'
    import {getTaskInfo,doTask} from '../../service/getData'
    import nullData from 'src/components/common/nullData'
    import alertTip from 'src/components/common/alertTip'
+   import loading from 'src/components/common/loading'
   //  import footGuide from 'src/components/footer/footGuide'
 
    export default {
@@ -93,6 +102,7 @@
               taskId:'',
               showAlert: false, //显示提示组件
               alertText: null, //提示的内容
+              showLoading:false,
               compelteTaskCount:0,  //完成任务数量
               signCount:0,        //领取任务奖励
               show_task:false,      //显示任务页面窗
@@ -112,21 +122,27 @@
            headTop,
            nullData,
            alertTip,
+           loading,
           //  footGuide,
        },
        methods: {
         //获取会员升级记录
         async getTaskInfo () {
+            //显示刷新
+            this.showLoading = true;
              //从后台获取记录
              let res = await getTaskInfo(1,100);
              if(res.code==200){
+               //不管成功失败，隐藏loading
+               this.showLoading = false;
                this.compelteTaskCount = res.result.extend.compelteTaskCount;
                this.signCount = res.result.extend.signCount;
-               if(res.result.rows == null){
-                 return
+               if(res.result.rows != null && res.result.rows !=''){
+                 this.staticRecordList = res.result.rows;
                }
-               this.staticRecordList = res.result.rows;
              }else {
+               //不管成功失败，隐藏loading
+               this.showLoading = false;
                if (res.code==0 || res.code==-1) {
                   this.showAlert = true;
                   this.alertText = res.msg;
@@ -138,15 +154,21 @@
               // this.showAlert = true;
               // this.alertText = userTaskId,taskId;
               // return;
+              //显示刷新
+              this.showLoading = true;
               //从后台获取记录
               let res = await doTask(userTaskId);
               if(res.code==200){
+                  //领取成功，隐藏刷新
+                  this.showLoading = false;
                   this.showAlert = true;
                   this.alertText = "领取成功";
                   //跳转页面
                   // window.location="https://www.baidu.com";
                   window.open(link);
               }else {
+                //不管成功失败，都得关闭
+                this.showLoading = false;
                 this.showAlert = true;
                 this.alertText = res.msg;
                 if (res.code==0 || res.code==-1) {
@@ -175,6 +197,7 @@
           },
           //显示任务详情窗 item.title,item.linkImgPath,item.link,item.discription,item.taskType
           showTask(title,linkImgPath,link,discription,taskType,userTaskId){
+            // console.error("userTaskId:"+userTaskId);
             this.show_task = true;
             this.title = title;
             if(linkImgPath == null || linkImgPath ==""){
@@ -192,6 +215,9 @@
          formatDate(createTime){
            let date = new Date(createTime);
            return formatDate(date,'yyyy年MM月dd日');
+         },
+         subStr(str){
+           return subStr(str,0,8);
          }
        },
       //  watch: {
@@ -375,5 +401,52 @@
    }
    body .coverpart_active .cover-animate-leave{
        animation:zoomOut .4s;
+   }
+
+   .coverpart{
+       @include wh(100%,100%);
+       @include allcover;
+       .cover-background{
+           @include wh(100%,105%);
+           @include allcover;
+           background:#000;
+           z-index:100;
+           opacity:.2;
+       }
+       .cover-content{
+           width:94%;
+           z-index:1000;
+           .redbao{
+             position: absolute;
+             top: 15%;
+             left: 4%;
+             vertical-align:middle;
+             display:inline-block;
+             width:15rem;
+             z-index:1010;
+           }
+           .redbao_button{
+             position: absolute;
+             top: 71%;
+             left: 19%;
+             vertical-align:middle;
+             display:inline-block;
+             width:10rem;
+             z-index:1010;
+           }
+           .redbao_text{
+             position: absolute;
+             top: 0;
+             left: 0;
+             z-index:1020;
+             font-size: 30px;
+             text-align: center;
+             width: 60%;
+             height: 50px;
+             line-height: 50px;
+             color: #DA4E3F;
+             margin: 40% 20% 0 20%;
+           }
+       }
    }
 </style>

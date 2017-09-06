@@ -112,6 +112,7 @@
     @import 'src/style/mixin';
 
     .page{
+        overflow-x:hidden;
         padding-top: 1.95rem;
         p, span{
             font-family: Helvetica Neue,Tahoma,Arial;
@@ -123,14 +124,14 @@
       width: 100%;
       height: 7rem;
       .activateDiv{
-        color: darkgrey;
+        color: Silver;
         padding-left:5%;
         padding-top: 3%;
         font-size: 0.65rem;
       }
       .activateCode{
          width: 100%;
-         padding-left:10%;
+         text-align: center;
          font-size: 0.65rem;
          color: #ccc;
          b{
@@ -140,7 +141,7 @@
       }
       .explain{
         width:100%;
-        color: darkgrey;
+        color: Silver;
         font-size: 0.65rem;
         padding-left:5%;
       }

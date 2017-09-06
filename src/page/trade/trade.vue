@@ -26,24 +26,21 @@
                   <div class="transfer_div">
                     <section v-if="turnType == true" class="transfer">
                       <div class="div1">
-                        <span class="shi">提币地址</span>
+                        <span class="shi">地址：<span class="address">{{outTradeAddress}}</span></span>
                         <!-- <input type="hidden" name="outTradeAddress" v-model.lazy="outTradeAddress"> -->
                       </div>
-                        <div class="div2">
-                          <span class="address">{{outTradeAddress}}</span>
-                          <!-- <input type="hidden" name="outTradeAddress" v-model.lazy="outTradeAddress"> -->
-                        </div>
-                        <div>
+                        <div style="margin-top:3%;">
                           <span class="shi">提币数量：</span>
                           <input type="text" name="coinOutAmt" v-model.lazy="coinOutAmt" @change="calcAmount">
+                          <span style="font-size:10px;color:red;">提币手续费：{{tradeCoinOutScale}}</span>
                         </div>
-                        <div>
+                        <!-- <div>
                           <span class="wu">提币手续费：</span>
                           <input type="text" name="tradeCoinOutScale" v-model.lazy="tradeCoinOutScale">
-                        </div>
+                        </div> -->
                         <div>
-                          <span class="wu">实际需支付：</span>
-                          <input type="text" name="amount" v-model.lazy="amount">
+                          <span class="wu">实际到账：</span>
+                          <input type="text" name="amount" readOnly="true" v-model.lazy="amount">
                         </div>
                         <div class="pay_display">
                           <span class="shi">交易密码：</span>
@@ -62,7 +59,10 @@
                <li @click="" class="info-data-link">
                  <span class="info-data-left"><img src="../../hsimages/7.png" class="privateImage" /></span>
                  <span class="info-data-center">我的提币地址</span>
-                 <span class="info-data-right" @click="addOutAddressAction" style="margin-top:2%;"><b>添加</b></span>
+                 <span class="info-data-right" @click="addOutAddressAction" style="margin-top:2%;">
+                   <b v-if="outTradeAddress == null || outTradeAddress == ''">添加</b>
+                   <b v-else>修改</b>
+                 </span>
                </li>
              </ul>
          </section>
@@ -98,7 +98,7 @@
                inTradeAddress:"",
                outTradeAddress:"",
                tradeAmt:0,
-               coinOutAmt:110,//需要提币支付个数
+               coinOutAmt:0,//需要提币支付个数
                amount:0,//实际支付个数
                tradeCoinOutScale:0,
                payPassWord:"",
@@ -116,6 +116,7 @@
                isShowOutTradeAddress:false,
                showPwd:false,
                tradeConverRmbScale:0,
+               tradeCoinOutScale:0,
            }
        },
        created(){
@@ -188,7 +189,7 @@
              }
          },
          calcAmount(){
-           this.amount=parseFloat(this.coinOutAmt).toFixed(6)/(1-0.5);
+            this.amount = this.coinOutAmt - (this.coinOutAmt * this.tradeCoinOutScale);
          },
          async coninOut(pwd){
              this.payPassWord=pwd;
@@ -234,6 +235,7 @@
                this.inTradeAddress=res.result.inTradeAddress;
                this.outTradeAddress=res.result.outTradeAddress;
                this.tradeConverRmbScale=res.result.tradeConverRmbScale;
+               this.tradeCoinOutScale = res.result.tradeCoinOutScale;
            }else {
              this.showAlert = true;
              this.alertText = res.msg;
@@ -258,6 +260,7 @@
 
    .page{
        padding-top: 1.95rem;
+       overflow-x:hidden;
        p, span{
            font-family: Helvetica Neue,Tahoma,Arial;
        }
@@ -268,14 +271,14 @@
      width: 100%;
      height: 7rem;
      .activateDiv{
-       color: darkgrey;
+       color: Silver;
        padding-top:3%;
-       padding-left:5%;
+       margin-left:5%;
        font-size: 0.65rem;
      }
      .activateCode{
         width: 100%;
-        padding-left:10%;
+        text-align: center;
         font-size: 0.65rem;
         color: #ccc;
         b{
@@ -285,9 +288,9 @@
      }
      .explain{
        width:100%;
-       color: darkgrey;
+       color: Silver;
        font-size: 0.65rem;
-       padding-left:5%;
+       margin-left:5%;
      }
    }
 
@@ -323,7 +326,7 @@
         padding: 0.35rem;
         background-color: white;
         .info-data-left{
-           padding-left: 3%;
+           margin-left: 3%;
             .privateImage{
               display:inline-block;
               width: 1.5rem;
@@ -373,15 +376,14 @@
        font-family: "黑体", Verdana, Arial, Helvetica, sans-serif;
      }
      .div1{
-       padding-top: 2%;
+       padding-top: 1%;
        background-color: white;
-       padding-bottom: -2%;
+       padding-bottom: 3%;
      }
      .div2{
-       padding-top: 2%;
        background-color: white;
        margin-bottom: 14px;
-       padding-bottom: 6%;
+       padding-bottom: 3%;
      }
      .btn{
        padding-bottom:1%;
@@ -390,8 +392,8 @@
        background-color: white;
      }
      .address{
-       margin-left:10.1%;
-       font-size: 0.7em;
+       /*margin-left:15%;*/
+       font-size: 0.55rem;
        background-color: white;
      }
      .shi{
@@ -399,7 +401,7 @@
        font-size: 15px;
      }
      .wu{
-        margin-left:10.4%;
+        margin-left:15%;
         font-size: 15px;
      }
      .pay_display{

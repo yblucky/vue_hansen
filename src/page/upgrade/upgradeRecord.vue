@@ -25,9 +25,15 @@
            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
          </svg>
        </aside>
-       <transition name="loading">
-         <loading v-show="showLoading"></loading>
-       </transition>
+
+
+       <section class="coverpart" v-if="showLoading">
+           <section class="cover-background"></section>
+           <section class="cover-content">
+               <loading></loading>
+           </section>
+       </section>
+       <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
        <!-- <foot-guide></foot-guide> -->
    </div>
 </template>
@@ -49,12 +55,14 @@
    export default {
      data(){
            return{
-              upgradeRecordList:[],//升级记录
+              showAlert: false, //显示提示组件
+              alertText: null, //提示的内容
+              upgradeRecordList:null,//升级记录
               pageNo:1,
               pageSize:10,
         		  preventRepeatReuqest: false, //到达底部加载数据，防止重复加载
         			showBackStatus: false, //显示返回顶部按钮
-        			showLoading: true, //显示加载动画
+        			showLoading: false, //显示加载动画
         			touchend: false, //没有更多数据
            }
        },
@@ -92,22 +100,21 @@
       		this.pageNo += 1;
       		let res = await upGradeRecord(this.pageNo,this.pageSize);
           if (res.code==200) {
-              if(res.result.rows == null){
-                 this.showLoading = false;
-                 return
+              this.hideLoading();
+              if(res.result.rows != null && res.result.rows !=''){
+                let rs = res.result.rows;
+                this.upgradeRecordList = [...this.upgradeRecordList, ...rs];
               }
-              let rs = res.result.rows;
-              this.upgradeRecordList = [...this.upgradeRecordList, ...rs];
           }else {
+            this.hideLoading();
             this.showAlert = true;
             this.alertText = res.msg;
             if (res.code==0 || res.code==-1) {
               localStorage.clear();
             }
           }
-      		this.hideLoading();
       		//当获取数据小于20，说明没有更多数据，不需要再次请求数据
-      		if ( res.result.rows.length < 10) {
+      		if (res.result.rows != null && res.result.rows.length < 10) {
       			this.touchend = true;
       			return
       		}
@@ -115,24 +122,24 @@
       	},
         //获取会员升级记录
         async getUpGradeRecord () {
+              this.showLoading = true;
              //从后台获取记录
              let res = await upGradeRecord(this.pageNo,this.pageSize);
              if(res.code==200){
-                 if(res.result.rows == null){
-                    this.showLoading = false;
-                    return
+                  this.showLoading = false;
+                 if(res.result.rows != null && res.result.rows !=''){
+                    this.upgradeRecordList = [...res.result.rows];
                  }
-                this.upgradeRecordList = [...res.result.rows];
              }else {
+               this.showLoading = false;
                if (res.code==0 || res.code==-1) {
                   this.showAlert = true;
                   this.alertText = this.data.msg;
                   localStorage.clear();
                }
              }
-         		this.hideLoading();
          		//当获取数据小于20，说明没有更多数据，不需要再次请求数据
-         		if ( res.result.rows.length < 10) {
+         		if (res.result.rows != null && res.result.rows.length < 10) {
          			this.touchend = true;
          			return
          		}
@@ -211,5 +218,52 @@
       img{
         width: 1.5rem;
       }
+   }
+
+   .coverpart{
+       @include wh(100%,100%);
+       @include allcover;
+       .cover-background{
+           @include wh(100%,105%);
+           @include allcover;
+           background:#000;
+           z-index:100;
+           opacity:.2;
+       }
+       .cover-content{
+           width:94%;
+           z-index:1000;
+           .redbao{
+             position: absolute;
+             top: 15%;
+             left: 4%;
+             vertical-align:middle;
+             display:inline-block;
+             width:15rem;
+             z-index:1010;
+           }
+           .redbao_button{
+             position: absolute;
+             top: 71%;
+             left: 19%;
+             vertical-align:middle;
+             display:inline-block;
+             width:10rem;
+             z-index:1010;
+           }
+           .redbao_text{
+             position: absolute;
+             top: 0;
+             left: 0;
+             z-index:1020;
+             font-size: 30px;
+             text-align: center;
+             width: 60%;
+             height: 50px;
+             line-height: 50px;
+             color: #DA4E3F;
+             margin: 40% 20% 0 20%;
+           }
+       }
    }
 </style>

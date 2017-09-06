@@ -35,9 +35,12 @@
            <nullData></nullData>
         </div>
 
-    		<transition name="loading">
-    			<loading v-show="showLoading"></loading>
-    		</transition>
+        <section class="coverpart" v-if="showLoading">
+            <section class="cover-background"></section>
+            <section class="cover-content">
+                <loading></loading>
+            </section>
+        </section>
     </div>
 </template>
 
@@ -62,7 +65,7 @@
                 pageSize:10,
           		  preventRepeatReuqest: false, //到达底部加载数据，防止重复加载
           			showBackStatus: false, //显示返回顶部按钮
-          			showLoading: true, //显示加载动画
+          			showLoading: false, //显示加载动画
           			touchend: false, //没有更多数据
             }
         },
@@ -109,6 +112,7 @@
            		this.pageNo += 1;
            		let res = await signlist(this.pageNo,this.pageSize);
                if (res.code==200) {
+                  this.showLoading = false;
                    let rs = res.result.rows;
                    if(rs.length > 0){
                       this.recordList = [...this.recordList, ...rs];
@@ -130,16 +134,18 @@
            		this.preventRepeatReuqest = false;
            	},
             async getSignlist(){
+                  //调用接口前显示loading
+                  this.showLoading = true;
                   let res = await signlist(this.pageNo,this.pageSize);
-                  if (res.code==200) {
-                      if(res.result.rows.length > 0){
+                    if (res.code==200) {
+                    this.showLoading = false;
+                      if(res.result.rows !=null && res.result.rows != ''){
+                        this.showLoading = false;
                         this.recordList = [...res.result.rows];
-
                         //返回数据集合个数大于0的时候做
                         if (res.result.rows.length < 10) {
                      			this.touchend = true;
                      		}
-                     		this.hideLoading();
                      		//开始监听scrollTop的值，达到一定程度后显示返回顶部按钮
                      		showBack(status => {
                      			this.showBackStatus = status;
@@ -335,5 +341,52 @@
     }
     .change_to_text{
         background-color: #4cd964;
+    }
+
+    .coverpart{
+        @include wh(100%,100%);
+        @include allcover;
+        .cover-background{
+            @include wh(100%,105%);
+            @include allcover;
+            background:#000;
+            z-index:100;
+            opacity:.2;
+        }
+        .cover-content{
+            width:94%;
+            z-index:1000;
+            .redbao{
+              position: absolute;
+              top: 15%;
+              left: 4%;
+              vertical-align:middle;
+              display:inline-block;
+              width:15rem;
+              z-index:1010;
+            }
+            .redbao_button{
+              position: absolute;
+              top: 71%;
+              left: 19%;
+              vertical-align:middle;
+              display:inline-block;
+              width:10rem;
+              z-index:1010;
+            }
+            .redbao_text{
+              position: absolute;
+              top: 0;
+              left: 0;
+              z-index:1020;
+              font-size: 30px;
+              text-align: center;
+              width: 60%;
+              height: 50px;
+              line-height: 50px;
+              color: #DA4E3F;
+              margin: 40% 20% 0 20%;
+            }
+        }
     }
 </style>

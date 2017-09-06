@@ -30,6 +30,18 @@
             </div>
           </li>
        </ul>
+
+       <section class="coverpart" v-if="showLoading">
+           <section class="cover-background"></section>
+           <section class="cover-content">
+               <loading></loading>
+           </section>
+       </section>
+
+       <div v-if="coinList == null || coinList == ''">
+          <nullData></nullData>
+       </div>
+       <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
    </div>
 </template>
 
@@ -39,12 +51,15 @@
    import {mapState, mapMutations} from 'vuex'
    import {isLogin,getLoginUserInfo,formatDate} from 'src/config/env'
    import {coinOuterTransferList} from '../../../service/getData'
+   import loading from 'src/components/common/loading'
+   import nullData from 'src/components/common/nullData'
 
    export default {
      data(){
            return{
                 showAlert: false,
                 alertText: null,
+                showLoading:false,
                 nickName:"",
                 headImgUrl:"",
                 uid:0,
@@ -58,20 +73,15 @@
        components: {
            headTop,
            alertTip,
+           loading,
+           nullData,
        },
-       mounted(){
+       created(){
          this.isLogin("/login");
          this.coinOuterTransferListAction();
        },
       mixins: [isLogin,getLoginUserInfo],
-       components: {
-           headTop,
-           alertTip,
-       },
-       computed: {
-
-       },
-       filters:{
+      filters:{
          formatDate(createTime){
            let date = new Date(createTime);
            return formatDate(date,'yyyy-MM-dd');
@@ -79,14 +89,21 @@
        },
        methods: {
          async coinOuterTransferListAction(){
+
+            //请求前调用loading
+            this.showLoading = true;
+
              let res = await coinOuterTransferList(this.pageNo, this.pageSize,this.orderType);
 
              if (res.code==200) {
-
-               if (res.result.rows.length>0) {
+              //不管成功失败,都关闭刷新
+              this.showLoading = false;
+               if (res.result.rows != null || res.result.rows != '') {
                   this.coinList=res.result.rows;
                }
              }else {
+               //不管成功失败,都关闭刷新
+               this.showLoading = false;
                this.showAlert = true;
                this.alertText = res.msg;
                if (res.code==0 || res.code==-1) {
@@ -98,6 +115,12 @@
             this.uid=this.getLoginUserInfo("uid");
             this.nickName=this.getLoginUserInfo("nickName");
             this.headImgUrl=this.getLoginUserInfo("headImgUrl");
+         },
+         closeTip(){
+           this.showAlert = false;
+           if(localStorage.getItem("token") == null){
+             this.isLogin("/login");
+           }
          },
        }
    }
@@ -168,5 +191,52 @@
          /*margin-top: 35%;*/
      }
    }
-   }
+ }
+
+ .coverpart{
+     @include wh(100%,100%);
+     @include allcover;
+     .cover-background{
+         @include wh(100%,105%);
+         @include allcover;
+         background:#000;
+         z-index:100;
+         opacity:.2;
+     }
+     .cover-content{
+         width:94%;
+         z-index:1000;
+         .redbao{
+           position: absolute;
+           top: 15%;
+           left: 4%;
+           vertical-align:middle;
+           display:inline-block;
+           width:15rem;
+           z-index:1010;
+         }
+         .redbao_button{
+           position: absolute;
+           top: 71%;
+           left: 19%;
+           vertical-align:middle;
+           display:inline-block;
+           width:10rem;
+           z-index:1010;
+         }
+         .redbao_text{
+           position: absolute;
+           top: 0;
+           left: 0;
+           z-index:1020;
+           font-size: 30px;
+           text-align: center;
+           width: 60%;
+           height: 50px;
+           line-height: 50px;
+           color: #DA4E3F;
+           margin: 40% 20% 0 20%;
+         }
+     }
+ }
 </style>

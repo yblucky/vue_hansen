@@ -118,7 +118,7 @@
             toggleTabs (index,tabText) {
                  this.active = index;
              },
-             async  findCardGradeList(){
+             async findCardGradeList(){
                let res =  await findCardGradeList();
                if (res.code==200) {
                 //  console.log(res);
@@ -130,13 +130,14 @@
              },
              //获取会员等级信息
              async selCard (index) {
-
-                  if(this.cardGrade <= index){
+                  if(this.cardGrade >= index){
                     this.showAlert = true;
                     this.alertText = "选择账户等级不能小于当前用户等级";
                     return;
                   }
 
+                  //显示loading
+                  this.showLoading = true;
                   let res;
                   //从后台获取等级信息
                   if (this.active==2) {
@@ -149,11 +150,13 @@
                   this.selCardType = index;
 
                   if(res.code == 200){
+                    this.showLoading = false;
                     this.cardMaxproft=res.result.maxProfits; //最大收益
                     this.needActiveNum=res.result.activeCodeNo//需要补充激活码数量
                     this.needBuyNum=res.result.payAmt//需要补充购物币数量
                     this.needChangeNum=res.result.tradeAmt//需要补充交易数量
                   }else {
+                    this.showLoading = false;
                     this.showAlert = true;
                     this.alertText = res.msg;
                     if(res.code==0 || res.code==-1){
@@ -224,9 +227,11 @@
                 return
             },
             async initData(){
+              this.showLoading = true;
               //获取用户信息接口
               let res = await getUser();
               if(res.code == 200){
+                  this.showLoading = false;
                   this.userActiveCodeNo=res.result.activeCodeNo;
                   this.userPayAmt=res.result.payAmt;
                   this.userTradeAmt=res.result.tradeAmt;
@@ -234,6 +239,7 @@
                   this.cardGrade=res.result.cardGrade;
                   this.selCard(this.cardGrade+1);
               }else {
+                this.showLoading = false;
                 this.showAlert = true;
                 this.alertText = res.msg;
                 if(res.code==0 || res.code==-1){
