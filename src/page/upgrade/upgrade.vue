@@ -131,7 +131,7 @@
              //获取会员等级信息
              async selCard (index) {
 
-                  if(this.cardGrade == index){
+                  if(this.cardGrade <= index){
                     this.showAlert = true;
                     this.alertText = "选择账户等级不能小于当前用户等级";
                     return;
