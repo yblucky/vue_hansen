@@ -55,17 +55,17 @@
             <section class="info-data">
                 <ul class="clear">
                     <router-link to="/pay" tag="li" class="info-data-link">
-                        <img src="../../hsimages/36.png" class="vip22" />
+                        <img src="../../hsimages/10.png" class="vip22" />
                         <span class="info-data-bottom">购物币</span>
                         <span class="info-data-middle"><b>{{parseInt(payAmt).toFixed(2)}}</b></span>
                     </router-link>
                     <router-link to="/trade" tag="li" class="info-data-link">
-                        <img src="../../hsimages/37.png" class="vip22" />
+                        <img src="../../hsimages/11.png" class="vip22" />
                         <span class="info-data-bottom">交易币</span>
                         <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(2)}}</b></span>
                     </router-link>
                     <router-link to="" tag="li" class="info-data-link">
-                        <img src="../../hsimages/38.png" class="vip22" />
+                        <img src="../../hsimages/12.png" class="vip22" />
                         <span class="info-data-bottom">瀚森股权</span>
                         <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(2)}}</b></span>
                     </router-link>

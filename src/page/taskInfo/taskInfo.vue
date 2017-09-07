@@ -106,7 +106,7 @@
               compelteTaskCount:0,  //完成任务数量
               signCount:0,        //领取任务奖励
               show_task:false,      //显示任务页面窗
-              title:"去北京旅游三天三夜",   //任务标题
+              title:"",   //任务标题
               linkImgPath:"", //任务图片  测试图片：https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg
               link:"",
               discription:"",//任务描述
@@ -159,6 +159,7 @@
               //从后台获取记录
               let res = await doTask(userTaskId);
               if(res.code==200){
+                  console.error("任务地址:"+link);
                   //领取成功，隐藏刷新
                   this.showLoading = false;
                   this.showAlert = true;
