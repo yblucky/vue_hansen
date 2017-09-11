@@ -125,6 +125,7 @@
             .unlikep{
                 @include sc(.58rem,#ea3106);
                 padding-top:.1rem;
+                font-family: cursive;
             }
         }
         .reset{

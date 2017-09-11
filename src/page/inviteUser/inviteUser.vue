@@ -27,7 +27,7 @@
           </section>
         </div>
 
-        <div class="middle">
+        <!-- <div class="middle">
             <p>
               <span class="registerCode">
                   账户注册码：<b>{{registerCodeNo}}</b>个
@@ -45,7 +45,7 @@
                   购物币：<b>{{payAmt}}</b>个
               </span>
             </p>
-        </div>
+        </div> -->
 
         <div class="fillInformation">
             <span class="title">填写基本资料</span>

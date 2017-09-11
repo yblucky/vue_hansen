@@ -133,8 +133,9 @@
             }
             p{
                 width:100%;
-                @include sc(.4rem,#666);
+                @include sc(.7rem,#666);
                 padding:.4rem 0 1rem;
+                font-family: cursive;
             }
             .unlikep{
                 @include sc(.58rem,#ea3106);

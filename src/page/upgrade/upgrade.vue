@@ -109,7 +109,8 @@
             //判断手机号码
             rightPhoneNumber: function (){
                 return /^1\d{10}$/gi.test(this.phoneNumber)
-            }
+            },
+
         },
         methods: {
             ...mapMutations([
@@ -206,8 +207,6 @@
                     this.showAlert = true;
                     this.alertText = '升级成功';
                     this.isUpgrade=true;
-                    //刷新页面
-                    location.reload();
                 }else{
                   this.showLoading = false;
                   this.showAlert = true;
@@ -218,13 +217,10 @@
                   //刷新页面
                   if(localStorage.getItem("token") == null){
                     this.isLogin("/login");
-                  }else {
                     //刷新页面
                     location.reload();
                   }
                 }
-
-                return
             },
             async initData(){
               this.showLoading = true;
@@ -255,7 +251,7 @@
             },
             closePwd(){
                 this.showPwd = false;
-            }
+            },
         }
     }
 

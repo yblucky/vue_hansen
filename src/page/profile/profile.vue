@@ -37,7 +37,7 @@
                                 <!-- <img v-if="this.status != 3" src="../../hsimages/23.png" class="vip22" algin="middle" /> -->
                                 <img v-if="status == 3 && cardGrade != 5" src="../../hsimages/23.png" class="vip22" algin="middle" />
                            </router-link>
-                           <img v-if="status == 5" @click="intervalActice" src="../../hsimages/51.png" class="vip23" algin="middle" />
+                           <img v-if="status == 5" @click="intervalActicePage" src="../../hsimages/51.png" class="vip23" algin="middle" />
                       </span>
                     </div>
 
@@ -57,17 +57,17 @@
                     <router-link to="/pay" tag="li" class="info-data-link">
                         <img src="../../hsimages/10.png" class="vip22" />
                         <span class="info-data-bottom">购物币</span>
-                        <span class="info-data-middle"><b>{{parseInt(payAmt).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseInt(payAmt).toFixed(4)}}</b></span>
                     </router-link>
                     <router-link to="/trade" tag="li" class="info-data-link">
                         <img src="../../hsimages/11.png" class="vip22" />
                         <span class="info-data-bottom">交易币</span>
-                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(4)}}</b></span>
                     </router-link>
                     <router-link to="" tag="li" class="info-data-link">
                         <img src="../../hsimages/12.png" class="vip22" />
                         <span class="info-data-bottom">瀚森股权</span>
-                        <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(4)}}</b></span>
                     </router-link>
                 </ul>
             </section>
@@ -126,7 +126,7 @@
                       <span class="info-data-top">
                           <img src="../../hsimages/20.png" class="vip" />
                       </span>
-                        <span class="info-data-bottom">修改密码</span>
+                        <span class="info-data-bottom">密码修改</span>
                     </router-link>
                     <router-link to="/myTeam" tag="li" class="info-data-link">
                       <span class="info-data-top">
@@ -135,6 +135,14 @@
                         <span class="info-data-bottom">我的团队</span>
                     </router-link>
                 </ul>
+                <!-- <ul class="clear">
+                    <router-link to="/profile/info" tag="li" class="info-data-link">
+                        <span class="info-data-top">
+                            <img src="../../hsimages/19.png" class="vip" />
+                        </span>
+                        <span class="info-data-bottom">财务中心</span>
+                    </router-link>
+                </ul> -->
             </section>
         </section>
 
@@ -154,17 +162,33 @@
             <section class="cover-content">
               <div class="head">
                   <span class="close" @click="closeActive">×</span>
-                  <h4>注册成功请立即激活</h4>
+                  <h4>账户激活</h4>
               </div>
               <div class="middle">
                   <p style="padding-left:7%;"><span style="font-size:10px;">购物币地址：{{inPayAddress}}</span></p>
                   <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">交易币地址：{{inTradeAddress}}</span></p>
-                  <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值购物币数量：<b>{{parseFloat(needBuyPayAmt).toFixed(2)}}</b><b style="padding-left:5%;">1GWC</b><b style="padding-left:5%;">约{{parseFloat(payConverRmbScale).toFixed(2)}}元</b></span></p>
-                  <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">购物币余额：{{parseFloat(payAmt).toFixed(2)}}</b></p>
-                  <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值交易币数量：<b>{{parseFloat(needBuyTradeAmt).toFixed(2)}}</b><b style="padding-left:5%;">1JYC</b><b style="padding-left:5%;">约{{parseFloat(tradeConverRmbScale).toFixed(2)}}元</b></span></p>
-                  <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">交易币余额：{{parseFloat(tradeAmt).toFixed(2)}}</b></p>
+                  <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值购物币数量：<b>{{parseFloat(needBuyPayAmt).toFixed(4)}}</b><b style="padding-left:5%;">1GWC</b><b style="padding-left:5%;">约{{parseFloat(payConverRmbScale).toFixed(2)}}元</b></span></p>
+                  <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">购物币余额：{{parseFloat(payAmt).toFixed(4)}}</b></p>
+                  <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值交易币数量：<b>{{parseFloat(needBuyTradeAmt).toFixed(4)}}</b><b style="padding-left:5%;">1JYC</b><b style="padding-left:5%;">约{{parseFloat(tradeConverRmbScale).toFixed(2)}}元</b></span></p>
+                  <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">交易币余额：{{parseFloat(tradeAmt).toFixed(4)}}</b></p>
               </div>
               <div class="active_container" @click="active">激活</div>
+            </section>
+        </section>
+
+        <!-- 激活码已过期，显示激活页面 -->
+        <section class="coverpart_active" v-if="show_expire">
+            <section class="cover-background"></section>
+            <section class="cover-content">
+              <div class="head">
+                  <span class="close" @click="closeExpire">×</span>
+                  <h4>激活码已过期</h4>
+              </div>
+              <div class="middle">
+                  <p style="text-align:center;padding-top:2%;"><b style="font-size:20px;font-weight:bold;">数量：{{activeCodeNo}}</b><span v-if="activeCodeNo < weekActiveCode" style="font-size:13px;margin-left:5%;">(余额不足)</span></p>
+                  <p style="text-align:center;padding-top:2%;"><b style="font-size:18px;font-weight:bold;color:red;">激活账户需要{{weekActiveCode}}个激活码</b></p>
+              </div>
+              <div class="active_container" @click="intervalActice">立即激活</div>
             </section>
         </section>
 
@@ -213,7 +237,8 @@ export default {
             alertText: null, //提示的内容
             cardName:null,            //卡的名称
             gradeName:null,         //用户等级
-            show_active:false,
+            show_active:false,     //注册成功后的激活页面
+            show_expire:false,     //显示激活码过期后的激活页面
             showLoading:false,
 
             //用户信息
@@ -251,6 +276,7 @@ export default {
             outEquityAddress:'',
             outTradeAddress:'',
             status:0,
+            weekActiveCode:0,         //每周激活码
 
             //激活信息
             tradeConverRmbScale:0,    //交易币兑换人民币汇率
@@ -368,19 +394,26 @@ export default {
             if(this.status == 3){
                 if(this.cardGrade == 1){
                   this.cardName = "普卡用户";
+                  this.weekActiveCode = 1;
                 }else if(this.cardGrade == 2){
                     this.cardName = "铜卡用户";
+                    this.weekActiveCode = 2;
                 }else if (this.cardGrade == 3 ) {
                   this.cardName = "银卡用户";
+                  this.weekActiveCode = 3;
                 }else if (this.cardGrade == 4 ) {
                   this.cardName = "金卡用户";
+                  this.weekActiveCode = 4;
                 }else if (this.cardGrade == 5 ) {
                   this.cardName = "钻石用户";
+                  this.weekActiveCode = 5;
                 }
             }else if(this.status == 4){
                 this.cardName = "处理中"
             }else if(this.status == 2){
               this.cardName = "未激活";
+            }else if(this.status == 5){
+              this.show_expire = true;
             }else {
               this.cardName = "";
             }
@@ -433,6 +466,9 @@ export default {
         },
         closeActive(){
           this.show_active = false;
+        },
+        closeExpire(){
+          this.show_expire = false;
         },
         //调用获取激活信息的接口
         async activeInfo(){
@@ -511,6 +547,9 @@ export default {
                }
              }
           }
+        },
+        intervalActicePage(){
+          this.show_expire = true;
         },
         //测试刷新
         // test(){
@@ -701,7 +740,7 @@ export default {
                 }
                 .info-data-bottom{
                     @include sc(.57333rem,#666);
-                    padding-top: .153333rem;
+                    padding-top: .553333rem;
                     font-weight:700;
 
                 }
@@ -715,7 +754,7 @@ export default {
                 }
 
             }
-            .info-data-link:nth-of-type(3){
+            .info-data-link:nth-of-type(4){
                 border:0;
                 .info-data-top{
                     b{

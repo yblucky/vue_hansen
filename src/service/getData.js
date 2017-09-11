@@ -159,6 +159,16 @@ export const rewardsign = () => fetch('/sign/rewardsign', {},'GET');
  */
 export const updateUserInfo = (phone, nickName, headImgUrl,email) => fetch('/user/updateUserInfo', {phone, nickName, headImgUrl,email}, 'POST');
 
+/**
+ * 修改用户银行卡
+ */
+export const updateUserBankInfo = (userName, bankType, bankCardNo) => fetch('/user/updateUserInfo', {userName, bankType,bankCardNo}, 'POST');
+
+/**
+ * 修改用户收货地址
+ */
+export const updateUserShopAddrInfo = (receiver, receiverPhone, shopAddr) => fetch('/user/updateUserInfo', {receiver, receiverPhone,shopAddr}, 'POST');
+
 
 /**
  * 修改用户提币地址

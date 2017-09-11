@@ -15,6 +15,8 @@ const service = r => require.ensure([], () => r(require('../page/service/service
 const questionDetail = r => require.ensure([], () => r(require('../page/service/children/questionDetail')), 'questionDetail')
 const setphone = r => require.ensure([], () => r(require('../page/profile/children/setphone')), 'setphone')
 const setmail = r => require.ensure([], () => r(require('../page/profile/children/setmail')), 'setmail')
+const setbankcard = r => require.ensure([], () => r(require('../page/profile/children/setbankcard')), 'setbankcard')
+const setaddress = r => require.ensure([], () => r(require('../page/profile/children/setaddress')), 'setaddress')
 const transfer = r => require.ensure([], () => r(require('../page/transfer/transfer')), 'transfer')
 const upgrade = r => require.ensure([], () => r(require('../page/upgrade/upgrade')), 'upgrade')
 const upgradeRecord = r => require.ensure([], () => r(require('../page/upgrade/upgradeRecord')), 'upgradeRecord')
@@ -30,6 +32,7 @@ const setMessage = r => require.ensure([], () => r(require('../page/message/setM
 const myReward = r => require.ensure([], () => r(require('../page/reward/myReward')), 'myReward')
 const forgetPwd = r => require.ensure([], () => r(require('../page/forgetPwd/forgetPwd')), 'forgetPwd')
 const taskInfo = r => require.ensure([], () => r(require('../page/taskInfo/taskInfo')), 'taskInfo')
+const digitalAsset = r => require.ensure([], () => r(require('../page/digitalAsset/digitalAsset')), 'digitalAsset')
 
 
 export default [{
@@ -65,6 +68,14 @@ export default [{
             {
                 path: 'setmail',
                 component: setmail,
+            },
+            {
+                path: 'setbankcard',
+                component: setbankcard,
+            },
+            {
+                path: 'setaddress',
+                component: setaddress,
             },
             {
                 path: 'service', //服务中心
@@ -190,6 +201,11 @@ export default [{
         {
           path: '/taskInfo',
           component: taskInfo
+        },
+        //数字资产钱包
+        {
+          path: '/digitalAsset',
+          component: digitalAsset
         },
     ]
 }]

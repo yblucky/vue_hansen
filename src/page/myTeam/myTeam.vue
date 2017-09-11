@@ -1,26 +1,26 @@
 <template>
     <div class="restContainer">
         <head-top head-title="我的团队" goBack="true"></head-top>
+        <section class="category_title">
+            <span :class="{choosed: chooseType === 1}" @click="chooseType = 1">团队成员</span>
+            <span :class="{choosed: chooseType === 2}" @click="getMyDepartmentList(1,100)">部门业绩</span>
+        </section>
         <transition name="router-fade">
             <section v-if="chooseType === 1">
               <section class="info-data">
-                  <ul class="clear">
-                      <li  class="info-data-link">
-                        <span class="info-data-team">团队成员</span>
-                        <span class="info-data-performance">团队业绩</span>
-                      </li>
-                  </ul>
                   <ul class="clear" v-for="(item,index) in teamList">
                       <li @click="getIndex(index,item.userId)" class="info-data-link">
                         <span class="info-data-center">{{item.nickName}}[{{item.uid}}]</span>
-                        <span class="spaPer">{{item.performance}}</span>
+                        <span class="spaPer">{{item.teamPerformance}}</span>
+                        <span class="spaPerGrade">{{item.remark}}</span>
                         <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnRecord, 'closeImg' : !turnRecord }"/></span>
                       </li>
                       <transition name="router-fade">
                           <section v-if="index === turnOn " class="member-data">
                             <div v-for="ele in memberList">
                               <span class="showDate">{{ele.nickName}}[{{ele.uid}}]</span>
-                              <span class="spaPer2">{{ele.performance}}</span>
+                              <span class="spaPer2Grade">{{item.remark}}</span>
+                              <span class="spaPer2">{{ele.teamPerformance}}</span>
                             </div>
                           </section>
                       </transition>
@@ -28,55 +28,76 @@
               </section>
             </section>
         </transition>
-        <div v-if="teamList == null || teamList == ''">
-           <nullData></nullData>
-        </div>
+        <transition name="router-fade">
+            <section v-if="chooseType === 2" class="show-data">
+              <div>
+                <ul>
+                   <li class="page">
+                       <span style="font-weight:bold;">部门总业绩</span>
+                       <div style="font-weight:bold;">{{sumDeparmentPerformance}}</div>
+                   </li>
+                </ul>
+              </div>
+              <div v-for="(item,index) in departmentList">
+                <ul>
+                   <li class="page">
+                       <span class="">第{{index+1}}部业绩</span>
+                       <div class="">{{item.performance}}</div>
+                   </li>
+                </ul>
+              </div>
+            </section>
+        </transition>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
-
 </template>
 
 <script>
     import headTop from 'src/components/header/head'
-    // import payPwd from '../../components/common/payPwd'
     import alertTip from 'src/components/common/alertTip'
     import {getUserInfo} from 'src/config/env'
-    import {mobileCode, checkExsis, sendMobile, getcaptchas, myteam} from 'src/service/getData'
-    import nullData from 'src/components/common/nullData'
-
+    import {myteam} from 'src/service/getData'
     export default {
         data(){
             return {
+                pageNo:1,
+                pageSize:100,
+                id:"",
                 chooseType:1,     //选择方式
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
                 turnRecord:false,   //打开
-                turnOn:0,
+                turnOn:-1,
+                sumDeparmentPerformance:0,
                 teamList:[], //直代
                 memberList:[],//二代
-                gradeList:[],
-                show:true,     //显示提示框
-                isEnter:true,  //是否登录
-                isLeave:false, //是否退出
-                showHtml:"",
+                departmentList:[],//二代
             }
         },
         components: {
             headTop,
             alertTip,
-            nullData,
-            // payPwd,
-        },
-        watch:{
         },
         created(){
-        },
-        mounted(){
-            this.getMyTeam(1,3,getUserInfo("id"));
+          this.id=getUserInfo("id");
+          this.getMyTeam(1,3,this.id);
         },
         methods: {
-            async getMyTeam(pageno,pageSize,parentUserId){
-                let res = await myteam(pageno,pageSize,parentUserId);
+            closeTip(){
+                this.showAlert = false;
+            },
+            getIndex:function($index,parentUserId){
+              if(this.turnOn == $index){
+                this.turnOn = -1;
+                this.turnRecord = false;
+              }else {
+                this.getmemberList(1,3,parentUserId);
+                this.turnOn=$index;
+                this.turnRecord = true;
+              }
+            },
+            async getMyTeam(pageNo,pageSize,parentUserId){
+                let res = await myteam(pageNo,pageSize,parentUserId);
                 this.teamList = res.result.rows;
             },
             async getmemberList(pageNo,pageSize,parentUserId){
@@ -91,50 +112,26 @@
                    }
                 }
             },
-            closeTip(){
-                this.showAlert = false;
-            },
-            getIndex:function($index,parentUserId){
-              this.getmemberList(1,3,parentUserId);
-              if(this.turnOn === $index){
-                this.turnOn = 0;
-                this.turnRecord = false;
-              }else {
-                this.turnOn=$index;
-                this.turnRecord = true;
-              }
-            },
-            exitlogin(){
-                this.show=true;
-                this.isEnter=true;
-                this.isLeave=false;
-            },
-            waitingThing(){
-                //取消推出
-                clearTimeout(this.timer)
-                this.isEnter=false;
-                this.isLeave=true;
-                this.timer = setTimeout(() =>{
-                    clearTimeout(this.timer)
-                    this.show=false;
-                },200)
-            },
-            //退出登录
-            async outLogin(){
-                this.OUT_LOGIN();
-                this.waitingThing();
-                this.$router.go(-1);
-                removeStore('user_id')
-                await signout();
+            async getMyDepartmentList(pageNo,pageSize){
+                this.chooseType = 2;
+                let res = await myteam(pageNo,pageSize,this.id);
+                if (res.code==200) {
+                    this.departmentList = res.result.rows;
+                    this.sumDeparmentPerformance = res.result.extend.sumDeparmentPerformance;
+                }else {
+                    this.showAlert = true;
+                    this.alertText = res.msg;
+                    if (res.code==0 || res.code==-1) {
+                       localStorage.clear();
+                   }
+                }
             },
         }
     }
-
 </script>
 
 <style lang="scss" scoped>
     @import 'src/style/mixin';
-
     .category_title{
         display: flex;
         justify-content: space-around;
@@ -153,11 +150,9 @@
             color: $blue;
         }
     }
-
     .restContainer{
         padding-top: 1.95rem;
     }
-
     .showImg{
       transform: rotate(90deg);
     }
@@ -178,34 +173,40 @@
                width: 1rem;
            }
          }
-         .info-data-team{
-           font-size: 0.7em;
-         }
-         .info-data-performance {
-           margin-left: 35%;
-           font-size: 0.7em;
-         }
          .spaPer{
-            text-align: right;
-            position: absolute;
-            right: 26%;
-            color: #7979cc;
-         }
+             text-align: right;
+             position: absolute;
+             right: 20%;
+             color: #7979cc;
+          }
+          .spaPerGrade{
+              position: absolute;
+              padding: 0.55rem;
+              right: 49%;
+              color: red;
+              font-size:13px;
+           }
          .info-data-center{
+           margin-left: 2%;
            font-size:16px;
            font-family:"微软雅黑",Courier New, Courier, monospace;
          }
       }
-
       .spaPer2{
          text-align: right;
          position: absolute;
-         right: 15%;
+         right: 20%;
          color: #7979cc;
          font-size: 0.85rem;
       }
+      .spaPer2Grade{
+          position: absolute;
+          padding: 0.45rem;
+          right: 50%;
+          color: red;
+          font-size:12px;
+       }
     }
-
     .show-data{
        background-color: #eee;
        ul{
@@ -221,7 +222,7 @@
          span{
            padding:0 1rem;
            height: 100%;
-           font-weight: bold;
+           font-weight: 500;
            line-height: 2rem;
          }
          div{
@@ -241,7 +242,7 @@
         font-size: 0.7rem;
         font-weight: normal;
         color: darkgrey;
-        padding: 3rem 3rem;
+        padding: 3rem 1.5rem;
       }
     }
 </style>
