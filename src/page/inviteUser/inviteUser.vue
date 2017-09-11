@@ -267,7 +267,8 @@
 
                     if(localStorage.getItem("token") == null){
                       this.isLogin("/login");
-                    }else {
+                    }
+                    else {
                       //刷新页面
                       location.reload();
                     }

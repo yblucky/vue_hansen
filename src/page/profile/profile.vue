@@ -192,7 +192,7 @@ import progress from 'src/components/progressBar/progress'
 import loading from 'src/components/common/loading'
 import {mapState, mapMutations} from 'vuex'
 import {getImgPath} from 'src/components/common/mixin'
-import {rewardsign,activeInfo,activeUser,getUser} from '../../service/getData'
+import {rewardsign,activeInfo,activeUser,getUser,intervalActice} from '../../service/getData'
 import {isLogin} from 'src/config/env'
 
 export default {
