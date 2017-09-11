@@ -3,7 +3,7 @@
         <head-top head-title="修改邮箱" go-back='true'></head-top>
         <section class="setname">
             <section class="setname-top">
-                <input type="text" placeholder="输入邮箱" :class="{'setname-input':bordercolor}" @input="inputThing" v-model="inputValue">
+                <input type="text" placeholder="输入邮箱" :class="{'setname-input':bordercolor}" v-model="inputValue">
                 <div>
                     <p v-if="earn">请输入正确的邮箱</p>
                     <p class="unlikep" v-else>输入的邮箱格式不正确</p>
@@ -13,6 +13,7 @@
                 <button :class="{fontopacity:opacityall}" @click="resetName">确认修改</button>
             </section>
         </section>
+        <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
 
@@ -22,6 +23,7 @@
     import {mapMutations,mapState} from 'vuex'
     import {updateUserInfo} from '../../../service/getData'
     import {updateLocalUser} from 'src/config/env'
+    import alertTip from 'src/components/common/alertTip'
     export default {
       data(){
             return{
@@ -29,7 +31,9 @@
                 bordercolor: false,  //输入框边框颜色
                 opacityall: false,   //字体透明度
                 inputValue: '',       //输入框的内容
-                newmail: ''         //新邮箱
+                newmail: '',         //新邮箱
+                showAlert: false, //显示提示组件
+                alertText: null, //提示的内容
             }
         },
         created(){
@@ -38,7 +42,7 @@
         mixins: [getImgPath],
         components: {
             headTop,
-
+            alertTip,
         },
         mounted(){
 
@@ -53,18 +57,25 @@
             ...mapMutations([
                 'RETSET_NAME'
             ]),
-            inputThing(){
-                if(this.inputValue.length <5 || this.inputValue.length>24){
-                    this.earn=false;
-                    this.bordercolor=true;
-                    this.opacityall=false;
-                }else{
-                    this.earn=true;
-                    this.bordercolor=false;
-                    this.opacityall=true;
-                }
-            },
+            // inputThing(){
+            //     if(/^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/gi.test(this.inputValue)){
+            //         this.earn=false;
+            //         this.bordercolor=true;
+            //         this.opacityall=false;
+            //     }else{
+            //         this.earn=true;
+            //         this.bordercolor=false;
+            //         this.opacityall=true;
+            //     }
+            // },
             async resetName(){
+                //验证邮箱
+                if(!/^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/gi.test(this.inputValue)){
+                  this.showAlert = true;
+                  this.alertText = "邮箱不正确";
+                  return
+                }
+
                 let res = await updateUserInfo('', '','',this.inputValue);
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
                 if (res.code == 200) {
@@ -78,7 +89,10 @@
                      localStorage.clear();
                   }
                 }
-            }
+            },
+            closeTip(){
+                this.showAlert = false;
+            },
         }
     }
 </script>

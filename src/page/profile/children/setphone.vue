@@ -13,6 +13,7 @@
                 <button :class="{fontopacity:opacityall}" @click="resetName">确认修改</button>
             </section>
         </section>
+        <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
 
@@ -22,6 +23,7 @@
     import {mapMutations,mapState} from 'vuex'
     import {updateUserInfo} from '../../../service/getData'
     import {updateLocalUser} from 'src/config/env'
+    import alertTip from 'src/components/common/alertTip'
     export default {
       data(){
             return{
@@ -29,7 +31,9 @@
                 bordercolor: false,  //输入框边框颜色
                 opacityall: false,   //字体透明度
                 inputValue: '',       //输入框的内容
-                newphone: ''         //新用户名
+                newphone: '',         //新用户名
+                showAlert: false, //显示提示组件
+                alertText: null, //提示的内容
             }
         },
         created(){
@@ -38,15 +42,16 @@
         mixins: [getImgPath],
         components: {
             headTop,
-
+            alertTip,
         },
         mounted(){
 
         },
         computed:{
-            ...mapState([
-                'userInfo'
-            ])
+          //判断手机号码
+          rightPhoneNumber: function (){
+              return /^1\d{10}$/gi.test(this.phoneNumber)
+          }
         },
         props:[],
         methods: {
@@ -54,7 +59,8 @@
                 'RETSET_NAME'
             ]),
             inputThing(){
-                if(this.inputValue.length <5 || this.inputValue.length>24){
+                console.error();
+                if(this.inputValue.length != 11){
                     this.earn=false;
                     this.bordercolor=true;
                     this.opacityall=false;
@@ -65,6 +71,11 @@
                 }
             },
             async resetName(){
+                if(!/^1\d{10}$/gi.test(this.inputValue)){
+                    this.showAlert = true;
+                    this.alertText = "请输入正确的手机号码";
+                    return
+                }
                 let res = await updateUserInfo(this.inputValue,'', '','');
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
                 if (res.code == 200) {
@@ -78,7 +89,10 @@
                      localStorage.clear();
                   }
                 }
-            }
+            },
+            closeTip(){
+                this.showAlert = false;
+            },
         }
     }
 </script>

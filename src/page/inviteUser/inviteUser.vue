@@ -193,10 +193,20 @@
                   this.alertText = '手机号不能为空';
                   return;
                 }
+                if(!/^1\d{10}$/gi.test(this.phone)){
+                    this.showAlert = true;
+                    this.alertText = "请输入正确的手机号码";
+                    return
+                }
                 if (!this.email) {
                   this.showAlert = true;
                   this.alertText = '邮箱不能为空';
                   return;
+                }
+                if(!/^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/gi.test(this.email)){
+                  this.showAlert = true;
+                  this.alertText = "邮箱不正确";
+                  return
                 }
                 if (!this.cardGrade) {
                   this.showAlert = true;
@@ -222,6 +232,11 @@
                   this.showAlert = true;
                   this.alertText = '支付密码不能为空';
                   return;
+                }
+                if(!/^\d{6}$/gi.test(this.payword)){
+                  this.showAlert = true;
+                  this.alertText = "支付密码是6位数的数字";
+                  return
                 }
                 if (!this.confirmPayWord) {
                   this.showAlert = true;
