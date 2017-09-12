@@ -24,6 +24,7 @@ const staticProfit = r => require.ensure([], () => r(require('../page/profit/sta
 const dynamicProfit = r => require.ensure([], () => r(require('../page/profit/dynamicProfit')), 'dynamicProfit')
 const transferRecord = r => require.ensure([], () => r(require('../page/transfer/children/transferRecord')), 'transferRecord')
 const inviteUser = r => require.ensure([], () => r(require('../page/inviteUser/inviteUser')), 'inviteUser')
+const inviteQrcode = r => require.ensure([], () => r(require('../page/inviteUser/inviteQrcode')), 'inviteQrcode')
 const activateCode = r => require.ensure([], () => r(require('../page/activateCode/activateCode')), 'activateCode')
 const registerCode = r => require.ensure([], () => r(require('../page/registerCode/registerCode')), 'registerCode')
 const myTeam = r => require.ensure([], () => r(require('../page/myTeam/myTeam')), 'myTeam')
@@ -33,6 +34,9 @@ const myReward = r => require.ensure([], () => r(require('../page/reward/myRewar
 const forgetPwd = r => require.ensure([], () => r(require('../page/forgetPwd/forgetPwd')), 'forgetPwd')
 const taskInfo = r => require.ensure([], () => r(require('../page/taskInfo/taskInfo')), 'taskInfo')
 const digitalAsset = r => require.ensure([], () => r(require('../page/digitalAsset/digitalAsset')), 'digitalAsset')
+const financial = r => require.ensure([], () => r(require('../page/financial/financial')), 'financial')
+const chooseUserCardGrade = r => require.ensure([], () => r(require('../page/upgrade/chooseUserCardGrade')), 'chooseUserCardGrade')
+
 
 
 export default [{
@@ -162,6 +166,11 @@ export default [{
           path: '/inviteUser',
           component: inviteUser
         },
+        //邀请会员二维码
+        {
+          path: '/inviteQrcode',
+          component: inviteQrcode
+        },
         //我的激活码
         {
           path: '/activateCode',
@@ -206,6 +215,16 @@ export default [{
         {
           path: '/digitalAsset',
           component: digitalAsset
+        },
+        //财务中心
+        {
+          path: '/financial',
+          component: financial
+        },
+        //新用户选择等级激活
+        {
+          path: '/chooseUserCardGrade',
+          component: chooseUserCardGrade
         },
     ]
 }]

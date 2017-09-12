@@ -204,3 +204,20 @@ export const intervalActice = () => fetch('/code/intervalActice', {}, 'GET');
  * 获取奖金列表信息
  */
 export const rewardInfo = (tradeOrderType) => fetch('/reward/list', {tradeOrderType}, 'GET');
+
+
+/**
+ * 财务中心
+ */
+export const financialInfo = () => fetch('/financial/info', {}, 'GET');
+
+/**
+ * 获取分享二维码
+ */
+export const shareCode = () => fetch('/share/sharecode', {}, 'GET');
+
+
+/**
+ * 分享注册重新选择注册卡的等级
+ */
+export const shareChooseCardeGrade = (grade) => fetch('/share/shareChooseCardeGrade', {grade}, 'POST');

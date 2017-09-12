@@ -54,31 +54,36 @@
             </section>
             <section class="info-data">
                 <ul class="clear">
-                    <router-link to="/pay" tag="li" class="info-data-link">
-                        <img src="../../hsimages/10.png" class="vip22" />
-                        <span class="info-data-bottom">购物币</span>
-                        <span class="info-data-middle"><b>{{parseInt(payAmt).toFixed(4)}}</b></span>
-                    </router-link>
-                    <router-link to="/trade" tag="li" class="info-data-link">
-                        <img src="../../hsimages/11.png" class="vip22" />
-                        <span class="info-data-bottom">交易币</span>
-                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(4)}}</b></span>
+                    <router-link to="" tag="li" class="info-data-link">
+                        <!-- <img src="../../hsimages/10.png" class="vip22" /> -->
+                        <span class="info-data-bottom">最大收益</span>
+                        <span class="info-data-middle"><b>{{parseInt(payAmt).toFixed(2)}}</b></span>
                     </router-link>
                     <router-link to="" tag="li" class="info-data-link">
-                        <img src="../../hsimages/12.png" class="vip22" />
-                        <span class="info-data-bottom">瀚森股权</span>
-                        <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(4)}}</b></span>
+                        <!-- <img src="../../hsimages/11.png" class="vip22" /> -->
+                        <span class="info-data-bottom">动态奖金</span>
+                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(2)}}</b></span>
+                    </router-link>
+                    <router-link to="" tag="li" class="info-data-link">
+                        <!-- <img src="../../hsimages/11.png" class="vip22" /> -->
+                        <span class="info-data-bottom">冻结收益</span>
+                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(2)}}</b></span>
+                    </router-link>
+                    <router-link to="/chooseUserCardGrade" tag="li" class="info-data-link">
+                        <!-- <img src="../../hsimages/12.png" class="vip22" /> -->
+                        <span class="info-data-bottom">释放奖金</span>
+                        <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(2)}}</b></span>
                     </router-link>
                 </ul>
             </section>
 
             <section class="profile-1reTe">
                 <ul class="clear">
-                    <router-link to="/transfer" tag="li" class="info-data-link">
+                    <router-link to="/digitalAsset" tag="li" class="info-data-link">
                         <span class="info-data-top">
                             <img src="../../hsimages/13.png" class="vip" />
                         </span>
-                        <span class="info-data-bottom">转账汇款</span>
+                        <span class="info-data-bottom">数字资产</span>
                     </router-link>
                     <router-link to="/dynamicProfit" tag="li" class="info-data-link">
                       <span class="info-data-top">
@@ -107,7 +112,7 @@
                       </span>
                         <span class="info-data-bottom">我的注册码</span>
                     </router-link>
-                    <router-link to="/inviteUser" tag="li" class="info-data-link">
+                    <router-link to="/inviteQrcode" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../hsimages/18.png" class="vip" />
                       </span>
@@ -122,11 +127,11 @@
                         </span>
                         <span class="info-data-bottom">资料修改</span>
                     </router-link>
-                    <router-link to="/forget" tag="li" class="info-data-link">
+                    <router-link to="/financial" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../hsimages/20.png" class="vip" />
                       </span>
-                        <span class="info-data-bottom">密码修改</span>
+                        <span class="info-data-bottom">财务中心</span>
                     </router-link>
                     <router-link to="/myTeam" tag="li" class="info-data-link">
                       <span class="info-data-top">
@@ -292,9 +297,9 @@ export default {
     },
     created(){
         //获取激活信息
-        this.initData();
-        this.activeInfo();
-        this.showRedBao();
+        // this.initData();
+        // this.activeInfo();
+        // this.showRedBao();
         // this.showMessageCount();
     },
     mounted(){
@@ -304,6 +309,10 @@ export default {
       // this.initData();
       //初始化信息
       //this.initData();
+      //获取激活信息
+      this.initData();
+      this.activeInfo();
+      this.showRedBao();
     },
     mixins: [isLogin],
     components:{
@@ -414,6 +423,9 @@ export default {
               this.cardName = "未激活";
             }else if(this.status == 5){
               this.show_expire = true;
+            }else if(this.status == 1){
+              //跳转页面
+              this.$router.push("/chooseUserCardGrade");
             }else {
               this.cardName = "";
             }
@@ -492,6 +504,12 @@ export default {
               }
               this.activeStatus=res.result.status;
           }else {
+
+              if(res.code == 8888){
+
+                this.showAlert = true;
+                this.alertText = res.msg;
+              }
               if (res.code==0 || res.code==-1) {
                   this.showAlert = true;
                   this.alertText = res.msg;
@@ -702,7 +720,7 @@ export default {
         ul{
             .info-data-link{
                 float:left;
-                width:33.33%;
+                width:24.95%;
                 display:inline-block;
                 border-right:1px solid #f1f1f1;
                 span{

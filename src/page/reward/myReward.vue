@@ -9,15 +9,15 @@
             </div>
             <ul>
                <li class="page">
-                   <span class=""><img  src="../../hsimages/37.png"/>交易币<b>{{item.tradeAmt}}JYB 约{{item.tradeAmtRmb}}元</b></span>
+                   <span class=""><img  src="../../hsimages/11.png"/>&nbsp;&nbsp;交易币<b>{{item.tradeAmt}}JYB 约{{item.tradeAmtRmb}}元</b></span>
                    <div class="">+{{item.tradeAmtRmb}}</div>
                </li>
               <li class="page">
-                  <span class=""><img  src="../../hsimages/36.png"/>购物币<b>{{item.equityAmt}}GWB 约{{item.equityAmtRmb}}元</b></span>
+                  <span class=""><img  src="../../hsimages/10.png"/>&nbsp;&nbsp;购物币<b>{{item.equityAmt}}GWB 约{{item.equityAmtRmb}}元</b></span>
                   <div class="">+{{item.equityAmtRmb}}</div>
               </li>
              <li class="page">
-                 <span class=""><img  src="../../hsimages/38.png"/>股权币<b>{{item.payAmt}}GQB 约{{item.payAmtRmb}}元</b></span>
+                 <span class=""><img  src="../../hsimages/12.png"/>&nbsp;&nbsp;股权币<b>{{item.payAmt}}GQB 约{{item.payAmtRmb}}元</b></span>
                  <div class="">+{{item.payAmtRmb}}</div>
              </li>
             </ul>
@@ -248,14 +248,14 @@
          font-size: 0.75rem;
          font-weight: normal;;
          width: 100%;
-         height: 3rem;
+         height: 2rem;
          span{
            padding:0 1rem;
            height: 100%;
            font-weight: bold;
-           line-height: 2rem;
+           line-height: 1.8rem;
            b{
-            padding:0.35rem;
+            padding:0.45rem;
             font-size:0.35rem;
            }
            img{
@@ -269,7 +269,7 @@
            height: 100%;
            text-align: center;
            padding:0 0.75rem;
-           line-height: 2rem;
+           line-height: 1.8rem;
            color: green;
          }
       }
