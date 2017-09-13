@@ -57,22 +57,22 @@
                     <router-link to="" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/10.png" class="vip22" /> -->
                         <span class="info-data-bottom">最大收益</span>
-                        <span class="info-data-middle"><b>{{parseInt(payAmt).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseFloat(sumProfits).toFixed(2)}}</b></span>
                     </router-link>
                     <router-link to="" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/11.png" class="vip22" /> -->
                         <span class="info-data-bottom">动态奖金</span>
-                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseFloat(dynamicProfits).toFixed(2)}}</b></span>
                     </router-link>
                     <router-link to="" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/11.png" class="vip22" /> -->
                         <span class="info-data-bottom">冻结收益</span>
-                        <span class="info-data-middle"><b>{{parseInt(tradeAmt).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseFloat(sumFrozenProfits).toFixed(2)}}</b></span>
                     </router-link>
-                    <router-link to="/chooseUserCardGrade" tag="li" class="info-data-link">
+                    <router-link to="" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/12.png" class="vip22" /> -->
                         <span class="info-data-bottom">释放奖金</span>
-                        <span class="info-data-middle"><b>{{parseInt(equityAmt).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseFloat(cashOutProfits).toFixed(2)}}</b></span>
                     </router-link>
                 </ul>
             </section>
@@ -282,6 +282,8 @@ export default {
             outTradeAddress:'',
             status:0,
             weekActiveCode:0,         //每周激活码
+            dynamicProfits:0,         //动态奖金
+            sumFrozenProfits:0,       //冻结奖金
 
             //激活信息
             tradeConverRmbScale:0,    //交易币兑换人民币汇率
@@ -383,6 +385,8 @@ export default {
             this.insuranceAmt=res.result.insuranceAmt;
             this.maxProfits=res.result.maxProfits;
             this.sumProfits=res.result.sumProfits;
+            this.dynamicProfits = res.result.dynamicProfits;
+            this.sumFrozenProfits = res.result.sumFrozenProfits;
             this.cashOutProfits=res.result.cashOutProfits;
             this.contactUserId=res.result.contactUserId;
             this.activeCodeNo=res.result.activeCodeNo;

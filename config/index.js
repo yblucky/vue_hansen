@@ -39,8 +39,8 @@ module.exports = {
             '/api',
         ],
         // proxypath: 'http://cangdu.org:8001',
-        // proxypath: 'http://192.168.2.104:8090/api',
-        proxypath: 'http://www.hansenshare.com/api',
+        proxypath: 'http://192.168.2.113:8090/api',
+        // proxypath: 'http://www.hansenshare.com/api',
         // proxypath: 'http://hs.6pyun.com/api',
 
         // CSS Sourcemaps off by default because relative paths are "buggy"

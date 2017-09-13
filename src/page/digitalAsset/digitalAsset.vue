@@ -11,8 +11,8 @@
                      <router-link to="/trade" tag="li" class="info-data-link">
                          <img src="../../hsimages/11.png" class="vip22" />
                          <span class="info-data-bottom">交易币</span>
-                         <span class="info-data-middle">当前价格：1JYB 约1.000RMB<b>资产：1000000.00RMB</b></span>
-                         <span class="info-data-bottom1">1000</span>
+                         <span class="info-data-middle">当前价格：1JYB 约{{parseFloat(tradeConverRmbScale).toFixed(4)}}RMB<b>资产：{{parseFloat(tradeRmb).toFixed(4)}}RMB</b></span>
+                         <span class="info-data-bottom1">{{parseFloat(tradeAmt).toFixed(4)}}</span>
                      </router-link>
                  </ul>
              </section>
@@ -22,8 +22,8 @@
                      <router-link to="/pay" tag="li" class="info-data-link">
                          <img src="../../hsimages/10.png" class="vip22" />
                          <span class="info-data-bottom">购物币</span>
-                         <span class="info-data-middle">当前价格：1GWB 约1.000RMB<b>资产：1000000.00RMB</b></span>
-                         <span class="info-data-bottom1">1000</span>
+                         <span class="info-data-middle">当前价格：1GWB 约{{parseFloat(payConverRmbScale).toFixed(4)}}RMB<b>资产：{{parseFloat(payRmb).toFixed(4)}}RMB</b></span>
+                         <span class="info-data-bottom1">{{parseFloat(payAmt).toFixed(4)}}</span>
                      </router-link>
                  </ul>
              </section>
@@ -33,8 +33,8 @@
                      <router-link to="" tag="li" class="info-data-link">
                          <img src="../../hsimages/12.png" class="vip22" />
                          <span class="info-data-bottom">股权币</span>
-                         <span class="info-data-middle">当前价格：1HSS 约1.000RMB<b>资产：1000000.00RMB</b></span>
-                         <span class="info-data-bottom1">1000</span>
+                         <span class="info-data-middle">当前价格：1HSS 约{{parseFloat(equityConverRmbScale).toFixed(4)}}RMB<b>资产：{{parseFloat(equityRmb).toFixed(4)}}RMB</b></span>
+                         <span class="info-data-bottom1">{{parseFloat(equityAmt).toFixed(4)}}</span>
                      </router-link>
                  </ul>
              </section>
@@ -55,8 +55,6 @@
    import {removeStore} from 'src/config/mUtils'
    import {updateUserInfo} from '../../service/getData'
    import loading from 'src/components/common/loading'
-   var test = null;
-   var _this = null;
    export default {
        data(){
            return{
@@ -64,19 +62,26 @@
                alertText: null,
                isUpimg:false,//是否更新头像
                showLoading: false, //显示加载动画
+
+               equityAmt:0,
+               payAmt:0,
+               tradeAmt:0,
+               tradeConverRmbScale:0,    //交易币兑换人民币汇率
+               payConverRmbScale:0,      //支付币兑换人民币汇率
+               equityConverRmbScale:1,      //支付币兑换人民币汇率
+
+               tradeRmb:0,          //交易币兑换人民币资产
+               payRmb:0,            //购物币兑换人民币资产
+               equityRmb:0,         //股权币兑换人民币资产
            }
        },
        created(){
          this.isLogin("/login");
          this.initData();
-         _this = this;
        },
        mounted(){
        },
        mixins: [isLogin,getLoginUserInfo],
-       beforeDestroy(){
-           clearTimeout(this.timer)
-       },
        components: {
            headTop,
            alertTip,
@@ -94,13 +99,14 @@
            async initData(){
                let res = await getUser();
                if(res.code == 200){
-                   this.uid=res.result.uid;
-                   this.nickName=res.result.nickName;
-                   this.phone=res.result.phone;
-                   this.mail=res.result.email;
-                   this.avatar=res.result.headImgUrl;
-                   this.shopAddr = res.result.shopAddr;
-                   this.bankCardNo = res.result.bankCardNo;
+                 this.equityAmt=res.result.equityAmt;
+                 this.payAmt=res.result.payAmt;
+                 this.tradeAmt=res.result.tradeAmt;
+                 this.tradeConverRmbScale=res.result.tradeConverRmbScale;
+                 this.payConverRmbScale=res.result.payConverRmbScale;
+                 this.tradeRmb=(res.result.tradeConverRmbScale * res.result.tradeAmt);
+                 this.payRmb=(res.result.payConverRmbScale * res.result.payAmt);
+                 this.equityRmb = res.result.equityAmt;
                }else {
                  this.showAlert = true;
                  this.alertText = res.msg;
