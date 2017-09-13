@@ -33,6 +33,7 @@ const setMessage = r => require.ensure([], () => r(require('../page/message/setM
 const myReward = r => require.ensure([], () => r(require('../page/reward/myReward')), 'myReward')
 const forgetPwd = r => require.ensure([], () => r(require('../page/forgetPwd/forgetPwd')), 'forgetPwd')
 const taskInfo = r => require.ensure([], () => r(require('../page/taskInfo/taskInfo')), 'taskInfo')
+const doTask = r => require.ensure([], () => r(require('../page/taskInfo/doTask')), 'doTask')
 const digitalAsset = r => require.ensure([], () => r(require('../page/digitalAsset/digitalAsset')), 'digitalAsset')
 const financial = r => require.ensure([], () => r(require('../page/financial/financial')), 'financial')
 const chooseUserCardGrade = r => require.ensure([], () => r(require('../page/upgrade/chooseUserCardGrade')), 'chooseUserCardGrade')
@@ -210,6 +211,11 @@ export default [{
         {
           path: '/taskInfo',
           component: taskInfo
+        },
+        //做任务页面
+        {
+          path: '/doTask',
+          component: doTask
         },
         //数字资产钱包
         {
