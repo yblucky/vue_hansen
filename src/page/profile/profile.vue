@@ -69,7 +69,7 @@
                         <span class="info-data-bottom">冻结收益</span>
                         <span class="info-data-middle"><b>{{parseFloat(sumFrozenProfits).toFixed(2)}}</b></span>
                     </router-link>
-                    <router-link to="" tag="li" class="info-data-link">
+                    <router-link to="/doTask" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/12.png" class="vip22" /> -->
                         <span class="info-data-bottom">释放奖金</span>
                         <span class="info-data-middle"><b>{{parseFloat(cashOutProfits).toFixed(2)}}</b></span>
@@ -127,11 +127,12 @@
                         </span>
                         <span class="info-data-bottom">资料修改</span>
                     </router-link>
-                    <router-link to="/financial" tag="li" class="info-data-link">
+                    <router-link to="/forget" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../hsimages/20.png" class="vip" />
                       </span>
-                        <span class="info-data-bottom">财务中心</span>
+                        <!-- <span class="info-data-bottom">财务中心</span> -->
+                        <span class="info-data-bottom">密码修改</span>
                     </router-link>
                     <router-link to="/myTeam" tag="li" class="info-data-link">
                       <span class="info-data-top">

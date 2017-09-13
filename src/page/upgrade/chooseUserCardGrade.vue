@@ -8,7 +8,7 @@
               <ul class="clear">
                   <li @click="selCard(item.grade)"   class="info-data-link" v-for="(item,index) in cardGradeList">
                       <span class="info-data-top-right">
-                        <img v-if='selCardType==item.grade' src="../../images/check.png"/>
+                        <img v-if='selCardType==1' src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
@@ -132,6 +132,11 @@
                   //显示loading
                   this.showLoading = true;
                    //选择哪个就升级到哪个
+                   if (index!=1) {
+                    this.showAlert = true;
+                    this.alertText ="首次只能选普卡";
+                    return;
+                   }
                   let res= await findCardGrade(index);
                   this.selCardType = index;
                   if(res.code == 200){

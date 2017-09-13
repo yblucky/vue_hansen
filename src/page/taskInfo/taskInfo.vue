@@ -37,7 +37,7 @@
           </li>
        </ul>
 
-       <!-- 显示激活页面 -->
+       <!-- 显示任务页面 -->
        <section class="coverpart_active" v-if="show_task">
            <section class="cover-background"></section>
            <section class="cover-content">
