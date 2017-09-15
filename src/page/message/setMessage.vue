@@ -4,9 +4,11 @@
         </head-top>
         <section class="input_container">
           <div>
-            <span>反馈类型：</span>
-            <select name="msgType" placeholder="请选择" v-model="type" disabled="disabled">
-              <option value="1">反馈与建议</option>
+            <span>类型：</span>
+            <select name="msgType" placeholder="请选择" v-model="type">
+              <option value="1">我要投诉</option>
+              <option value="2">系统bug</option>
+              <option value="3">功能建议</option>
             </select>
           </div>
           <div>
@@ -14,14 +16,16 @@
             <input type="text" placeholder="" v-model="title">
           </div>
           <div>
-            <textarea rows="10" cols="45"  placeholder="请输入反馈内容" v-model="detail"></textarea>
+            <span>手机：</span>
+            <input type="text" placeholder=""  v-model="phone">
           </div>
           <div>
-            <span>反馈手机号码：</span>
-            <input class="msgMaill" type="text" placeholder=""  v-model="phone">
+            <span>内容：</span>
+            <textarea rows="8" cols="39.5" v-model="detail"></textarea>
           </div>
+
         </section>
-        <div class="active_container" @click="addfeedback">提交反馈</div>
+        <div class="active_container" @click="addfeedback">保存</div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
         <foot-guide></foot-guide>
     </div>
@@ -145,6 +149,7 @@
         background-color: #4cd964;
     }
     .input_container{
+        padding-top: 5%;
         font-size: 0.65rem;
         font-weight:500;
         width:100%;
@@ -154,16 +159,13 @@
           border:1px solid #ececec;
         }
         div{
-          padding: .15rem .35rem;
+          padding: .15rem 1rem;
         }
         input,select{
             @include sc(0.65rem, #666);
             border:1px solid #dedede;
             width:11.3rem;
             height:1.45rem;
-        }
-        .msgMaill{
-          width:10rem;
         }
     }
 </style>

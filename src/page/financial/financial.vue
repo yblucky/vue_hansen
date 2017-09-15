@@ -20,7 +20,7 @@
             </div>
        </section>
 
-       <section class="topPanel1">
+       <!-- <section class="topPanel1">
             <table width="300" height="150" text-align="center">
                 <tr>
                     <td width="25%"></td>
@@ -43,7 +43,7 @@
                     <td>{{financialInfo.equitySumInAmt}}</td>
                 </tr>
             </table>
-       </section>
+       </section> -->
 
        <section class="topPanel2">
             <div class="div1">奖金总金额：{{financialInfo.rewardSumAmt}}</div>

@@ -1,6 +1,6 @@
 <template>
    <div class="upGradeRecordContainer" >
-       <head-top :head-title="title" go-back='true'></head-top>
+       <head-top :head-title="title"></head-top>
        <section>
            <div class="videoPanel" v-if="isVdoShow">
              <!-- controls 是否显示控制器 -->
@@ -54,6 +54,8 @@
              <div class="active_container" @click="doTask">完成任务</div>
            </section>
        </section>
+
+       <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
 
    </div>
 
@@ -119,9 +121,6 @@
              this.showAlert = false;
              if(localStorage.getItem("token") == null){
                this.isLogin("/login");
-             }else {
-               //刷新页面
-               location.reload();
              }
          },
          //关闭任务弹窗

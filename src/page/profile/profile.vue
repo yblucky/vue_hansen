@@ -47,7 +47,7 @@
                     <router-link to="" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/10.png" class="vip22" /> -->
                         <span class="info-data-bottom">最大收益</span>
-                        <span class="info-data-middle"><b>{{parseFloat(sumProfits).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseFloat(maxProfits).toFixed(2)}}</b></span>
                     </router-link>
                     <router-link to="" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/11.png" class="vip22" /> -->
@@ -62,9 +62,9 @@
                     <router-link to="/doTask" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/12.png" class="vip22" /> -->
                         <span class="info-data-bottom">释放奖金</span>
-                        <span class="info-data-middle"><b>{{parseFloat(cashOutProfits).toFixed(2)}}</b></span>
+                        <span class="info-data-middle"><b>{{parseFloat(sumProfits).toFixed(2)}}</b></span>
                     </router-link>
-                    <div class="bottomdiv" v-if="progressText > 0">
+                    <div class="bottomdiv" v-if="progressText > 0.001">
                         <progressbar :value="progressText" :type="type4" :max="max4" animate="animate"></progressbar>
                     </div>
                 </ul>
@@ -181,11 +181,11 @@
             <section class="cover-content">
               <div class="head">
                   <span class="close" @click="closeExpire">×</span>
-                  <h4>激活码已过期</h4>
+                  <h4>消费码已过期</h4>
               </div>
               <div class="middle">
-                  <p style="text-align:center;padding-top:2%;"><b style="font-size:20px;font-weight:bold;">数量：{{activeCodeNo}}</b><span v-if="activeCodeNo < weekActiveCode" style="font-size:13px;margin-left:5%;">(余额不足)</span></p>
-                  <p style="text-align:center;padding-top:2%;"><b style="font-size:18px;font-weight:bold;color:red;">激活账户需要{{weekActiveCode}}个激活码</b></p>
+                  <p style="text-align:center;padding-top:2%;"><b style="font-size:20px;font-weight:bold;">账户消费码：{{activeCodeNo}}</b><span v-if="activeCodeNo < weekActiveCode" style="font-size:13px;margin-left:5%;">(余额不足)</span></p>
+                  <p style="text-align:center;padding-top:2%;"><b style="font-size:18px;font-weight:bold;color:red;">激活账户需要{{weekActiveCode}}个消费码</b></p>
               </div>
               <div class="active_container" @click="intervalActice">立即激活</div>
             </section>
@@ -412,27 +412,30 @@ export default {
             this.outPayAddress=res.result.outPayAddress;
             this.outEquityAddress=res.result.outEquityAddress;
             this.outTradeAddress=res.result.outTradeAddress;
+            this.weekActiveCode = res.result.cardGrade;
 
             //计算进度条
-            this.progressText = (this.cashOutProfits / this.sumProfits * 100);
+            if(this.maxProfits > 0){
+              this.progressText = (this.sumProfits / this.maxProfits * 100);
+            }
 
             //用户卡等级
             if(this.status == 3){
                 if(this.cardGrade == 1){
                   this.cardName = "普卡用户";
-                  this.weekActiveCode = 1;
+                  // this.weekActiveCode = 1;
                 }else if(this.cardGrade == 2){
                     this.cardName = "铜卡用户";
-                    this.weekActiveCode = 2;
+                    // this.weekActiveCode = 2;
                 }else if (this.cardGrade == 3 ) {
                   this.cardName = "银卡用户";
-                  this.weekActiveCode = 3;
+                  // this.weekActiveCode = 3;
                 }else if (this.cardGrade == 4 ) {
                   this.cardName = "金卡用户";
-                  this.weekActiveCode = 4;
+                  // this.weekActiveCode = 4;
                 }else if (this.cardGrade == 5 ) {
                   this.cardName = "钻石用户";
-                  this.weekActiveCode = 5;
+                  // this.weekActiveCode = 5;
                 }
             }else if(this.status == 4){
                 this.cardName = "处理中"
@@ -469,21 +472,23 @@ export default {
              }
 
              //判断是否需要跳转任务页面
-            //  if(res.result.userTask != null){
-            //     //不为空，跳转任务页面
-            //     this.$router.push({
-            //         path:'/doTask',
-            //         query: {
-            //             title: res.result.userTask.title,
-            //             linkImgPath: res.result.userTask.linkImgPath,
-            //             link: res.result.userTask.link,
-            //             discription: res.result.userTask.discription,
-            //             taskType: res.result.userTask.taskType,
-            //             userTaskId: res.result.userTask.userTaskId,
-            //             status:res.result.userTask.status,
-            //         }
-            //     })
-            //  }
+             if(this.status == 3){
+               if(res.result.userTask != null){
+                  //不为空，跳转任务页面
+                  this.$router.push({
+                      path:'/doTask',
+                      query: {
+                          title: res.result.userTask.title,
+                          linkImgPath: res.result.userTask.linkImgPath,
+                          link: res.result.userTask.link,
+                          discription: res.result.userTask.discription,
+                          taskType: res.result.userTask.taskType,
+                          userTaskId: res.result.userTask.id,
+                          status:res.result.userTask.status,
+                      }
+                  })
+               }
+             }
 
           }else {
             this.showAlert = true;

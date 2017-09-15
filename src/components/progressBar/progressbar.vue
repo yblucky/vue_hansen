@@ -36,7 +36,7 @@
 		},
 		computed:{
 			percent(){
-				return parseInt(this.value * 100 / this.max,10);
+				return parseFloat((this.value * 100 / this.max).toFixed(3),10);
 			},
 			valueText(){
 				return this.percent + '%';
