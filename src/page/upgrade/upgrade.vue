@@ -28,24 +28,24 @@
         </div>
 
         <section class="input_container">
-          <div style="margin-left:5.3sssssss%;">
+          <div>
             <span>最大收益：</span>
             <input type="text" readOnly="true" placeholder="最大收益" v-model.lazy="cardMaxproft">
           </div>
-          <div>
-            <span>补充激活码：</span>
-            <input type="text" readOnly="true" placeholder="补充激活码：" v-model.lazy="needActiveNum">
+          <div style="padding-left:5.5%;">
+            <span>消费码：</span>
+            <input type="text" readOnly="true" placeholder="补充消费码：" v-model.lazy="needActiveNum">
           </div>
-          <div>
-            <span>补充购物币：</span>
+          <div style="padding-left:5.5%;">
+            <span>购物币：</span>
             <input type="text" readOnly="true" placeholder="补充购物币：" v-model.lazy="needBuyNum">
           </div>
-          <div>
-            <span>补充交易币：</span>
+          <div style="padding-left:5.5%;">
+            <span>交易币：</span>
             <input type="text" readOnly="true" placeholder="补充交易币：" v-model.lazy="needChangeNum">
           </div>
         </section>
-        <div class="active_container" @click="doUpgrade()">激活注册</div>
+        <div class="active_container" @click="doUpgrade()">升级</div>
 
         <section class="coverpart" v-if="showLoading">
             <section class="cover-background"></section>
@@ -374,7 +374,8 @@
         width:100%;
         text-align:center;
         display:block;
-        background-color: rgba(210, 215, 218, 0.32);;
+        /*background-color: rgba(210, 215, 218, 0.32);*/
+        background-color: $fc;
         div{
           padding: .15rem .15rem;
         }

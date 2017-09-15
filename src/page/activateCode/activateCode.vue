@@ -1,15 +1,15 @@
 <template>
    <div class="upGradeRecordContainer">
-       <head-top head-title="我的激活码" go-back='true'></head-top>
+       <head-top head-title="我的消费码" go-back='true'></head-top>
        <section class="topPanel">
-          <div class="activateDiv">激活码剩余</div>
+          <div class="activateDiv">消费码剩余</div>
           <div class="activateCode"><b>{{activeCodeNo}}</b>个</div>
        </section>
        <section class="info-data">
            <ul class="clear">
                <li @click="turnCode=!turnCode,turnRecord=false" class="info-data-link">
                  <span class="info-data-left"><img src="../../hsimages/31.png" class="privateImage" /></span>
-                 <span class="info-data-center">转让激活码</span>
+                 <span class="info-data-center">转让消费码</span>
                  <span class="info-data-right"><img src="../../hsimages/44.png" v-bind:class="{'showImg': turnCode, 'closeImg' : !turnCode  }"/></span>
                </li>
                <transition name="router-fade">
@@ -199,10 +199,10 @@
                   this.activeCodeList[i].isShowNextPage=flag;
                   if (this.activeCodeList[i].sendUserId==this.id) {
                       this.activeCodeList[i].transferNoStr=""+this.activeCodeList[i].transferNo;
-                      this.activeCodeList[i].remarkStr="会员"+this.nickName+"使用激活码";
+                      this.activeCodeList[i].remarkStr="会员"+this.nickName+"使用消费码";
                   }else {
                       this.activeCodeList[i].transferNoStr="+"+this.activeCodeList[i].transferNo;
-                      this.activeCodeList[i].remarkStr="会员"+this.nickName+"获赠激活码";
+                      this.activeCodeList[i].remarkStr="会员"+this.nickName+"获赠消费码";
                   }
                 }
               }
@@ -225,7 +225,7 @@
            }
            if (this.transferNo <= 0) {
              this.showAlert = true;
-             this.alertText = '激活码数量不能为空';
+             this.alertText = '消费码数量不能为空';
              return;
            }
           //  this.turnType = false;

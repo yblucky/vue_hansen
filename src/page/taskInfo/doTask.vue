@@ -5,7 +5,7 @@
            <div class="videoPanel" v-if="isVdoShow">
              <!-- controls 是否显示控制器 -->
              <!-- autoplay 是否自动播放 -->
-             <video id="vdo" width="100%" height="300px" webkit-playsinline playsinline autoplay="autoplay" controls :src="videoUrl"></video>
+             <video id="vdo" width="100%" webkit-playsinline playsinline autoplay="autoplay" controls :src="videoUrl"></video>
              <!-- <img id="poster" v-show="isPosterShow" :src="posterUrl" alt=""> -->
              <!-- <img id="loading" v-show="isLoadingShow" src="https://hybrid.xiaoying.tv/web/active/krFAQ/static/imgs/load.gif" alt=""> -->
              <!-- <img @click="play()" id="playBtn" v-show="isPlayBtnShow" src="https://hybrid.xiaoying.tv/web/active/krFAQ/static/imgs/playBtn.png" alt=""> -->
@@ -51,7 +51,7 @@
                     <img src="../../hsimages/gou.png" />
                  </div>
              </div>
-             <div class="active_container">完成任务</div>
+             <div class="active_container" @click="doTask">完成任务</div>
            </section>
        </section>
 
@@ -64,7 +64,7 @@
    import alertTip from 'src/components/common/alertTip'
    import {mapState, mapMutations} from 'vuex'
    import {isLogin,formatDate} from 'src/config/env'
-   import {codeTransfer,codeTransferList,getUser,financialInfo} from '../../service/getData'
+   import {codeTransfer,codeTransferList,getUser,doTask} from '../../service/getData'
    import payPwd from 'src/components/common/payPwd'
    import loading from 'src/components/common/loading'
 
@@ -81,9 +81,13 @@
           // isPlayBtnShow: true,
           videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
           linkImgPath:"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg", //任务图片  测试图片：https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg
-          discription:"连接手机放辣椒法拉风急浪大放家里附近拉萨的飞机到拉萨的风景连接手机放辣椒法拉风急浪大放家里附近拉萨的飞机到拉萨的风景",
+          discription:"",
+          userTaskId:"",  //任务关联id
+          link:"",        //任务跳转链接
+          status:"",      //任务状态
           timer:null,   //到计时
           computedTime:0, //秒数
+          taskTime:0,
           code_state:true,//是否显示距离任务时间
           show_task:false,   //显示任务
           code_btn:false, //是否显示任务已完成
@@ -94,12 +98,11 @@
            headTop,
            alertTip,
            payPwd,
-           loading
+           loading,
        },
        mounted(){
          this.isLogin("/login");
-        //  this.initData();
-          this.countDown();
+         this.initData();
        },
        filters:{
          formatDate(createTime){
@@ -132,22 +135,43 @@
            this.code_btn = false;
          },
         async initData(){
-            this.showLoading = true;
-            let reUser = await financialInfo();
-            if(reUser.code == 200){
-                this.showLoading = false;
-            }else {
-              this.showLoading = false;
-              this.showAlert = true;
-              this.alertText = reUser.msg;
-              if(reUser.code==0 || reUser.code==-1){
-                localStorage.clear();
-              }
-              return;
+            // this.params = this.$route.query.params;
+            if(this.$route.query.taskType == 2){
+              //显示图片
+              this.linkImgPath = this.$route.query.linkImgPath;
+              this.isVdoShow = false;
+            }else if(this.$route.query.taskType == 3) {
+              this.videoUrl = this.$route.query.linkImgPath;
+              this.isVdoShow = true;
             }
+
+            this.title = this.$route.query.title;
+            this.discription = this.$route.query.discription;
+            this.link = this.$route.query.link;
+            this.userTaskId = this.$route.query.userTaskId;
+            this.status = this.$route.query.status;
+            //调用倒计时
+            this.countDown();
          },
          //到计时
          countDown(){
+           if(this.status != 1){
+             this.showAlert = true;
+             this.alertText = "任务已完成,5秒后自动退出任务";
+             //任务已完成
+             this.code_state = false;
+             //启动到计时
+             this.taskTime = 5;
+             //倒计时
+             this.timer = setInterval(() => {
+                 this.taskTime --;
+                 if (this.taskTime == 0) {
+                     clearInterval(this.timer)
+                     this.$router.go(-1);
+                 }
+             }, 1000)
+             return;
+           }
            //启动到计时
            this.computedTime = 30;
            //倒计时
@@ -160,6 +184,43 @@
                }
            }, 1000)
          },
+         async doTask () {
+          //显示刷新
+          this.showLoading = true;
+          //从后台获取记录
+          let res = await doTask(this.userTaskId);
+          if(res.code==200){
+              //领取成功，隐藏刷新
+              this.show_task = false;
+              this.code_state = false;
+              this.code_btn = false;
+              this.showLoading = false;
+              this.showAlert = true;
+              this.alertText = "完成任务,5秒后自动退出任务";
+              //启动到计时
+              this.taskTime = 5;
+              //倒计时
+              this.timer = setInterval(() => {
+                  this.taskTime --;
+                  if (this.taskTime == 0) {
+                      clearInterval(this.timer)
+                      this.$router.go(-1);
+                  }
+              }, 1000)
+              //跳转页面
+              // window.location="https://www.baidu.com";
+              // window.open(this.link);
+          }else {
+            //不管成功失败，都得关闭
+            this.show_task = false;
+            this.showLoading = false;
+            this.showAlert = true;
+            this.alertText = res.msg;
+            if (res.code==0 || res.code==-1) {
+               localStorage.clear();
+            }
+          }
+        },
       }
    }
 </script>
@@ -177,11 +238,12 @@
          position: fixed;
          top:95%;
          width: 100%;
-         height:5%;
+         padding-top:2%;
+         height: 2rem;
          text-align: center;
-         padding-top:1.8%;
          @include sc(.7rem, #fff);
          background-color:#FAE8E8;
+         z-index:202;
          color:#F62A0A;
          font-family: cursive;
       }
@@ -190,9 +252,9 @@
           position: fixed;
           top:95%;
           width: 100%;
-          height:5%;
+          padding-top:2%;
+          height: 2rem;
           text-align: center;
-          padding-top:1.8%;
           @include sc(.7rem, #fff);
           background-color:#FAE8E8;
           z-index:202;
@@ -203,17 +265,17 @@
    }
 
    .videoPanel{
-     /*margin-top:20px;*/
+     padding-top:14%;
      background: #000000;
-     height: 11rem;
-     border-bottom:1px solid #B6C0C0;
+     /*height: 7rem;*/
+     /*border-bottom:1px solid #B6C0C0;*/
    }
 
    .imgPanel{
      padding-top:15%;
      background: $fc;
      height: 12rem;
-     border-bottom:1px solid #B6C0C0;
+     /*border-bottom:1px solid #B6C0C0;*/
      padding-bottom:2%;
      img{
        width: 100%;
@@ -222,7 +284,7 @@
    }
 
    .discriptionPanel{
-     padding-top:2%;
+     padding-top:3%;
      padding-left:3%;
      background: $fc;
      text-indent:32px;
@@ -240,7 +302,7 @@
            @include wh(100%,105%);
            @include allcover;
            background:#000;
-           z-index:100;
+           z-index:1010;
            opacity:.2;
        }
        .cover-content{
@@ -269,7 +331,7 @@
            @include wh(100%,100%);
            @include allcover;
            background:#000;
-           z-index:100;
+           z-index:990;
            opacity:.2;
        }
        .cover-content{
@@ -294,7 +356,7 @@
                }
                .close{
                  position: absolute;
-                 top: 0;
+                 top: 10px;
                  left: 10px;
                  font-size: 30px;
                  width: 16px;

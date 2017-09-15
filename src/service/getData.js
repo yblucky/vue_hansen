@@ -221,3 +221,8 @@ export const shareCode = () => fetch('/share/sharecode', {}, 'GET');
  * 分享注册重新选择注册卡的等级
  */
 export const shareChooseCardeGrade = (grade) => fetch('/share/shareChooseCardeGrade', {grade}, 'POST');
+
+/**
+ * 根据任务id查询任务信息
+ */
+export const getTaskInfoById = (taskId) => fetch('/task/getTaskInfoById', {taskId}, 'GET');

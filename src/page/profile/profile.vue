@@ -40,16 +40,6 @@
                            <img v-if="status == 5" @click="intervalActicePage" src="../../hsimages/51.png" class="vip23" algin="middle" />
                       </span>
                     </div>
-
-                    <!-- <div class="bottomdiv">
-                        <progress></progress>
-                    </div> -->
-
-                    <!-- <span class="arrow">
-                        <svg class="arrow-svg" fill="#fff">
-                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right"></use>
-                        </svg>
-                    </span> -->
                 </ul>
             </section>
             <section class="info-data">
@@ -74,9 +64,11 @@
                         <span class="info-data-bottom">释放奖金</span>
                         <span class="info-data-middle"><b>{{parseFloat(cashOutProfits).toFixed(2)}}</b></span>
                     </router-link>
+                    <div class="bottomdiv" v-if="progressText > 0">
+                        <progressbar :value="progressText" :type="type4" :max="max4" animate="animate"></progressbar>
+                    </div>
                 </ul>
             </section>
-
             <section class="profile-1reTe">
                 <ul class="clear">
                     <router-link to="/digitalAsset" tag="li" class="info-data-link">
@@ -104,13 +96,14 @@
                         <span class="info-data-top">
                             <img src="../../hsimages/16.png" class="vip" />
                         </span>
-                        <span class="info-data-bottom">我的激活码</span>
+                        <span class="info-data-bottom">我的消费码</span>
                     </router-link>
-                    <router-link to="/registerCode" tag="li" class="info-data-link">
+                    <router-link to="/financial" tag="li" class="info-data-link">
                       <span class="info-data-top">
                           <img src="../../hsimages/17.png" class="vip" />
                       </span>
-                        <span class="info-data-bottom">我的注册码</span>
+                        <!-- <span class="info-data-bottom">我的注册码</span> -->
+                        <span class="info-data-bottom">财务中心</span>
                     </router-link>
                     <router-link to="/inviteQrcode" tag="li" class="info-data-link">
                       <span class="info-data-top">
@@ -218,7 +211,7 @@
 import headTop from 'src/components/header/head'
 import alertTip from '../../components/common/alertTip'
 // import footGuide from 'src/components/footer/footGuide'
-import progress from 'src/components/progressBar/progress'
+import progressbar from 'src/components/progressBar/progressbar'
 import loading from 'src/components/common/loading'
 import {mapState, mapMutations} from 'vuex'
 import {getImgPath} from 'src/components/common/mixin'
@@ -296,6 +289,21 @@ export default {
             needBuyPayAmt:0,          //需要补充购物币数量
             cardMaxproft:0,           //最大收益
             activeStatus:'',          //激活状态
+
+            //任务列表
+            userTaskParams:{
+              title:"",
+              linkImgPath:"",
+              link:"",
+              discription:"",//任务描述
+              taskType:"",//任务类型
+              userTaskId:"",//用户关联任务id
+              remark:"",
+              status:"",    //任务状态
+            },
+
+            //进度条
+            progressText:0,
         }
     },
     created(){
@@ -322,6 +330,7 @@ export default {
         headTop,
         alertTip,
         loading,
+        progressbar,
         // footGuide,
     },
 
@@ -404,6 +413,9 @@ export default {
             this.outEquityAddress=res.result.outEquityAddress;
             this.outTradeAddress=res.result.outTradeAddress;
 
+            //计算进度条
+            this.progressText = (this.cashOutProfits / this.sumProfits * 100);
+
             //用户卡等级
             if(this.status == 3){
                 if(this.cardGrade == 1){
@@ -455,6 +467,24 @@ export default {
              }else if (this.grade == 8) {
                 this.gradeName = "董事";
              }
+
+             //判断是否需要跳转任务页面
+            //  if(res.result.userTask != null){
+            //     //不为空，跳转任务页面
+            //     this.$router.push({
+            //         path:'/doTask',
+            //         query: {
+            //             title: res.result.userTask.title,
+            //             linkImgPath: res.result.userTask.linkImgPath,
+            //             link: res.result.userTask.link,
+            //             discription: res.result.userTask.discription,
+            //             taskType: res.result.userTask.taskType,
+            //             userTaskId: res.result.userTask.userTaskId,
+            //             status:res.result.userTask.status,
+            //         }
+            //     })
+            //  }
+
           }else {
             this.showAlert = true;
             this.alertText = res.msg;

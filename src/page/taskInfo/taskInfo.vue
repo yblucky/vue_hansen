@@ -31,7 +31,7 @@
                 </div>
                 <div class="right_div">
                     <!-- <div v-if="item.status == 1" class="login_container" @click="doTask(item.id,item.taskId)">做任务领取奖励</div> -->
-                    <div v-if="item.status == 1" class="login_container" @click="showTask(item.title,item.linkImgPath,item.link,item.discription,item.remark,item.id)">做任务领取奖励</div>
+                    <div v-if="item.status == 1" class="login_container" @click="showTask(item.title,item.linkImgPath,item.link,item.discription,item.taskType,item.remark,item.id,item.status)">做任务领取奖励</div>
                     <div v-if="item.status == 2" class="complent_container">已完成</div>
                 </div>
           </li>
@@ -52,20 +52,20 @@
                  <p style="padding-left:7%;padding-top:2%;"><span style="font-size:10px;">需充值交易币数量：<b>{{parseFloat(needBuyTradeAmt).toFixed(2)}}</b><b style="padding-left:5%;">1JYC</b><b style="padding-left:5%;">约{{parseFloat(tradeConverRmbScale).toFixed(2)}}元</b></span></p>
                  <p style="padding-left:7%;padding-top:2%;"><b style="font-size:15px;font-weight:bold;">交易币余额：{{parseFloat(tradeAmt).toFixed(2)}}</b></p> -->
                  <div class="showImg">
-                    <img :src="linkImgPath" />
+                    <img :src="params.linkImgPath" />
                  </div>
                  <div class="showTitle">
-                    <h4>---{{title}}---</h4>
+                    <h4>---{{params.title}}---</h4>
                  </div>
                  <div class="showTaskType">
-                    <h6>{{taskType}}</h6>
+                    <h6>{{params.remark}}</h6>
                  </div>
                  <div class="showDiscription">
-                    <b>{{discription}}</b>
+                    <b>{{params.discription}}</b>
                  </div>
 
              </div>
-             <div class="active_container" @click="skipTask(link,userTaskId)">前往任务</div>
+             <div class="active_container" @click="skipTask()">前往任务</div>
            </section>
        </section>
 
@@ -106,12 +106,22 @@
               compelteTaskCount:0,  //完成任务数量
               signCount:0,        //领取任务奖励
               show_task:false,      //显示任务页面窗
-              title:"",   //任务标题
-              linkImgPath:"", //任务图片  测试图片：https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg
-              link:"",
-              discription:"",//任务描述
-              taskType:"",//任务类型
-              userTaskId:"",//用户关联任务id
+              // title:"",   //任务标题
+              // linkImgPath:"", //任务图片  测试图片：https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg
+              // link:"",
+              // discription:"",//任务描述
+              // taskType:"",//任务类型
+              // userTaskId:"",//用户关联任务id
+              params:{
+                title:"",
+                linkImgPath:"",
+                link:"",
+                discription:"",//任务描述
+                taskType:"",//任务类型
+                userTaskId:"",//用户关联任务id
+                remark:"",
+                status:"",    //任务状态
+              },
            }
        },
        created(){
@@ -178,10 +188,22 @@
               }
           },
           //跳转做任务页面
-          skipTask(link,userTaskId){
+          skipTask(){
             //隐藏弹框
             this.show_task=false;
-            this.doTask(userTaskId,link);
+            // this.doTask(userTaskId,link);
+            this.$router.push({
+                path:'/doTask',
+                query: {
+                    title: this.params.title,
+                    linkImgPath: this.params.linkImgPath,
+                    link: this.params.link,
+                    discription: this.params.discription,
+                    taskType: this.params.taskType,
+                    userTaskId: this.params.userTaskId,
+                    status:this.params.status,
+                }
+            })
           },
           closeTip(){
               this.showAlert = false;
@@ -197,20 +219,23 @@
             this.show_task = false;
           },
           //显示任务详情窗 item.title,item.linkImgPath,item.link,item.discription,item.taskType
-          showTask(title,linkImgPath,link,discription,taskType,userTaskId){
+          showTask(title,linkImgPath,link,discription,taskType,remark,userTaskId,status){
             // console.error("userTaskId:"+userTaskId);
-            this.show_task = true;
-            this.title = title;
-            if(linkImgPath == null || linkImgPath ==""){
-              this.linkImgPath = "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg";
-            }else {
-              this.linkImgPath = linkImgPath;
-            }
+              this.show_task = true;
+              this.params.title = title;
+              if(linkImgPath == null || linkImgPath ==""){
+                this.params.linkImgPath = "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg";
+              }else {
+                this.params.linkImgPath = linkImgPath;
+              }
 
-            this.link = link;
-            this.discription = discription;
-            this.userTaskId = userTaskId;
-          }
+              this.params.link = link;
+              this.params.discription = discription;
+              this.params.userTaskId = userTaskId;
+              this.params.taskType = taskType;
+              this.params.remark = remark;
+              this.params.status = status;
+          },
        },
        filters:{
          formatDate(createTime){
