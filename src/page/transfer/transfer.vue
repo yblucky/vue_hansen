@@ -43,10 +43,10 @@
         </div>
         <section class="input_container">
           <p>
-            <span>收款用户：<input type="text" size="16" name="toUid" placeholder="请输入用户uid" v-model.lazy="toUid"></span>
+            <span>收款用户：<input type="number" size="16" name="toUid" placeholder="请输入用户uid" v-model.lazy="toUid"></span>
           </p>
           <p>
-            <span>转币数量：<input type="text" size="16" name="amount" placeholder="0.00" v-model.lazy="amount"></span>
+            <span>转币数量：<input type="number" size="16" name="amount" placeholder="0.00" v-model.lazy="amount"></span>
           </p>
           <p class="pay_display">
             <span>高级密码：<input type="password" size="16" name="payPassWord"  v-model.lazy="payPassWord"></span>
@@ -373,6 +373,7 @@
             border-radius: 0.3rem;
             text-align: center;
             font-family:cursive;
+            width: 45%;
         }
         p{
             text-align: center;

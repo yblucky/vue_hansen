@@ -65,7 +65,7 @@
                         <span class="info-data-middle"><b>{{parseFloat(sumProfits).toFixed(2)}}</b></span>
                     </router-link>
                     <div class="bottomdiv" v-if="progressText > 0.001">
-                        <progressbar :value="progressText" :type="type4" :max="max4" animate="animate"></progressbar>
+                        <progressbar :value="progressText"  animate="animate"></progressbar>
                     </div>
                 </ul>
             </section>
