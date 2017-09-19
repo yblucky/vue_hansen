@@ -13,7 +13,7 @@
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-middle">{{item.remark}}</span>
-                      <div class="info-data-bottom">{{item.insuranceAmt}}</div>
+                      <!-- <div class="info-data-bottom">{{item.insuranceAmt}}</div> -->
                   </li>
               </ul>
           </section>

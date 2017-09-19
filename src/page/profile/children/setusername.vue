@@ -58,6 +58,7 @@
                     this.earn=true;
                     this.bordercolor=true;
                     this.opacityall=false;
+                    return;
                 }else{
                     this.earn=false;
                     this.bordercolor=false;

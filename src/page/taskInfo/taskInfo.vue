@@ -215,13 +215,13 @@
               }
           },
           //关闭任务弹窗
-          closeActive(){
+            closeActive(){
             this.show_task = false;
           },
           //显示任务详情窗 item.title,item.linkImgPath,item.link,item.discription,item.taskType
           showTask(title,linkImgPath,link,discription,taskType,remark,userTaskId,status){
             // console.error("userTaskId:"+userTaskId);
-              this.show_task = true;
+              this.show_task = false;
               this.params.title = title;
               if(linkImgPath == null || linkImgPath ==""){
                 this.params.linkImgPath = "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg";
@@ -235,6 +235,7 @@
               this.params.taskType = taskType;
               this.params.remark = remark;
               this.params.status = status;
+              this.skipTask();
           },
        },
        filters:{

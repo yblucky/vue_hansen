@@ -147,7 +147,7 @@
              if (res.code==200) {
                this.showLoading = false;
                this.showAlert = true;
-               this.alertText = res.msg; 
+               this.alertText = res.msg;
              }else {
                this.showLoading = false;
                this.showAlert = true;
@@ -165,11 +165,7 @@
              if(localStorage.getItem("token") == null){
                this.isLogin("/login");
              }
-
-            //  else {
-            //    //刷新页面
-            //    location.reload();
-            //  }
+             location.reload();
          },
         async initData(){
             this.showLoading = true;

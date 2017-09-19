@@ -4,10 +4,18 @@
        <ul>
           <li class="page"  v-for="item in coinList">
             <div class="left_div">
-                <!-- <img v-if="item.orderType == 1 || item.orderType == 10 " src="../../../hsimages/39.png"  class="vip"/>
-                <img v-if="item.orderType  == 4 || item.orderType == 11" src="../../../hsimages/40.png"  class="vip"/>
-                <img v-if="item.orderType  == 8 || item.orderType == 12" src="../../../hsimages/41.png"  class="vip"/> -->
-                <span v-if="item.sendUserId == id">转出{{item.receviceUid}}</span>
+              <!-- <img v-if="item.orderType == 1 || item.orderType == 10" src="../../../hsimages/39.png"  class="vip"/>
+              <img v-if="item.orderType  == 4 || item.orderType == 11" src="../../../hsimages/40.png"  class="vip"/>
+              <img v-if="item.orderType  == 8 || item.orderType == 12" src="../../../hsimages/41.png"  class="vip"/>
+               -->
+                <!-- <img v-if="item.orderType == 1 || item.orderType == 10" src="../../static/img/10.png"  class="vip"/>
+                <img v-if="item.orderType  == 4 || item.orderType == 11" src="../../../static/img/11.png"  class="vip"/>
+                <img v-if="item.orderType  == 8 || item.orderType == 12" src="../../../static/img/12.png"  class="vip"/> -->
+
+                <span v-if="item.sendUserId == id && (item.orderType==13 || item.orderType==14) && item.receviceUid==99999">激活</span>
+                <span v-if="item.sendUserId == id && (item.orderType==15 || item.orderType==16)  && item.receviceUid==99999">升级</span>
+                <span v-if="item.sendUserId == id && item.receviceUid!=99999">转出{{item.receviceUid}}</span>
+                <span v-if="item.sendUserId == id && item.receviceUid==99999">转出</span>
                 <span v-if="item.receviceUserId == id">{{item.receviceUid}}转入</span>
             </div>
             <div class="middle_div">
@@ -66,7 +74,7 @@
                 coinList:null,
                 pageNo:1,
                 pageSize:30,
-                orderType:[1,4,8,10,11,12],
+                orderType:[1,4,8,10,11,12,13,14,15,16],
            }
        },
        components: {

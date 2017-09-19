@@ -163,7 +163,7 @@
                       this.showAlert = true;
                       this.alertText = res.msg;
                       //刷新页面
-                      location.reload();
+
                     }else {
                       this.showLoading=false;
                       this.showAlert = true;
@@ -175,7 +175,7 @@
                         this.isLogin("/login");
                       }else {
                         //刷新页面
-                        location.reload();
+                        // location.reload();
                       }
                     }
                 }
@@ -202,6 +202,7 @@
             },
             closeTip(){
                 this.showAlert = false;
+                location.reload();
             },
             closePwd(){
                 this.showPwd = false;

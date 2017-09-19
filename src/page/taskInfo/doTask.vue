@@ -5,7 +5,7 @@
            <div class="videoPanel" v-if="isVdoShow">
              <!-- controls 是否显示控制器 -->
              <!-- autoplay 是否自动播放 -->
-             <video id="vdo" width="100%" webkit-playsinline playsinline autoplay="autoplay" controls :src="videoUrl"></video>
+             <video id="vdo" width="100%" webkit-playsinline playsinline autoplay="autoplay"   controls :src="videoUrl"></video> 
              <!-- <img id="poster" v-show="isPosterShow" :src="posterUrl" alt=""> -->
              <!-- <img id="loading" v-show="isLoadingShow" src="https://hybrid.xiaoying.tv/web/active/krFAQ/static/imgs/load.gif" alt=""> -->
              <!-- <img @click="play()" id="playBtn" v-show="isPlayBtnShow" src="https://hybrid.xiaoying.tv/web/active/krFAQ/static/imgs/playBtn.png" alt=""> -->
@@ -82,7 +82,7 @@
           // isLoadingShow: false,
           // isPlayBtnShow: true,
           videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
-          linkImgPath:"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg", //任务图片  测试图片：https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg
+          linkImgPath:"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2672143417,2386537397&fm=27&gp=0.jpg", //任务图片
           discription:"",
           userTaskId:"",  //任务关联id
           link:"",        //任务跳转链接
@@ -172,7 +172,7 @@
              return;
            }
            //启动到计时
-           this.computedTime = 30;
+           this.computedTime = 10;
            //倒计时
            this.timer = setInterval(() => {
                this.computedTime --;

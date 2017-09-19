@@ -14,14 +14,15 @@
           <span class="title">选择账户等级</span>
           <section class="info-data">
               <ul class="clear">
-                  <li @click="selCard(item.grade)"   class="info-data-link" v-for="(item,index) in cardGradeList">
+                  <!-- <li @click="selCard(item.grade)"   class="info-data-link" v-for="(item,index) in cardGradeList"> -->
+                    <li @click=""   class="info-data-link" v-for="(item,index) in cardGradeList">
                       <span class="info-data-top-right">
                         <img v-if='selCardType==item.grade' src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
                       <span class="info-data-middle">{{item.remark}}</span>
-                      <div class="info-data-bottom">{{item.insuranceAmt}}</div>
+                      <!-- <div class="info-data-bottom">{{item.insuranceAmt}}</div> -->
                   </li>
               </ul>
           </section>
@@ -45,7 +46,8 @@
             <input type="text" readOnly="true" placeholder="补充交易币：" v-model.lazy="needChangeNum">
           </div>
         </section>
-        <div class="active_container" @click="doUpgrade()">升级</div>
+        <div class="active_container" @click="">暂不支持升级</div>
+        <!-- <div class="active_container" @click="doUpgrade()">升级</div> -->
 
         <section class="coverpart" v-if="showLoading">
             <section class="cover-background"></section>
