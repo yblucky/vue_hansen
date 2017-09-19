@@ -7,8 +7,8 @@
                 <!-- <img v-if="item.orderType == 1 || item.orderType == 10 " src="../../../hsimages/39.png"  class="vip"/>
                 <img v-if="item.orderType  == 4 || item.orderType == 11" src="../../../hsimages/40.png"  class="vip"/>
                 <img v-if="item.orderType  == 8 || item.orderType == 12" src="../../../hsimages/41.png"  class="vip"/> -->
-                <span v-if="item.sendUserId == id">转出</span>
-                <span v-if="item.receviceUserId == id">转入</span>
+                <span v-if="item.sendUserId == id">转出{{item.receviceUid}}</span>
+                <span v-if="item.receviceUserId == id">{{item.receviceUid}}转入</span>
             </div>
             <div class="middle_div">
                 <p class="p1">
@@ -141,17 +141,17 @@
    }
    .page{
       border-bottom: 0.1rem solid #eee;
-      font-size: 0.75rem;
+      font-size: 0.60rem;
       width: 100%;
       height: 2.3rem;
       .left_div{
         float: left;
-        margin-left:5%;
-        margin-right:5%;
+        margin-left:1%;
+        margin-right:1%;
         margin-top: 4%;
         text-align: center;
         font-family: cursive;
-        @include wh(10%,10%);
+        @include wh(30%,10%);
         .vip{
            width:1.5rem;
            algin:center;
@@ -178,7 +178,7 @@
 
       .middle_div2{
         float: left;
-        /*margin-top:1%;*/
+        margin-top:-0.5%;
         margin-left: 55%;
         @include wh(55%,25%);
         .p1{

@@ -67,7 +67,7 @@
                 coinList:null,
                 pageNo:1,
                 pageSize:30,
-                orderType:[2,3,10]
+                orderType:[2,3,10,13]
            }
        },
        components: {
@@ -84,7 +84,7 @@
        filters:{
          formatDate(createTime){
            let date = new Date(createTime);
-           return formatDate(date,'yyyy-MM-dd');
+           return formatDate(date,'yyyy-MM-dd hh:mm:ss');
          }
        },
        methods: {
@@ -164,7 +164,7 @@
         float: left;
         @include wh(10%,10%);
         text-align: center;
-        margin-left:4%;
+        margin-left:0.1%;
         .p1{
             margin-top: 42%;
             /*margin-left:10%;*/
@@ -172,20 +172,20 @@
       }
       .middle_div1{
         float: left;
-        margin-left: 20%;
-        @include wh(15%,10%);
+        margin-left: 8%;
+        @include wh(55%,10%);
         .p3{
-            margin-top: 35%;
+            margin-top: 9%;
         }
       }
 
       .middle_div2{
         float: left;
         margin-top:1%;
-        margin-left: 75%;
-        @include wh(25%,25%);
+        margin-left: 59%;
+        @include wh(65%,25%);
         .p1{
-            /*margin-top: 35%;*/
+            margin-top: 0%;
         }
       }
    }

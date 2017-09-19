@@ -214,7 +214,7 @@
                this.alertText = '支付密码不能为空';
                return;
              }
-             let res = await cointOut(this.outTradeAddress, parseFloat(this.amount) ,this.walletOrderType,this.payPassWord);
+             let res = await cointOut(this.outTradeAddress, parseFloat(this.coinOutAmt) ,this.walletOrderType,this.payPassWord);
              if (res.code==200) {
                this.showAlert = true;
                this.alertText = res.msg;

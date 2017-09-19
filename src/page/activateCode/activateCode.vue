@@ -132,6 +132,13 @@
                this.alertText = '支付密码不能为空';
                return;
              }
+             var reg = /^[0-9]+$/;
+             if (!re.test(this.transferNo)) {
+               this.showAlert = true;
+               this.alertText = '转账数量只能是正整数';
+               return;
+             }
+
 
              //隐藏密码框
              this.showPwd=false;

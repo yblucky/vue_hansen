@@ -8,7 +8,7 @@
               <ul class="clear">
                   <li @click="selCard(item.grade)"   class="info-data-link" v-for="(item,index) in cardGradeList">
                       <span class="info-data-top-right">
-                        <img v-if='selCardType==1' src="../../images/check.png"/>
+                        <img v-if='selCardType==(index+1)' src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
@@ -72,7 +72,7 @@
                 showAlert: false, //显示提示组件
                 alertText: null, //提示的内容
                 active:2, //升级方式
-                selCardType: 1, //升级等级
+                selCardType: 0, //升级等级
                 cardMaxproft: 0, //最大收益
                 needActiveNum:0,//需要补充激活码数量
                 needRegisterNum:0,//需要补充注册码数量
