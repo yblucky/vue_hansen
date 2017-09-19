@@ -17,7 +17,7 @@
           </div>
           <div>
             <span>手机：</span>
-            <input type="text" placeholder=""  v-model="phone">
+            <input type="number" placeholder=""  v-model="phone">
           </div>
           <div>
             <span>内容：</span>
@@ -27,7 +27,6 @@
         </section>
         <div class="active_container" @click="addfeedback">保存</div>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
-        <foot-guide></foot-guide>
     </div>
 </template>
 
@@ -156,15 +155,16 @@
         text-align:right;
         display:block;
         textarea{
+          width:78%;
           border:1px solid #ececec;
         }
         div{
-          padding: .15rem 1rem;
+          padding: .1rem 1rem;
         }
         input,select{
             @include sc(0.65rem, #666);
             border:1px solid #dedede;
-            width:11.3rem;
+            width:9.3rem;
             height:1.45rem;
         }
     }
