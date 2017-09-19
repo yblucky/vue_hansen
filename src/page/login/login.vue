@@ -19,7 +19,7 @@
             <section class="input_container captcha_code_container">
                 <input type="text" placeholder="验证码" maxlength="4" v-model="picCode">
                 <div class="img_change_img">
-                    <img v-show="captchaCodeImg" :src="captchaCodeImg">
+                    <img id="captchaCodeImg" v-show="showCaptchaCodeImg" v-bind:src="captchaCodeImg">
                     <div class="change_img" @click="getCaptchaCode">
                         <p>看不清</p>
                         <p>换一张</p>
@@ -45,6 +45,7 @@
             return {
                 loginName: "", //用户名
                 password: "", //密码
+                showCaptchaCodeImg:false,
                 captchaCodeImg: null, //验证码地址
                 picCode: null, //传回验证验证码picCode
                 showPassword:false,
@@ -73,6 +74,9 @@
                 let res = await getcaptchas();
                  this.captchaCodeImg = res.result.picCode;
                  this.key= res.result.key;
+                 this.showCaptchaCodeImg=true;
+                //  document.getElementById("captchaCodeImg").src=this.captchaCodeImg;
+                //  console.log( document.getElementById("captchaCodeImg").src);
             },
             //发送登录信息
             async checkLogin(){

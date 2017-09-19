@@ -63,6 +63,7 @@
 			position: absolute;
 			top:33%;
 			left: 45%;
+			display: none;
 	}
 	.progress-bar{
 		width:0;

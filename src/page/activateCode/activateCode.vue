@@ -133,7 +133,7 @@
                return;
              }
              var reg = /^[0-9]+$/;
-             if (!re.test(this.transferNo)) {
+             if (!reg.test(this.transferNo)) {
                this.showAlert = true;
                this.alertText = '转账数量只能是正整数';
                return;
@@ -147,8 +147,7 @@
              if (res.code==200) {
                this.showLoading = false;
                this.showAlert = true;
-               this.alertText = res.msg;
-               location.reload();
+               this.alertText = res.msg; 
              }else {
                this.showLoading = false;
                this.showAlert = true;
