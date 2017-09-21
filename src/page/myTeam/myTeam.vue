@@ -163,7 +163,7 @@
       .info-data-link{
          border-bottom: 0.1rem solid #eee;
          width: 100%;
-         padding: 0.45rem;
+         padding: 0.25rem;
          .info-data-right{
            text-align: right;
            position: absolute;
@@ -181,7 +181,7 @@
           }
           .spaPerGrade{
               position: absolute;
-              padding: 0.55rem;
+              padding: 0.25rem;
               right: 49%;
               color: red;
               font-size:13px;

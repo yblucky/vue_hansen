@@ -37,6 +37,7 @@ const doTask = r => require.ensure([], () => r(require('../page/taskInfo/doTask'
 const digitalAsset = r => require.ensure([], () => r(require('../page/digitalAsset/digitalAsset')), 'digitalAsset')
 const financial = r => require.ensure([], () => r(require('../page/financial/financial')), 'financial')
 const chooseUserCardGrade = r => require.ensure([], () => r(require('../page/upgrade/chooseUserCardGrade')), 'chooseUserCardGrade')
+const chooseUserCardGradeAgain = r => require.ensure([], () => r(require('../page/upgrade/chooseUserCardGradeAgain')), 'chooseUserCardGradeAgain')
 
 
 
@@ -231,6 +232,11 @@ export default [{
         {
           path: '/chooseUserCardGrade',
           component: chooseUserCardGrade
+        },
+        //保单出局选择等级激活
+        {
+          path: '/chooseUserCardGradeAgain',
+          component: chooseUserCardGradeAgain
         },
     ]
 }]

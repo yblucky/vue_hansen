@@ -46,7 +46,7 @@
             <input type="text" readOnly="true" placeholder="补充交易币：" v-model.lazy="needChangeNum">
           </div>
         </section>
-        <div class="active_container" @click="">暂不支持升级</div>
+        <div class="active_container" @click="">暂不开启</div>
         <!-- <div class="active_container" @click="doUpgrade()">升级</div> -->
 
         <section class="coverpart" v-if="showLoading">

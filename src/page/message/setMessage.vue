@@ -16,12 +16,12 @@
             <input type="text" placeholder="" v-model="title">
           </div>
           <div>
-            <span>手机：</span>
-            <input type="number" placeholder=""  v-model="phone">
+            <span>内容：</span>
+            <textarea rows="6" cols="39.5" v-model="detail"></textarea>
           </div>
           <div>
-            <span>内容：</span>
-            <textarea rows="8" cols="39.5" v-model="detail"></textarea>
+            <span>联系方式：</span>
+            <input type="text" placeholder=""  v-model="phone">
           </div>
 
         </section>
@@ -166,6 +166,9 @@
             border:1px solid #dedede;
             width:9.3rem;
             height:1.45rem;
+        }
+        textarea{
+          width:9.3rem;
         }
     }
 </style>

@@ -5,7 +5,7 @@
            <div class="videoPanel" v-if="isVdoShow">
              <!-- controls 是否显示控制器 -->
              <!-- autoplay 是否自动播放 -->
-             <video id="vdo" width="100%" webkit-playsinline playsinline autoplay="autoplay"   controls :src="videoUrl"></video> 
+             <video id="vdo" width="100%" webkit-playsinline playsinline autoplay="autoplay"   controls :src="videoUrl"></video>
              <!-- <img id="poster" v-show="isPosterShow" :src="posterUrl" alt=""> -->
              <!-- <img id="loading" v-show="isLoadingShow" src="https://hybrid.xiaoying.tv/web/active/krFAQ/static/imgs/load.gif" alt=""> -->
              <!-- <img @click="play()" id="playBtn" v-show="isPlayBtnShow" src="https://hybrid.xiaoying.tv/web/active/krFAQ/static/imgs/playBtn.png" alt=""> -->
@@ -44,14 +44,14 @@
            <section class="cover-content">
              <div class="head">
                  <span class="close" @click="closeActive">×</span>
-                 <h4>瀚森社区</h4>
+                 <h4>任务已完成</h4>
              </div>
              <div class="middle">
                  <div class="showImg">
                     <img src="../../hsimages/gou.png" />
                  </div>
              </div>
-             <div class="active_container" @click="doTask">完成任务</div>
+             <div class="active_container" @click="doTask">退出任务</div>
            </section>
        </section>
 
@@ -156,7 +156,7 @@
          countDown(){
            if(this.status != 1){
              this.showAlert = true;
-             this.alertText = "任务已完成,5秒后自动退出任务";
+             this.alertText = "已完成任务,5秒后自动退出任务";
              //任务已完成
              this.code_state = false;
              //启动到计时
@@ -194,18 +194,22 @@
               this.code_state = false;
               this.code_btn = false;
               this.showLoading = false;
-              this.showAlert = true;
-              this.alertText = "完成任务,5秒后自动退出任务";
+
+              //任务成功,返回上一页面
+              this.$router.go(-1);
+
+              // this.showAlert = true;
+              // this.alertText = "完成任务,5秒后自动退出任务";
               //启动到计时
-              this.taskTime = 5;
-              //倒计时
-              this.timer = setInterval(() => {
-                  this.taskTime --;
-                  if (this.taskTime == 0) {
-                      clearInterval(this.timer)
-                      this.$router.go(-1);
-                  }
-              }, 1000)
+              // this.taskTime = 5;
+              // //倒计时
+              // this.timer = setInterval(() => {
+              //     this.taskTime --;
+              //     if (this.taskTime == 0) {
+              //         clearInterval(this.timer)
+              //         this.$router.go(-1);
+              //     }
+              // }, 1000)
               //跳转页面
               // window.location="https://www.baidu.com";
               // window.open(this.link);

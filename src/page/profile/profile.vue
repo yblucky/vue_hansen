@@ -447,6 +447,9 @@ export default {
             }else if(this.status == 1){
               //跳转页面
               this.$router.push("/chooseUserCardGrade");
+            }else if(this.status == 6){
+              //跳转保单出局后选择卡等级页面
+              this.$router.push("/chooseUserCardGradeAgain");
             }else {
               this.cardName = "";
             }
@@ -599,6 +602,7 @@ export default {
               //刷新页面
               // location.reload();
             }else {
+                this.show_expire = false;
                 this.showLoading = false;
                 this.showAlert = true;
                 this.alertText = res.msg;

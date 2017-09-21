@@ -1,6 +1,6 @@
 <template>
     <div class="upGradeContainer">
-        <head-top :head-title="'激活账户'" goBack="true"></head-top>
+        <head-top :head-title="'保单出局再激活'" goBack="true"></head-top>
 
         <div class="selCardType">
           <span class="title">选择账户等级</span>
@@ -8,7 +8,7 @@
               <ul class="clear">
                   <li @click="selCard(item.grade)"   class="info-data-link" v-for="(item,index) in cardGradeList">
                       <span class="info-data-top-right">
-                        <img v-if='selCardType==(index+1)' src="../../images/check.png"/>
+                        <img v-if='selCardType==item.grade' src="../../images/check.png"/>
                         <img v-else src="../../images/uncheck.png"/>
                       </span>
                       <span class="info-data-top"><img src="../../images/vipCard.png" class="vip" /></span>
@@ -41,7 +41,7 @@
             <input type="text" readOnly="true" v-model.lazy="needChangeNum">
           </div>
         </section>
-        <div class="active_container" @click="shareChooseCardeGradeAction()">选定开卡</div>
+        <div class="active_container" @click="chooseCardeGradeAgain()">激&nbsp;活</div>
 
         <section class="coverpart" v-if="showLoading">
             <section class="cover-background"></section>
@@ -62,7 +62,7 @@
     import payPwd from 'src/components/common/payPwd'
     import footGuide from 'src/components/footer/footGuide'
     import {localapi, proapi, imgBaseUrl,getUserInfo} from 'src/config/env'
-    import {memberUpgrade,findCardGradeList,findCardGrade,getUser,shareChooseCardeGrade} from '../../service/getData'
+    import {memberUpgrade,findCardGradeList,findCardGrade,getUser,chooseCardeGradeAgain} from '../../service/getData'
     import {mapState, mapMutations} from 'vuex'
     import loading from 'src/components/common/loading'
 
@@ -131,12 +131,6 @@
              async selCard (index) {
                   //显示loading
                   this.showLoading = true;
-                   //选择哪个就升级到哪个
-                   if (index!=1) {
-                    this.showAlert = true;
-                    this.alertText ="首次只能选普卡";
-                    return;
-                   }
                   let res= await findCardGrade(index);
                   this.selCardType = index;
                   if(res.code == 200){
@@ -180,12 +174,12 @@
               //   this.showPwd=true;
               // },
             //升级
-            async shareChooseCardeGradeAction(){
+            async chooseCardeGradeAgain(){
                 // this.closePwd();
                 //显示刷新
                 this.showLoading=true;
                 //触发会员升级方法
-                let res = await shareChooseCardeGrade(this.selCardType);
+                let res = await chooseCardeGradeAgain(this.selCardType);
                 //如果返回的值不正确，则弹出提示框，返回的值正确则返回上一页
                 if (res.code == 200) {
                     this.showLoading = false;
@@ -207,7 +201,8 @@
               if(res.code == 200){
                   this.showLoading = false;
                   this.status = res.result.status;
-                  this.selCard(this.cardGrade+1);
+                  this.cardGrade = res.result.cardGrade;
+                  this.selCard(this.cardGrade);
               }else {
                 this.showLoading = false;
                 this.showAlert = true;

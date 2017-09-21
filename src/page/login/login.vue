@@ -1,6 +1,6 @@
 <template>
     <div class="loginContainer">
-        <head-top head-title="登录">
+        <head-top head-title="瀚森科技">
         </head-top>
 
         <div>

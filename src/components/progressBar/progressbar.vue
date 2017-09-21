@@ -48,13 +48,13 @@
 <style lang="scss" scoped>
 	@import 'src/style/mixin';
 	.progress{
-		height:25px;
+		height:15px;
 		width:100%;
-		margin-bottom:10px;
+		margin-bottom:3px;
 		float:left;
 		overflow:hidden;
 		background-color:#f5f5f5;
-		border-radius:10px;
+		/*border-radius:10px;*/
 		-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,.1);
 		box-shadow:inset 0 1px 2px rgba(0,0,0,.1);
 	}
@@ -73,7 +73,7 @@
 		color:#fff;
 		text-align:center;
 		background-color:#337ab7;
-		border-radius:4px;
+		/*border-radius:4px;*/
 		-webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);
 		box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);
 		-webkit-transition:width .6s ease;
