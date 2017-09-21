@@ -591,6 +591,7 @@ export default {
           if(this.showLoading){
             let res = await intervalActice();
             if(res.code == 200){
+              this.show_expire=false;
               //成功后关闭
               this.showLoading = false;
               this.showAlert = true;
