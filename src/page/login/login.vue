@@ -2,6 +2,10 @@
     <div class="loginContainer">
         <head-top head-title="登录">
         </head-top>
+
+        <div>
+            <h3 style="text-align:center">登录社区</h3>
+        </div>
         <form class="loginForm">
             <section class="input_container">
                 <input type="text" placeholder="账号" v-model.lazy="loginName">
@@ -28,7 +32,7 @@
             </section>
         </form>
         <div class="login_container" @click="checkLogin">登录</div>
-        <router-link to="/forgetPwd" class="to_forget">重置密码？</router-link>
+        <router-link to="/forgetPwd" class="to_forget">忘记密码？</router-link>
         <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
     </div>
 </template>
@@ -119,7 +123,7 @@
     @import '../../style/mixin';
 
     .loginContainer{
-        padding-top: 1.95rem;
+        padding-top: 6rem;
         p, span, input{
             font-family: Helvetica Neue,Tahoma,Arial;
         }

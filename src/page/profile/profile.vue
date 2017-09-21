@@ -59,7 +59,7 @@
                         <span class="info-data-bottom">冻结收益</span>
                         <span class="info-data-middle"><b>{{parseFloat(sumFrozenProfits).toFixed(2)}}</b></span>
                     </router-link>
-                    <router-link to="/doTask" tag="li" class="info-data-link">
+                    <router-link to="" tag="li" class="info-data-link">
                         <!-- <img src="../../hsimages/12.png" class="vip22" /> -->
                         <span class="info-data-bottom">释放奖金</span>
                         <span class="info-data-middle"><b>{{parseFloat(sumProfits).toFixed(2)}}</b></span>
