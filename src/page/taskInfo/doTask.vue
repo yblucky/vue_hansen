@@ -172,7 +172,7 @@
              return;
            }
            //启动到计时
-           this.computedTime = 10;
+           this.computedTime = 30;
            //倒计时
            this.timer = setInterval(() => {
                this.computedTime --;
