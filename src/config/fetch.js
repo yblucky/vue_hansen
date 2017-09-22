@@ -32,7 +32,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 		}
 	}
 
-	if (window.fetch && method == 'fetch') {
+	if (window.fetch) {
 		// let requestConfig = {
 		// 	// credentials: 'include',
 		// 	credentials: '*',
@@ -75,7 +75,6 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 
 			requestObj.open(type, url, true);
 			requestObj.setRequestHeader("Content-type", "application/json;charset=utf-8");
-			requestObj.setRequestHeader("token", token);
 			requestObj.send(sendData);
 
 			requestObj.onreadystatechange = () => {
